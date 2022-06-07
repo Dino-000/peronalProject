@@ -22,9 +22,7 @@ public class HiringRequest {
     private String specificBenefit;
     private  Double bonusPoint;
     @ManyToOne
-    @JoinColumn(name = "application_form_ID")
     private ApplicationForm applicationForm;
-
     @ManyToOne
     private Department department;
     @ManyToOne

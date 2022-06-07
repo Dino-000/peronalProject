@@ -26,7 +26,8 @@ public class WorkingHistoryRecord {
     private String responsibility;
     private String client;
     private Integer teamSize;
-    private List<SkillSet> technologyUsed;
+    @OneToOne
+    private SkillSet technologyUsed;
     private String referencesPeoplePhone;
     @ManyToOne
     private Candidate candidate;

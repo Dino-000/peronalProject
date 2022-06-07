@@ -9,25 +9,27 @@ import javax.persistence.*;
 import java.security.cert.Certificate;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 public class Candidate {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String name;
-    private LocalDate dateOfBirth;
-    private String location;
-    private String occupation;
-    private String seniority;
-    @ManyToOne
-    private List<Education> education;
-    @ManyToOne
-    private List<Certification> certification;
-    @ManyToOne
-    private List<SkillSet> skillSet;
-    private double GPA;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
+
+  private String name;
+  private LocalDate dateOfBirth;
+  private String location;
+  private String occupation;
+  private String seniority;
+  @OneToMany
+  private Set<Education> education;
+  @OneToMany
+  private Set<Certification> certification;
+  @OneToMany
+  private Set<SkillSet> skillSet;
+  private double gpa;
 }

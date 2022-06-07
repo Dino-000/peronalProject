@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.*;
 
 @Repository
-
 public interface HiringManagerRepository extends JpaRepository<HiringManager,Integer> {
 
 }

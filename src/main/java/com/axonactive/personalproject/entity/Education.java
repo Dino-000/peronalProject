@@ -18,8 +18,8 @@ public class Education {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String schoolName;
-    private String Degree;
-    private String Major;
+    private String degree;
+    private String major;
     private Integer graduationYear;
     private Double prestigeRate;
 }
