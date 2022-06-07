@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public abstract class Employee {
+public class Employee {
 
     private String name;
     private LocalDate dateOfBirth;

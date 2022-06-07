@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 public class ApplicationForm {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
