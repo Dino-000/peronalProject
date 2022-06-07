@@ -10,7 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class HrPerformanceRecods {
+public class HrPerformanceRecords {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

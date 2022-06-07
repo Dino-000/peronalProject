@@ -1,14 +1,14 @@
 package com.axonactive.personalproject.serviceImpl;
 
-import com.axonactive.personalproject.repository.CandidateRepository;
-import com.axonactive.personalproject.service.CandidateService;
+import com.axonactive.personalproject.repository.EducationRepository;
+import com.axonactive.personalproject.service.EducationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CandidateServiceImpl implements CandidateService {
+public class EducationServiceImpl implements EducationService {
 @Autowired
-    CandidateRepository candidateRepository;
+    EducationRepository educationRepository;
 }
