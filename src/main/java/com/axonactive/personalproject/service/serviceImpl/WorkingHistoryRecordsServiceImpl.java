@@ -1,6 +1,5 @@
 package com.axonactive.personalproject.service.serviceImpl;
 
-import com.axonactive.personalproject.controller.WorkingHistoryService;
 import com.axonactive.personalproject.entity.WorkingHistoryRecord;
 import com.axonactive.personalproject.repository.WorkingHistoryRecordRepository;
 import com.axonactive.personalproject.service.WorkingHistoryRecordsService;

@@ -35,7 +35,7 @@ public class ApplicationFormController {
   @PostMapping
   public ResponseEntity<ApplicationForm> add(
       @RequestBody ApplicationFormRequest formRequest) {
-    ApplicationForm newForm =
+    ApplicationForm newForm =applicationFormService.saveApplicationForm(
         new ApplicationForm(
             null,
             formRequest.getSubmittedDate(),
@@ -46,8 +46,7 @@ public class ApplicationFormController {
             hiringRequestService.findById(formRequest.getHiringRequestId()).get(),
             recruitmentChanelService.findById(formRequest.getRecruitmentChanelId()).get(),
             employeeService.findById(formRequest.getHrOfficerId()).get()
-        );
-    applicationFormService.saveApplicationForm(newForm);
+        ));
 
     return ResponseEntity.created(URI.create(PATH + "/" + newForm.getId())).body(newForm);
   }
@@ -63,7 +62,8 @@ public class ApplicationFormController {
       updatingForm.setHiringRequest(hiringRequestService.findById(updatingRequest.getHiringRequestId()).get());
       updatingForm.setRecruitmentChanel(recruitmentChanelService.findById(updatingRequest.getRecruitmentChanelId()).get());
     updatingForm.setHrOfficer(employeeService.findById(updatingRequest.getHrOfficerId()).get());
-    return  ResponseEntity.created(URI.create(PATH+"/"+id)).body(updatingForm);
+    ApplicationForm updatedForm = applicationFormService.saveApplicationForm(updatingForm);
+    return  ResponseEntity.created(URI.create(PATH+"/"+id)).body(updatedForm);
   }
 
   @DeleteMapping("/{id}")

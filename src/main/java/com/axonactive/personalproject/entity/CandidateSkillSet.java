@@ -5,24 +5,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class HiringRequest {
+public class CandidateSkillSet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private LocalDate onBoardingDate;
-    private String position;
-    private String specificBenefit;
-    private  Double bonusPoint;
     @ManyToOne
-    private Department department;
+    private Candidate candidate;
     @ManyToOne
-    private Employee hiringManager;
-    @ManyToOne
-    private Employee hrOfficer;
+    private SkillSet skillSet;
 }
