@@ -1,13 +1,11 @@
 package com.axonactive.personalproject.entity;
 
-import jdk.jfr.Enabled;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -26,8 +24,9 @@ public class WorkingHistoryRecord {
     private String responsibility;
     private String client;
     private Integer teamSize;
-    @OneToOne
-    private SkillSet technologyUsed;
+
+    @ManyToOne
+    private EmployeeSkillSet technologyUsed;
     private String referencesPeoplePhone;
     @ManyToOne
     private Candidate candidate;

@@ -1,6 +1,5 @@
 package com.axonactive.personalproject.service;
 
-import com.axonactive.personalproject.entity.Candidate;
 import com.axonactive.personalproject.entity.RecruitmentChanel;
 
 import java.util.List;

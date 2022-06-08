@@ -10,16 +10,12 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class HrPerformanceRecords {
+public class EmployeeEducation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String quarter;
-    private Double quarterKpi;
-    private Double quarterPerformance;
-    private Double bonus;
-    private Double Penalty;
-    private boolean peakRate;
     @ManyToOne
-    private Employee hrOfficer;
+    private Employee employee;
+    @ManyToOne
+    private Education education;
 }

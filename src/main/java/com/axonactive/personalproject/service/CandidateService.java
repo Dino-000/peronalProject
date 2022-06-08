@@ -1,6 +1,5 @@
 package com.axonactive.personalproject.service;
 
-import com.axonactive.personalproject.entity.ApplicationForm;
 import com.axonactive.personalproject.entity.Candidate;
 
 import java.util.List;

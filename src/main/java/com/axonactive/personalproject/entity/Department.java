@@ -19,5 +19,6 @@ public class Department {
 
     private String name;
     private int headcount;
-    private int managerID;
+    private int quantityOfHiringManager;
+    private String managerID;
 }

@@ -1,4 +1,4 @@
-package com.axonactive.personalproject.serviceImpl;
+package com.axonactive.personalproject.service.serviceImpl;
 
 import com.axonactive.personalproject.entity.Candidate;
 import com.axonactive.personalproject.repository.CandidateRepository;

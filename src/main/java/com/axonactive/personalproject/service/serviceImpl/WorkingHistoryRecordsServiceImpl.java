@@ -1,4 +1,4 @@
-package com.axonactive.personalproject.serviceImpl;
+package com.axonactive.personalproject.service.serviceImpl;
 
 import com.axonactive.personalproject.controller.WorkingHistoryService;
 import com.axonactive.personalproject.entity.WorkingHistoryRecord;

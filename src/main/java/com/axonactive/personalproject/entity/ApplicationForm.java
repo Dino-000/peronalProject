@@ -26,6 +26,8 @@ public class ApplicationForm {
     private HiringRequest hiringRequest;
     @ManyToOne
     private RecruitmentChanel recruitmentChanel;
+
+
     @ManyToOne
-    private  HrOfficer hrOfficer;
+    private  Employee hrOfficer;
 }

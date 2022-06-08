@@ -26,7 +26,7 @@ public class HiringRequest {
     @ManyToOne
     private Department department;
     @ManyToOne
-    private HiringManager hiringManager;
+    private Employee hiringManager;
     @ManyToOne
-    private HrOfficer hrOfficer;
+    private Employee hrOfficer;
 }

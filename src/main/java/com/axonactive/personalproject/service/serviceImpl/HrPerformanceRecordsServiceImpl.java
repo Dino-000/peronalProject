@@ -1,7 +1,6 @@
-package com.axonactive.personalproject.serviceImpl;
+package com.axonactive.personalproject.service.serviceImpl;
 
 import com.axonactive.personalproject.entity.HrPerformanceRecords;
-import com.axonactive.personalproject.repository.HrOfficerRepository;
 import com.axonactive.personalproject.repository.HrPerformanceRecordsRepository;
 import com.axonactive.personalproject.service.HrPerformanceRecordsService;
 import lombok.RequiredArgsConstructor;
