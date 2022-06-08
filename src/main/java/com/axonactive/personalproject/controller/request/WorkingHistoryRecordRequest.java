@@ -19,5 +19,5 @@ public class WorkingHistoryRecordRequest {
     private String client;
     private Integer teamSize;
     private String referencesPeoplePhone;
-    private Integer employeeId;
+    private Integer candidateId;
 }

@@ -25,7 +25,8 @@ public class ApplicationFormController {
   @Autowired CandidateService candidateService;
   @Autowired HiringRequestService hiringRequestService;
   @Autowired RecruitmentChanelService recruitmentChanelService;
-  @Autowired EmployeeService employeeService;
+  @Autowired
+  EmployeeService employeeService;
 
   @GetMapping
   public ResponseEntity<List<ApplicationForm>> getAll() {

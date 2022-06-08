@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Entity
 
 public class Department {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

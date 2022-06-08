@@ -2,7 +2,7 @@ package com.axonactive.personalproject.service.serviceImpl;
 
 import com.axonactive.personalproject.entity.WorkingHistoryRecord;
 import com.axonactive.personalproject.repository.WorkingHistoryRecordRepository;
-import com.axonactive.personalproject.service.WorkingHistoryRecordsService;
+import com.axonactive.personalproject.service.WorkingHistoryRecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class WorkingHistoryRecordsServiceImpl implements WorkingHistoryRecordsService {
+public class WorkingHistoryRecordServiceImpl implements WorkingHistoryRecordService {
   @Autowired WorkingHistoryRecordRepository workingHistoryRecordRepository;
 
   @Override
@@ -31,7 +31,7 @@ public class WorkingHistoryRecordsServiceImpl implements WorkingHistoryRecordsSe
   }
 
   @Override
-  public WorkingHistoryRecord saveWorkingHistoryRecord(WorkingHistoryRecord candidate) {
-    return workingHistoryRecordRepository.save(candidate);
+  public WorkingHistoryRecord saveWorkingHistoryRecord(WorkingHistoryRecord workingHistoryRecord) {
+    return workingHistoryRecordRepository.save(workingHistoryRecord);
   }
 }
