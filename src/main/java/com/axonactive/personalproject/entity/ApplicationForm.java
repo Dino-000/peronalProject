@@ -3,6 +3,7 @@ package com.axonactive.personalproject.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ public class ApplicationForm {
     private LocalDate submittedDate;
     private Integer noticePeriods;
     private String urlCV;
+//    private MultipartFile cvFile;
     private double salaryExpectation;
     @ManyToOne
     private Candidate candidate;
