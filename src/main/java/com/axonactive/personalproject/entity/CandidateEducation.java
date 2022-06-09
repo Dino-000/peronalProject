@@ -18,4 +18,5 @@ public class CandidateEducation {
     private Candidate candidate;
     @ManyToOne
     private Education education;
+    private Integer graduationYear;
 }

@@ -4,11 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class CandidateCertificationDto {
     private String candidateName;
     private String certificationName;
+    private LocalDate issuedDate;
+    private LocalDate expiredDate;
 
 }

@@ -21,6 +21,5 @@ public class Certification {
     private String issuerName;
     private String nameOfCertification;
     private String type;
-    private LocalDate issuedDate;
-    private LocalDate expiredDate;
+
 }

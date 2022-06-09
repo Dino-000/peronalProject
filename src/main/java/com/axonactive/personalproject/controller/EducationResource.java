@@ -31,7 +31,6 @@ public class EducationResource {
                 inputData.getSchoolName(),
                 inputData.getDegree(),
                 inputData.getMajor(),
-                inputData.getGraduationYear(),
                 inputData.getPrestigeRate()
         ));
 
@@ -42,8 +41,7 @@ public class EducationResource {
     public  ResponseEntity<Education> update(@PathVariable("id") Integer id, @RequestBody Education inputData) throws ResourceNotFoundException {
         Education updatingEducation = educationService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
         updatingEducation.setSchoolName(inputData.getSchoolName());
-        updatingEducation.setDegree(inputData.getSchoolName());
-        updatingEducation.setGraduationYear(inputData.getGraduationYear());
+        updatingEducation.setDegree(inputData.getDegree());
         updatingEducation.setMajor(inputData.getMajor());
         updatingEducation.setPrestigeRate(inputData.getPrestigeRate());
 

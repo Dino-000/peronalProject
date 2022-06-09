@@ -34,7 +34,7 @@ public class CandidateResource {
 
     @PutMapping("/{id}")
     public  ResponseEntity<Candidate> update(@PathVariable("id") Integer id,@RequestBody Candidate updateDetail) throws ResourceNotFoundException {
-        Candidate updatingCandidate = candidateService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
+        Candidate updatingCandidate = candidateService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Candidate with that id."));
         updatingCandidate.setName(updateDetail.getName());
         updatingCandidate.setDateOfBirth(updateDetail.getDateOfBirth());
         updatingCandidate.setLocation(updateDetail.getLocation());

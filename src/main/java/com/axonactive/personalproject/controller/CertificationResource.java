@@ -29,9 +29,8 @@ public class CertificationResource {
         Certification newCertification = certificationService.saveCertification(new Certification(null,
                 inputData.getIssuerName(),
                 inputData.getNameOfCertification(),
-                inputData.getType(),
-                inputData.getIssuedDate(),
-                inputData.getExpiredDate()
+                inputData.getType()
+
         ));
 
         return ResponseEntity.created(URI.create(PATH + "/" + newCertification.getId())).body(newCertification);
@@ -43,8 +42,6 @@ public class CertificationResource {
         updatingCertification.setIssuerName(inputData.getIssuerName());
         updatingCertification.setNameOfCertification(inputData.getNameOfCertification());
         updatingCertification.setType(inputData.getType());
-        updatingCertification.setIssuedDate(inputData.getIssuedDate());
-        updatingCertification.setExpiredDate(inputData.getExpiredDate());
         Certification updatedCertification = certificationService.saveCertification(updatingCertification);
         return  ResponseEntity.created(URI.create(PATH+"/"+id)).body(updatedCertification);
     }

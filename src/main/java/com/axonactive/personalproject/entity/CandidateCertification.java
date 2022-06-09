@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -18,4 +19,6 @@ public class CandidateCertification {
     private Candidate candidate;
     @ManyToOne
     private Certification certification;
+    private LocalDate issuedDate;
+    private LocalDate expiredDate;
 }
