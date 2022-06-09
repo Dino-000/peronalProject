@@ -12,9 +12,9 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(SkillSetController.PATH)
+@RequestMapping(SkillSetResource.PATH)
 @RequiredArgsConstructor
-public class SkillSetController {
+public class SkillSetResource {
     public static final String PATH="api/SkillSets";
     @Autowired
     SkillSetService skillSetService;

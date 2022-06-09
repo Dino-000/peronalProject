@@ -1,6 +1,5 @@
 package com.axonactive.personalproject.service;
 
-import com.axonactive.personalproject.entity.HiringRequestSkillSet;
 import com.axonactive.personalproject.entity.WorkingHistoryRecordSkillSet;
 
 import java.util.List;

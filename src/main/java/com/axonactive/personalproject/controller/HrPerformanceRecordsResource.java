@@ -5,6 +5,8 @@ import com.axonactive.personalproject.entity.HrPerformanceRecord;
 import com.axonactive.personalproject.exception.ResourceNotFoundException;
 import com.axonactive.personalproject.service.EmployeeService;
 import com.axonactive.personalproject.service.HrPerformanceRecordService;
+import com.axonactive.personalproject.service.dto.HrPerformanceRecordDto;
+import com.axonactive.personalproject.service.mapper.HrPerformanceRecordMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 @RestController
-@RequestMapping(path = HrPerformanceRecordsController.PATH)
+@RequestMapping(path = HrPerformanceRecordsResource.PATH)
 @RequiredArgsConstructor
-public class HrPerformanceRecordsController {
+public class HrPerformanceRecordsResource {
     public static final String PATH ="api/HrPerformanceRecords";
     @Autowired
     HrPerformanceRecordService hrPerformanceRecordService;
@@ -23,12 +25,12 @@ public class HrPerformanceRecordsController {
     EmployeeService employeeService;
 
     @GetMapping
-    public ResponseEntity<List<HrPerformanceRecord>> getAll() {
-        return ResponseEntity.ok().body(hrPerformanceRecordService.findAll());
+    public ResponseEntity<List<HrPerformanceRecordDto>> getAll() {
+        return ResponseEntity.ok().body(HrPerformanceRecordMapper.INSTANCE.toDtos(hrPerformanceRecordService.findAll()));
     }
 
     @PostMapping
-    public ResponseEntity<HrPerformanceRecord> add(
+    public ResponseEntity<HrPerformanceRecordDto> add(
             @RequestBody HrPerformanceRecordRequest inputData) {
         HrPerformanceRecord newHrPerformanceRecord = hrPerformanceRecordService.saveHrPerformanceRecord(new HrPerformanceRecord(null,
                 inputData.getQuarter(),
@@ -40,11 +42,11 @@ public class HrPerformanceRecordsController {
                 employeeService.findById(inputData.getHrOfficerId()).get()
         ));
 
-        return ResponseEntity.created(URI.create(PATH + "/" + newHrPerformanceRecord.getId())).body(newHrPerformanceRecord);
+        return ResponseEntity.created(URI.create(PATH + "/" + newHrPerformanceRecord.getId())).body(HrPerformanceRecordMapper.INSTANCE.toDto(newHrPerformanceRecord));
     }
 
     @PutMapping("/{id}")
-    public  ResponseEntity<HrPerformanceRecord> update(@PathVariable("id") Integer id, @RequestBody HrPerformanceRecordRequest inputData) throws ResourceNotFoundException {
+    public  ResponseEntity<HrPerformanceRecordDto> update(@PathVariable("id") Integer id, @RequestBody HrPerformanceRecordRequest inputData) throws ResourceNotFoundException {
         HrPerformanceRecord updatingHrPerformanceRecord = hrPerformanceRecordService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
         updatingHrPerformanceRecord.setQuarter(inputData.getQuarter());
         updatingHrPerformanceRecord.setQuarterKpi(inputData.getQuarterKpi());
@@ -55,7 +57,7 @@ public class HrPerformanceRecordsController {
         updatingHrPerformanceRecord.setHrOfficer(employeeService.findById(inputData.getHrOfficerId()).get());
 
         HrPerformanceRecord updatedHrPerformanceRecord = hrPerformanceRecordService.saveHrPerformanceRecord(updatingHrPerformanceRecord);
-        return  ResponseEntity.created(URI.create(PATH+"/"+id)).body(updatedHrPerformanceRecord);
+        return  ResponseEntity.created(URI.create(PATH+"/"+id)).body(HrPerformanceRecordMapper.INSTANCE.toDto(updatedHrPerformanceRecord));
     }
 
     @DeleteMapping("/{id}")

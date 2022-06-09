@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmployeeRequest {
-    private String EmployeeId;
+    private String employeeId;
     private String name;
     private LocalDate dateOfBirth;
     private String team;

@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 @RestController
-@RequestMapping(path = EducationController.PATH)
+@RequestMapping(path = EducationResource.PATH)
 @RequiredArgsConstructor
-public class EducationController {
+public class EducationResource {
     public static final String PATH ="api/Educations";
     @Autowired
     EducationService educationService;
@@ -31,7 +31,6 @@ public class EducationController {
                 inputData.getSchoolName(),
                 inputData.getDegree(),
                 inputData.getMajor(),
-                inputData.getGraduationYear(),
                 inputData.getPrestigeRate()
         ));
 
@@ -42,8 +41,7 @@ public class EducationController {
     public  ResponseEntity<Education> update(@PathVariable("id") Integer id, @RequestBody Education inputData) throws ResourceNotFoundException {
         Education updatingEducation = educationService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
         updatingEducation.setSchoolName(inputData.getSchoolName());
-        updatingEducation.setDegree(inputData.getSchoolName());
-        updatingEducation.setGraduationYear(inputData.getGraduationYear());
+        updatingEducation.setDegree(inputData.getDegree());
         updatingEducation.setMajor(inputData.getMajor());
         updatingEducation.setPrestigeRate(inputData.getPrestigeRate());
 

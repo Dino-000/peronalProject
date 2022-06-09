@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 @RestController
-@RequestMapping(path = DepartmentController.PATH)
+@RequestMapping(path = DepartmentResource.PATH)
 @RequiredArgsConstructor
-public class DepartmentController {
+public class DepartmentResource {
     public static final String PATH ="api/Departments";
     @Autowired
     DepartmentService departmentService;

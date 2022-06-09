@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 @RestController
-@RequestMapping(path = CertificationController.PATH)
+@RequestMapping(path = CertificationResource.PATH)
 @RequiredArgsConstructor
-public class CertificationController {
+public class CertificationResource {
     public static final String PATH ="api/Certifications";
     @Autowired
     CertificationService certificationService;
@@ -29,9 +29,8 @@ public class CertificationController {
         Certification newCertification = certificationService.saveCertification(new Certification(null,
                 inputData.getIssuerName(),
                 inputData.getNameOfCertification(),
-                inputData.getType(),
-                inputData.getIssuedDate(),
-                inputData.getExpiredDate()
+                inputData.getType()
+
         ));
 
         return ResponseEntity.created(URI.create(PATH + "/" + newCertification.getId())).body(newCertification);
@@ -43,8 +42,6 @@ public class CertificationController {
         updatingCertification.setIssuerName(inputData.getIssuerName());
         updatingCertification.setNameOfCertification(inputData.getNameOfCertification());
         updatingCertification.setType(inputData.getType());
-        updatingCertification.setIssuedDate(inputData.getIssuedDate());
-        updatingCertification.setExpiredDate(inputData.getExpiredDate());
         Certification updatedCertification = certificationService.saveCertification(updatingCertification);
         return  ResponseEntity.created(URI.create(PATH+"/"+id)).body(updatedCertification);
     }

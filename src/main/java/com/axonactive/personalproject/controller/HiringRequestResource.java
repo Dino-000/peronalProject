@@ -6,6 +6,8 @@ import com.axonactive.personalproject.exception.ResourceNotFoundException;
 import com.axonactive.personalproject.service.DepartmentService;
 import com.axonactive.personalproject.service.EmployeeService;
 import com.axonactive.personalproject.service.HiringRequestService;
+import com.axonactive.personalproject.service.dto.HiringRequestDto;
+import com.axonactive.personalproject.service.mapper.HiringRequestMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +17,9 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = HiringRequestController.PATH)
+@RequestMapping(path = HiringRequestResource.PATH)
 @RequiredArgsConstructor
-public class HiringRequestController {
+public class HiringRequestResource {
     public static final String PATH ="api/HiringRequests";
     @Autowired
     HiringRequestService hiringRequestService;
@@ -29,12 +31,12 @@ public class HiringRequestController {
 
 
     @GetMapping
-    public ResponseEntity<List<HiringRequest>> getAll() {
-        return ResponseEntity.ok().body(hiringRequestService.findAll());
+    public ResponseEntity<List<HiringRequestDto>> getAll() {
+        return ResponseEntity.ok().body(HiringRequestMapper.INSTANCE.toDtos(hiringRequestService.findAll()));
     }
 
     @PostMapping
-    public ResponseEntity<HiringRequest> add(
+    public ResponseEntity<HiringRequestDto> add(
             @RequestBody HiringRequestRequest inputData) {
         HiringRequest newHiringRequest = hiringRequestService.saveHiringRequest(new HiringRequest(null,
                inputData.getOnBoardingDate(),
@@ -46,11 +48,11 @@ public class HiringRequestController {
                 employeeService.findById(inputData.getHrOfficerId()).get()
         ));
 
-        return ResponseEntity.created(URI.create(PATH + "/" + newHiringRequest.getId())).body(newHiringRequest);
+        return ResponseEntity.created(URI.create(PATH + "/" + newHiringRequest.getId())).body(HiringRequestMapper.INSTANCE.toDto(newHiringRequest));
     }
 
     @PutMapping("/{id}")
-    public  ResponseEntity<HiringRequest> update(@PathVariable("id") Integer id, @RequestBody HiringRequestRequest inputData) throws ResourceNotFoundException {
+    public  ResponseEntity<HiringRequestDto> update(@PathVariable("id") Integer id, @RequestBody HiringRequestRequest inputData) throws ResourceNotFoundException {
         HiringRequest updatingHiringRequest = hiringRequestService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
         updatingHiringRequest.setOnBoardingDate(inputData.getOnBoardingDate());
         updatingHiringRequest.setPosition(inputData.getPosition());
@@ -60,7 +62,7 @@ public class HiringRequestController {
         updatingHiringRequest.setHiringManager(employeeService.findById(inputData.getHiringManagerId()).get());
         updatingHiringRequest.setHrOfficer( employeeService.findById(inputData.getHrOfficerId()).get());
         HiringRequest updatedHiringRequest = hiringRequestService.saveHiringRequest(updatingHiringRequest);
-        return  ResponseEntity.created(URI.create(PATH+"/"+id)).body(updatedHiringRequest);
+        return  ResponseEntity.created(URI.create(PATH+"/"+id)).body(HiringRequestMapper.INSTANCE.toDto(updatedHiringRequest));
     }
 
     @DeleteMapping("/{id}")

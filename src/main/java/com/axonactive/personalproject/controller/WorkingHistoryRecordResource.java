@@ -5,6 +5,8 @@ import com.axonactive.personalproject.entity.WorkingHistoryRecord;
 import com.axonactive.personalproject.exception.ResourceNotFoundException;
 import com.axonactive.personalproject.service.CandidateService;
 import com.axonactive.personalproject.service.WorkingHistoryRecordService;
+import com.axonactive.personalproject.service.dto.WorkingHistoryRecordDto;
+import com.axonactive.personalproject.service.mapper.WorkingHistoryRecordMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 @RestController
-@RequestMapping(path = WorkingHistoryRecordController.PATH)
+@RequestMapping(path = WorkingHistoryRecordResource.PATH)
 @RequiredArgsConstructor
-public class WorkingHistoryRecordController {
+public class WorkingHistoryRecordResource {
     public static final String PATH ="api/WorkingHistoryRecords";
     @Autowired
     WorkingHistoryRecordService workingHistoryRecordService;
@@ -23,12 +25,12 @@ public class WorkingHistoryRecordController {
     CandidateService candidateService;
 
     @GetMapping
-    public ResponseEntity<List<WorkingHistoryRecord>> getAll() {
-        return ResponseEntity.ok().body(workingHistoryRecordService.findAll());
+    public ResponseEntity<List<WorkingHistoryRecordDto>> getAll() {
+        return ResponseEntity.ok().body(WorkingHistoryRecordMapper.INSTANCE.toDtos(workingHistoryRecordService.findAll()));
     }
 
     @PostMapping
-    public ResponseEntity<WorkingHistoryRecord> add(
+    public ResponseEntity<WorkingHistoryRecordDto> add(
             @RequestBody WorkingHistoryRecordRequest inputData) {
         WorkingHistoryRecord newWorkingHistoryRecord = workingHistoryRecordService.saveWorkingHistoryRecord(new WorkingHistoryRecord(null,
                 inputData.getCompanyName(),
@@ -43,11 +45,11 @@ public class WorkingHistoryRecordController {
                 candidateService.findById(inputData.getCandidateId()).get()
         ));
 
-        return ResponseEntity.created(URI.create(PATH + "/" + newWorkingHistoryRecord.getId())).body(newWorkingHistoryRecord);
+        return ResponseEntity.created(URI.create(PATH + "/" + newWorkingHistoryRecord.getId())).body(WorkingHistoryRecordMapper.INSTANCE.toDto(newWorkingHistoryRecord));
     }
 
     @PutMapping("/{id}")
-    public  ResponseEntity<WorkingHistoryRecord> update(@PathVariable("id") Integer id, @RequestBody WorkingHistoryRecordRequest inputData) throws ResourceNotFoundException {
+    public  ResponseEntity<WorkingHistoryRecordDto> update(@PathVariable("id") Integer id, @RequestBody WorkingHistoryRecordRequest inputData) throws ResourceNotFoundException {
         WorkingHistoryRecord updatingWorkingHistoryRecord = workingHistoryRecordService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
         updatingWorkingHistoryRecord.setCompanyName(inputData.getCompanyName());
         updatingWorkingHistoryRecord.setJoinedDate(inputData.getJoinedDate());
@@ -60,7 +62,7 @@ public class WorkingHistoryRecordController {
         updatingWorkingHistoryRecord.setReferencesPeoplePhone(inputData.getReferencesPeoplePhone());
         updatingWorkingHistoryRecord.setCandidate( candidateService.findById(inputData.getCandidateId()).get());
         WorkingHistoryRecord updatedWorkingHistoryRecord = workingHistoryRecordService.saveWorkingHistoryRecord(updatingWorkingHistoryRecord);
-        return  ResponseEntity.created(URI.create(PATH+"/"+id)).body(updatedWorkingHistoryRecord);
+        return  ResponseEntity.created(URI.create(PATH+"/"+id)).body(WorkingHistoryRecordMapper.INSTANCE.toDto(updatedWorkingHistoryRecord));
     }
 
     @DeleteMapping("/{id}")

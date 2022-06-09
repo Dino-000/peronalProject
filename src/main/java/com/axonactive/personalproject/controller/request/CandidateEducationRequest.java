@@ -4,10 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class CandidateEducationRequest {
     private Integer candidateId;
     private Integer educationId;
+    private Integer graduationYear;
 }
