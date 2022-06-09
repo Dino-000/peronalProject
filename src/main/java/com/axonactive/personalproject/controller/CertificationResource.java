@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 @RestController
-@RequestMapping(path = CertificationController.PATH)
+@RequestMapping(path = CertificationResource.PATH)
 @RequiredArgsConstructor
-public class CertificationController {
+public class CertificationResource {
     public static final String PATH ="api/Certifications";
     @Autowired
     CertificationService certificationService;

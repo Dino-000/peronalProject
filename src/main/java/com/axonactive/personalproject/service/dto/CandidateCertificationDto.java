@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CandidateCertificationDto {
-    private String employeeName;
-    private String CertificationName;
+    private String candidateName;
+    private String certificationName;
 
 }

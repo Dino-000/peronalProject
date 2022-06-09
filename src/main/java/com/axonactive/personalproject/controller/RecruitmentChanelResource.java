@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 @RestController
-@RequestMapping(path = RecruitmentChanelController.PATH)
+@RequestMapping(path = RecruitmentChanelResource.PATH)
 @RequiredArgsConstructor
-public class RecruitmentChanelController {
+public class RecruitmentChanelResource {
     public static final String PATH ="api/RecruitmentChanels";
     @Autowired
     RecruitmentChanelService recruitmentChanelService;

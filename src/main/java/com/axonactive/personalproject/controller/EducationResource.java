@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 @RestController
-@RequestMapping(path = EducationController.PATH)
+@RequestMapping(path = EducationResource.PATH)
 @RequiredArgsConstructor
-public class EducationController {
+public class EducationResource {
     public static final String PATH ="api/Educations";
     @Autowired
     EducationService educationService;

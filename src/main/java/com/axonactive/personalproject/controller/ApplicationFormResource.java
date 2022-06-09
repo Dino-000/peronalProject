@@ -4,9 +4,8 @@ import com.axonactive.personalproject.controller.request.ApplicationFormRequest;
 import com.axonactive.personalproject.entity.ApplicationForm;
 import com.axonactive.personalproject.exception.ResourceNotFoundException;
 import com.axonactive.personalproject.service.*;
-import com.axonactive.personalproject.service.CandidateService;
-import com.axonactive.personalproject.service.HiringRequestService;
-import com.axonactive.personalproject.service.RecruitmentChanelService;
+import com.axonactive.personalproject.service.dto.ApplicationFormDto;
+import com.axonactive.personalproject.service.mapper.ApplicationFormMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +15,9 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = ApplicationFormController.PATH)
+@RequestMapping(path = ApplicationFormResource.PATH)
 @RequiredArgsConstructor
-public class ApplicationFormController {
+public class ApplicationFormResource {
   public static final String PATH = "/api/ApplicationForms";
   @Autowired ApplicationFormService applicationFormService;
 
@@ -29,12 +28,12 @@ public class ApplicationFormController {
   EmployeeService employeeService;
 
   @GetMapping
-  public ResponseEntity<List<ApplicationForm>> getAll() {
-    return ResponseEntity.ok().body(applicationFormService.findAll());
+  public ResponseEntity<List<ApplicationFormDto>> getAll() {
+    return ResponseEntity.ok().body(ApplicationFormMapper.INSTANCE.toDtos(applicationFormService.findAll()));
   }
 
   @PostMapping
-  public ResponseEntity<ApplicationForm> add(
+  public ResponseEntity<ApplicationFormDto> add(
       @RequestBody ApplicationFormRequest formRequest) {
     ApplicationForm newForm =applicationFormService.saveApplicationForm(
         new ApplicationForm(
@@ -49,11 +48,11 @@ public class ApplicationFormController {
             employeeService.findById(formRequest.getHrOfficerId()).get()
         ));
 
-    return ResponseEntity.created(URI.create(PATH + "/" + newForm.getId())).body(newForm);
+    return ResponseEntity.created(URI.create(PATH + "/" + newForm.getId())).body(ApplicationFormMapper.INSTANCE.toDto(newForm));
   }
 
   @PutMapping("/{id}")
-    public  ResponseEntity<ApplicationForm> update(@PathVariable("id") Integer id,@RequestBody ApplicationFormRequest updatingRequest) throws ResourceNotFoundException {
+    public  ResponseEntity<ApplicationFormDto> update(@PathVariable("id") Integer id,@RequestBody ApplicationFormRequest updatingRequest) throws ResourceNotFoundException {
       ApplicationForm updatingForm = applicationFormService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
       updatingForm.setSubmittedDate(updatingRequest.getSubmittedDate());
       updatingForm.setNoticePeriods(updatingRequest.getNoticePeriods());
@@ -64,7 +63,7 @@ public class ApplicationFormController {
       updatingForm.setRecruitmentChanel(recruitmentChanelService.findById(updatingRequest.getRecruitmentChanelId()).get());
     updatingForm.setHrOfficer(employeeService.findById(updatingRequest.getHrOfficerId()).get());
     ApplicationForm updatedForm = applicationFormService.saveApplicationForm(updatingForm);
-    return  ResponseEntity.created(URI.create(PATH+"/"+id)).body(updatedForm);
+    return  ResponseEntity.created(URI.create(PATH+"/"+id)).body(ApplicationFormMapper.INSTANCE.toDto(updatedForm));
   }
 
   @DeleteMapping("/{id}")

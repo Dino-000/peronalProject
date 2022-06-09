@@ -13,8 +13,8 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(CandidateController.PATH)
-public class CandidateController {
+@RequestMapping(CandidateResource.PATH)
+public class CandidateResource {
     public static final String PATH ="api/Candidates";
     @Autowired
     CandidateService candidateService;

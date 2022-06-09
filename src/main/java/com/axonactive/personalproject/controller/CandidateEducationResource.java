@@ -6,6 +6,8 @@ import com.axonactive.personalproject.exception.ResourceNotFoundException;
 import com.axonactive.personalproject.service.CandidateEducationService;
 import com.axonactive.personalproject.service.CandidateService;
 import com.axonactive.personalproject.service.EducationService;
+import com.axonactive.personalproject.service.dto.CandidateEducationDto;
+import com.axonactive.personalproject.service.mapper.CandidateEducationMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +18,8 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(CandidateEducationController.PATH)
-public class CandidateEducationController {
+@RequestMapping(CandidateEducationResource.PATH)
+public class CandidateEducationResource {
     public static final String PATH ="api/CandidateEducationEducation";
     @Autowired
     CandidateEducationService candidateEducationService;
@@ -27,28 +29,28 @@ public class CandidateEducationController {
     CandidateService candidateService;
 
     @GetMapping
-    public ResponseEntity<List<CandidateEducation>> getAll() {
-        return ResponseEntity.ok().body(candidateEducationService.findAll());
+    public ResponseEntity<List<CandidateEducationDto>> getAll() {
+        return ResponseEntity.ok().body(CandidateEducationMapper.INSTANCE.toDtos(candidateEducationService.findAll()));
     }
 
     @PostMapping
-    public ResponseEntity<CandidateEducation> add(
+    public ResponseEntity<CandidateEducationDto> add(
             @RequestBody CandidateEducationRequest inputData) {
         CandidateEducation newCandidateEducation = candidateEducationService.saveEducationList(new CandidateEducation(null,
                 candidateService.findById(inputData.getCandidateId()).get(),
                 educationService.findById(inputData.getEducationId()).get()
         ));
 
-        return ResponseEntity.created(URI.create(PATH + "/" + newCandidateEducation.getId())).body(newCandidateEducation);
+        return ResponseEntity.created(URI.create(PATH + "/" + newCandidateEducation.getId())).body(CandidateEducationMapper.INSTANCE.toDto(newCandidateEducation));
     }
 
     @PutMapping("/{id}")
-    public  ResponseEntity<CandidateEducation> update(@PathVariable("id") Integer id, @RequestBody CandidateEducationRequest inputData) throws ResourceNotFoundException {
+    public  ResponseEntity<CandidateEducationDto> update(@PathVariable("id") Integer id, @RequestBody CandidateEducationRequest inputData) throws ResourceNotFoundException {
         CandidateEducation updatingCandidateEducation = candidateEducationService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
         updatingCandidateEducation.setCandidate(candidateService.findById(inputData.getCandidateId()).get());
         updatingCandidateEducation.setEducation(educationService.findById(inputData.getEducationId()).get());
         CandidateEducation updatedCandidateEducation = candidateEducationService.saveEducationList(updatingCandidateEducation);
-        return  ResponseEntity.created(URI.create(PATH+"/"+id)).body(updatedCandidateEducation);
+        return  ResponseEntity.created(URI.create(PATH+"/"+id)).body(CandidateEducationMapper.INSTANCE.toDto(updatedCandidateEducation));
     }
 
     @DeleteMapping("/{id}")
