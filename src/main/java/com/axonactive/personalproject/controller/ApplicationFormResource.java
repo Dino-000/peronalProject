@@ -95,8 +95,8 @@ public class ApplicationFormResource {
             System.out.println(file.getName());
             System.out.println(file.getOriginalFilename());
             System.out.println(file.getContentType());
-            String Path_directory = "/Users/dino/Downloads/personalproject/src/main/resources/static/Cv";
-//    String Path_directory =new ClassPathResource("static/Cv/").getFile().getAbsolutePath();
+//            String Path_directory = "/Users/dino/Downloads/personalproject/src/main/resources/static/Cv";
+    String Path_directory =new ClassPathResource("static/Cv/").getFile().getAbsolutePath();
             String CvUrl = Path_directory + File.separator + file.getOriginalFilename();
             Files.copy(file.getInputStream(), Paths.get(CvUrl), StandardCopyOption.REPLACE_EXISTING);
 
