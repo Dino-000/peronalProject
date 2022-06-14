@@ -29,6 +29,13 @@ public class HrPerformanceRecordsResource {
         return ResponseEntity.ok().body(HrPerformanceRecordMapper.INSTANCE.toDtos(hrPerformanceRecordService.findAll()));
     }
 
+
+    @GetMapping("/{id}")
+    public ResponseEntity<HrPerformanceRecordDto> getById (@PathVariable("id") Integer id) throws ResourceNotFoundException {
+        HrPerformanceRecord hrPerformanceRecord = hrPerformanceRecordService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find HrPerformanceRecord with that id."));
+        return ResponseEntity.created(URI.create(PATH+"/"+hrPerformanceRecord.getId())).body(HrPerformanceRecordMapper.INSTANCE.toDto(hrPerformanceRecord));
+    }
+
     @PostMapping
     public ResponseEntity<HrPerformanceRecordDto> add(
             @RequestBody HrPerformanceRecordRequest inputData) {
@@ -47,7 +54,7 @@ public class HrPerformanceRecordsResource {
 
     @PutMapping("/{id}")
     public  ResponseEntity<HrPerformanceRecordDto> update(@PathVariable("id") Integer id, @RequestBody HrPerformanceRecordRequest inputData) throws ResourceNotFoundException {
-        HrPerformanceRecord updatingHrPerformanceRecord = hrPerformanceRecordService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
+        HrPerformanceRecord updatingHrPerformanceRecord = hrPerformanceRecordService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find HrPerformanceRecord with that id."));
         updatingHrPerformanceRecord.setQuarter(inputData.getQuarter());
         updatingHrPerformanceRecord.setQuarterKpi(inputData.getQuarterKpi());
         updatingHrPerformanceRecord.setQuarterPerformance(inputData.getQuarterPerformance());
@@ -62,7 +69,7 @@ public class HrPerformanceRecordsResource {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws ResourceNotFoundException {
-        HrPerformanceRecord deletingHrPerformanceRecord = hrPerformanceRecordService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
+        HrPerformanceRecord deletingHrPerformanceRecord = hrPerformanceRecordService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find HrPerformanceRecord with that id."));
         hrPerformanceRecordService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

@@ -32,6 +32,12 @@ public class HiringRequestSkillSetResource {
         return ResponseEntity.ok().body(HiringRequestSkillSetMapper.INSTANCE.toDtos(hiringRequestSkillSetService.findAll()));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<HiringRequestSkillSetDto> getById (@PathVariable("id") Integer id) throws ResourceNotFoundException {
+        HiringRequestSkillSet hiringRequestSkillSet = hiringRequestSkillSetService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find HiringRequestSkillSet with that id."));
+        return ResponseEntity.created(URI.create(PATH+"/"+hiringRequestSkillSet.getId())).body(HiringRequestSkillSetMapper.INSTANCE.toDto(hiringRequestSkillSet));
+    }
+
     @PostMapping
     public ResponseEntity<HiringRequestSkillSetDto> add(
             @RequestBody HiringRequestSkillSetRequest inputData) {
@@ -44,7 +50,7 @@ public class HiringRequestSkillSetResource {
 
     @PutMapping("/{id}")
     public  ResponseEntity<HiringRequestSkillSetDto> update(@PathVariable("id") Integer id, @RequestBody HiringRequestSkillSetRequest inputData) throws ResourceNotFoundException {
-        HiringRequestSkillSet updatingHiringRequestSkillSet = hiringRequestSkillSetService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
+        HiringRequestSkillSet updatingHiringRequestSkillSet = hiringRequestSkillSetService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find HiringRequestSkillSet with that id."));
         updatingHiringRequestSkillSet.setHiringRequest(hiringRequestService.findById(inputData.getHiringRequestId()).get());
         updatingHiringRequestSkillSet.setSkillSet(skillSetService.findById(inputData.getSkillSetId()).get());
         HiringRequestSkillSet updatedHiringRequestSkillSet = hiringRequestSkillSetService.saveHiringRequestSkillSet(updatingHiringRequestSkillSet);
@@ -53,7 +59,7 @@ public class HiringRequestSkillSetResource {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws ResourceNotFoundException {
-        HiringRequestSkillSet deletingHiringRequestSkillSet = hiringRequestSkillSetService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
+        HiringRequestSkillSet deletingHiringRequestSkillSet = hiringRequestSkillSetService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find HiringRequestSkillSet with that id."));
         hiringRequestSkillSetService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

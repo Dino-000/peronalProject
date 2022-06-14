@@ -30,6 +30,12 @@ public class EmployeeResource {
         return ResponseEntity.ok().body(EmployeeMapper.INSTANCE.toDtos(employeeService.findAll()));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<EmployeeDto> getById (@PathVariable("id") Integer id) throws ResourceNotFoundException {
+        Employee employee = employeeService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Employee with that id."));
+        return ResponseEntity.created(URI.create(PATH+"/"+employee.getId())).body(EmployeeMapper.INSTANCE.toDto(employee));
+    }
+
     @PostMapping
     public ResponseEntity<EmployeeDto> add(
             @RequestBody EmployeeRequest inputData) {
@@ -46,7 +52,7 @@ public class EmployeeResource {
 
     @PutMapping("/{id}")
     public  ResponseEntity<EmployeeDto> update(@PathVariable("id") Integer id, @RequestBody EmployeeRequest inputData) throws ResourceNotFoundException {
-        Employee updatingEmployee = employeeService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
+        Employee updatingEmployee = employeeService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Employee with that id."));
         updatingEmployee.setEmployeeId(inputData.getEmployeeId());
         updatingEmployee.setName(inputData.getName());
         updatingEmployee.setDateOfBirth(inputData.getDateOfBirth());
@@ -58,7 +64,7 @@ public class EmployeeResource {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws ResourceNotFoundException {
-        Employee deletingEmployee = employeeService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
+        Employee deletingEmployee = employeeService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Employee with that id."));
         employeeService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

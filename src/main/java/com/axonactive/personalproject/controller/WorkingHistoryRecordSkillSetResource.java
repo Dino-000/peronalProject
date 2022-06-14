@@ -32,6 +32,12 @@ public class WorkingHistoryRecordSkillSetResource {
         return ResponseEntity.ok().body(WorkingHistoryRecordSkillSetMapper.INSTANCE.toDtos(workingHistoryRecordSkillSetService.findAll()));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<WorkingHistoryRecordSkillSetDto> getById (@PathVariable("id") Integer id) throws ResourceNotFoundException {
+        WorkingHistoryRecordSkillSet workingHistoryRecordSkillSet = workingHistoryRecordSkillSetService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Working History Record SkillSet with that id."));
+        return ResponseEntity.created(URI.create(PATH + "/" + workingHistoryRecordSkillSet.getId())).body(WorkingHistoryRecordSkillSetMapper.INSTANCE.toDto(workingHistoryRecordSkillSet));
+    }
+
     @PostMapping
     public ResponseEntity<WorkingHistoryRecordSkillSetDto> add(
             @RequestBody WorkingHistoryRecordSkillSetRequest inputData) {
@@ -45,7 +51,7 @@ public class WorkingHistoryRecordSkillSetResource {
 
     @PutMapping("/{id}")
     public  ResponseEntity<WorkingHistoryRecordSkillSetDto> update(@PathVariable("id") Integer id, @RequestBody WorkingHistoryRecordSkillSetRequest inputData) throws ResourceNotFoundException {
-        WorkingHistoryRecordSkillSet updatingWorkingHistoryRecordSkillSet = workingHistoryRecordSkillSetService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
+        WorkingHistoryRecordSkillSet updatingWorkingHistoryRecordSkillSet = workingHistoryRecordSkillSetService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Working History Record SkillSet with that id."));
         updatingWorkingHistoryRecordSkillSet.setSkillSet(skillSetService.findById(inputData.getSkillSetId()).get());
         updatingWorkingHistoryRecordSkillSet.setWorkingHistoryRecord(workingHistoryRecordService.findById(inputData.getWorkingHistoryRecordId()).get());
         WorkingHistoryRecordSkillSet updatedWorkingHistoryRecordSkillSet = workingHistoryRecordSkillSetService.saveWorkingHistoryRecordSkillSet(updatingWorkingHistoryRecordSkillSet);
@@ -54,7 +60,7 @@ public class WorkingHistoryRecordSkillSetResource {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws ResourceNotFoundException {
-        WorkingHistoryRecordSkillSet deletingWorkingHistoryRecordSkillSet = workingHistoryRecordSkillSetService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
+        WorkingHistoryRecordSkillSet deletingWorkingHistoryRecordSkillSet = workingHistoryRecordSkillSetService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Working History Record SkillSet with that id."));
         workingHistoryRecordSkillSetService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

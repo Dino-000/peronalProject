@@ -29,6 +29,12 @@ public class WorkingHistoryRecordResource {
         return ResponseEntity.ok().body(WorkingHistoryRecordMapper.INSTANCE.toDtos(workingHistoryRecordService.findAll()));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<WorkingHistoryRecordDto> getById (@PathVariable("id") Integer id) throws ResourceNotFoundException {
+        WorkingHistoryRecord workingHistoryRecord = workingHistoryRecordService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Working History Record with that id."));
+        return ResponseEntity.created(URI.create(PATH+"/"+workingHistoryRecord.getId())).body(WorkingHistoryRecordMapper.INSTANCE.toDto(workingHistoryRecord));
+    }
+
     @PostMapping
     public ResponseEntity<WorkingHistoryRecordDto> add(
             @RequestBody WorkingHistoryRecordRequest inputData) {
@@ -50,7 +56,7 @@ public class WorkingHistoryRecordResource {
 
     @PutMapping("/{id}")
     public  ResponseEntity<WorkingHistoryRecordDto> update(@PathVariable("id") Integer id, @RequestBody WorkingHistoryRecordRequest inputData) throws ResourceNotFoundException {
-        WorkingHistoryRecord updatingWorkingHistoryRecord = workingHistoryRecordService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
+        WorkingHistoryRecord updatingWorkingHistoryRecord = workingHistoryRecordService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Working History Record with that id."));
         updatingWorkingHistoryRecord.setCompanyName(inputData.getCompanyName());
         updatingWorkingHistoryRecord.setJoinedDate(inputData.getJoinedDate());
         updatingWorkingHistoryRecord.setResignationDate(inputData.getResignationDate());
@@ -67,7 +73,7 @@ public class WorkingHistoryRecordResource {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws ResourceNotFoundException {
-        WorkingHistoryRecord deletingWorkingHistoryRecord = workingHistoryRecordService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
+        WorkingHistoryRecord deletingWorkingHistoryRecord = workingHistoryRecordService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Working History Record with that id."));
         workingHistoryRecordService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

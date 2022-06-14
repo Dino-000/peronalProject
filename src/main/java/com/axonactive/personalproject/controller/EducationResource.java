@@ -24,6 +24,12 @@ public class EducationResource {
         return ResponseEntity.ok().body(educationService.findAll());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Education> getById (@PathVariable("id") Integer id) throws ResourceNotFoundException {
+        Education education = educationService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Education with that id."));
+        return ResponseEntity.created(URI.create(PATH+"/"+education.getId())).body(education);
+    }
+
     @PostMapping
     public ResponseEntity<Education> add(
             @RequestBody Education inputData) {
@@ -39,7 +45,7 @@ public class EducationResource {
 
     @PutMapping("/{id}")
     public  ResponseEntity<Education> update(@PathVariable("id") Integer id, @RequestBody Education inputData) throws ResourceNotFoundException {
-        Education updatingEducation = educationService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
+        Education updatingEducation = educationService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Education with that id."));
         updatingEducation.setSchoolName(inputData.getSchoolName());
         updatingEducation.setDegree(inputData.getDegree());
         updatingEducation.setMajor(inputData.getMajor());
@@ -51,7 +57,7 @@ public class EducationResource {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws ResourceNotFoundException {
-        Education deletingEducation = educationService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
+        Education deletingEducation = educationService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Education with that id."));
         educationService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

@@ -33,6 +33,11 @@ public class CandidateCertificationResource {
             CandidateCertificationMapper.INSTANCE.toDtos(candidateCertificationService.findAll()));
   }
 
+  @GetMapping("/{id}")
+  public ResponseEntity<CandidateCertificationDto> getById (@PathVariable("id") Integer id) throws ResourceNotFoundException {
+      CandidateCertification candidateCertification= candidateCertificationService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Can't not find CandidateCertification with that id."));
+    return ResponseEntity.created(URI.create(PATH+"/"+candidateCertification.getId())).body(CandidateCertificationMapper.INSTANCE.toDto(candidateCertification));
+  }
   @PostMapping
   public ResponseEntity<CandidateCertificationDto> add(
       @RequestBody CandidateCertificationRequest inputData) {

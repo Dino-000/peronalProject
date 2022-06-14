@@ -35,6 +35,12 @@ public class HiringRequestResource {
         return ResponseEntity.ok().body(HiringRequestMapper.INSTANCE.toDtos(hiringRequestService.findAll()));
     }
 
+
+    @GetMapping("/{id}")
+    public ResponseEntity<HiringRequestDto> getById (@PathVariable("id") Integer id) throws ResourceNotFoundException {
+        HiringRequest hiringRequest = hiringRequestService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find HiringRequest with that id."));
+        return ResponseEntity.created(URI.create(PATH+"/"+hiringRequest.getId())).body(HiringRequestMapper.INSTANCE.toDto(hiringRequest));
+    }
     @PostMapping
     public ResponseEntity<HiringRequestDto> add(
             @RequestBody HiringRequestRequest inputData) {
@@ -53,7 +59,7 @@ public class HiringRequestResource {
 
     @PutMapping("/{id}")
     public  ResponseEntity<HiringRequestDto> update(@PathVariable("id") Integer id, @RequestBody HiringRequestRequest inputData) throws ResourceNotFoundException {
-        HiringRequest updatingHiringRequest = hiringRequestService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
+        HiringRequest updatingHiringRequest = hiringRequestService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find HiringRequest with that id."));
         updatingHiringRequest.setOnBoardingDate(inputData.getOnBoardingDate());
         updatingHiringRequest.setPosition(inputData.getPosition());
         updatingHiringRequest.setSpecificBenefit(inputData.getSpecificBenefit());
@@ -67,7 +73,7 @@ public class HiringRequestResource {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws ResourceNotFoundException {
-        HiringRequest deletingHiringRequest = hiringRequestService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
+        HiringRequest deletingHiringRequest = hiringRequestService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find HiringRequest with that id."));
         hiringRequestService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

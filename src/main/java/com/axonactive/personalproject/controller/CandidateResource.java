@@ -24,6 +24,12 @@ public class CandidateResource {
         return ResponseEntity.ok().body(candidateService.findAll());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Candidate> getById (@PathVariable("id") Integer id) throws ResourceNotFoundException {
+        Candidate candidate = candidateService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Candidate with that id."));
+        return ResponseEntity.created(URI.create(PATH+"/"+candidate.getId())).body(candidate);
+    }
+
     @PostMapping
     public ResponseEntity<Candidate> add(
             @RequestBody Candidate inputData) {
@@ -47,7 +53,7 @@ public class CandidateResource {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws ResourceNotFoundException {
-        Candidate deletingCandidate = candidateService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
+        Candidate deletingCandidate = candidateService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Candidate with that id."));
         candidateService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

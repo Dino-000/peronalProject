@@ -33,6 +33,12 @@ public class CandidateSkillSetResource {
         return ResponseEntity.ok().body(CandidateSkillSetMapper.INSTANCE.toDtos(candidateSkillSetService.findAll()));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<CandidateSkillSetDto> getById (@PathVariable("id") Integer id) throws ResourceNotFoundException {
+        CandidateSkillSet candidateSkillSet = candidateSkillSetService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Candidate SkillSet with that id."));
+        return ResponseEntity.created(URI.create(PATH+"/"+candidateSkillSet.getId())).body(CandidateSkillSetMapper.INSTANCE.toDto(candidateSkillSet));
+    }
+
     @PostMapping
     public ResponseEntity<CandidateSkillSetDto> add(
             @RequestBody CandidateSkillSetRequest inputData) {
@@ -46,7 +52,7 @@ public class CandidateSkillSetResource {
 
     @PutMapping("/{id}")
     public  ResponseEntity<CandidateSkillSetDto> update(@PathVariable("id") Integer id, @RequestBody CandidateSkillSetRequest inputData) throws ResourceNotFoundException {
-        CandidateSkillSet updatingCandidateSkillSet = candidateSkillSetService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
+        CandidateSkillSet updatingCandidateSkillSet = candidateSkillSetService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Candidate SkillSet with that id."));
         updatingCandidateSkillSet.setCandidate(candidateService.findById(inputData.getCandidateId()).get());
         updatingCandidateSkillSet.setSkillSet(skillSetService.findById(inputData.getSkillSetId()).get());
         CandidateSkillSet updatedCandidateSkillSet = candidateSkillSetService.saveSkillSetList(updatingCandidateSkillSet);

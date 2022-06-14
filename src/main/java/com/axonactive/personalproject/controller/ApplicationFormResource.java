@@ -52,6 +52,12 @@ public class ApplicationFormResource {
     return ResponseEntity.ok().body(ApplicationFormMapper.INSTANCE.toDtos(applicationFormService.findAll()));
   }
 
+  @GetMapping("/{id}")
+  public ResponseEntity<ApplicationFormDto> getById (@PathVariable("id") Integer id) throws ResourceNotFoundException {
+      ApplicationForm applicationForm= applicationFormService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Can't not find Application Form with that id."));
+      return ResponseEntity.created(URI.create(PATH+"/"+applicationForm.getId())).body(ApplicationFormMapper.INSTANCE.toDto(applicationForm));
+  }
+
   @PostMapping
   public ResponseEntity<ApplicationFormDto> add(
       @RequestBody ApplicationFormRequest formRequest) {

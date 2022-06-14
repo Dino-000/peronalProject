@@ -24,6 +24,12 @@ public class SkillSetResource {
         return ResponseEntity.ok().body(skillSetService.findAll());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<SkillSet> getById (@PathVariable("id") Integer id) throws ResourceNotFoundException {
+        SkillSet skillSet = skillSetService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find SkillSet with that id."));
+        return ResponseEntity.created(URI.create(PATH+"/"+skillSet.getId())).body(skillSet);
+    }
+
     @PostMapping
     public ResponseEntity<SkillSet> add(
             @RequestBody SkillSet inputData) {
@@ -34,7 +40,7 @@ public class SkillSetResource {
 
     @PutMapping("/{id}")
     public  ResponseEntity<SkillSet> update(@PathVariable("id") Integer id,@RequestBody SkillSet updateDetail) throws ResourceNotFoundException {
-        SkillSet updatingSkillSet = skillSetService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
+        SkillSet updatingSkillSet = skillSetService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find SkillSet with that id."));
         updatingSkillSet.setIndustryCategory(updateDetail.getIndustryCategory());
         updatingSkillSet.setName(updateDetail.getName());
         updatingSkillSet.setType(updateDetail.getType());
@@ -44,7 +50,7 @@ public class SkillSetResource {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws ResourceNotFoundException {
-        SkillSet deletingSkillSet = skillSetService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
+        SkillSet deletingSkillSet = skillSetService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find SkillSet with that id."));
         skillSetService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

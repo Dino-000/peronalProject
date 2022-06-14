@@ -31,6 +31,16 @@ public class CandidateEducationResource {
         .body(CandidateEducationMapper.INSTANCE.toDtos(candidateEducationService.findAll()));
   }
 
+  @GetMapping("/{id}")
+  public ResponseEntity<CandidateEducationDto> getById (@PathVariable("id") Integer id) throws ResourceNotFoundException {
+    CandidateEducation candidateEducation =
+            candidateEducationService
+                    .findById(id)
+                    .orElseThrow(
+                            () ->
+                                    new ResourceNotFoundException("Can't not find Candidate Education with that id."));
+    return ResponseEntity.created(URI.create(PATH+"/"+id)).body(CandidateEducationMapper.INSTANCE.toDto(candidateEducation));
+  }
   @PostMapping
   public ResponseEntity<CandidateEducationDto> add(
       @RequestBody CandidateEducationRequest inputData) {
@@ -55,7 +65,7 @@ public class CandidateEducationResource {
             .findById(id)
             .orElseThrow(
                 () ->
-                    new ResourceNotFoundException("Can't not find Application Form with that id."));
+                    new ResourceNotFoundException("Can't not find Candidate Education with that id."));
     updatingCandidateEducation.setCandidate(
         candidateService.findById(inputData.getCandidateId()).get());
     updatingCandidateEducation.setEducation(

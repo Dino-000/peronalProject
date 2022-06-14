@@ -23,6 +23,12 @@ public class CertificationResource {
         return ResponseEntity.ok().body(certificationService.findAll());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Certification> getById (@PathVariable("id") Integer id) throws ResourceNotFoundException {
+        Certification certification = certificationService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Certification with that id."));
+        return ResponseEntity.created(URI.create(PATH+"/"+certification.getId())).body(certification);
+    }
+
     @PostMapping
     public ResponseEntity<Certification> add(
             @RequestBody Certification inputData) {
@@ -38,7 +44,7 @@ public class CertificationResource {
 
     @PutMapping("/{id}")
     public  ResponseEntity<Certification> update(@PathVariable("id") Integer id, @RequestBody Certification inputData) throws ResourceNotFoundException {
-        Certification updatingCertification = certificationService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
+        Certification updatingCertification = certificationService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Certification with that id."));
         updatingCertification.setIssuerName(inputData.getIssuerName());
         updatingCertification.setNameOfCertification(inputData.getNameOfCertification());
         updatingCertification.setType(inputData.getType());
@@ -48,7 +54,7 @@ public class CertificationResource {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws ResourceNotFoundException {
-        Certification deletingCertification = certificationService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
+        Certification deletingCertification = certificationService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Certification with that id."));
         certificationService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
