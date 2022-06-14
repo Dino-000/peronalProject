@@ -24,6 +24,7 @@ public class WorkingHistoryRecord {
     private String responsibility;
     private String client;
     private Integer teamSize;
+    private String jobType;
     private String referencesPeoplePhone;
     @ManyToOne
     private Candidate candidate;

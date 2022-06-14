@@ -18,6 +18,8 @@ public class WorkingHistoryRecordRequest {
     private String responsibility;
     private String client;
     private Integer teamSize;
+    private String jobType;
+
     private String referencesPeoplePhone;
     private Integer candidateId;
 }

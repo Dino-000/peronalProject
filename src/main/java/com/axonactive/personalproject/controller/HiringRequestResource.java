@@ -49,6 +49,7 @@ public class HiringRequestResource {
                 inputData.getPosition(),
                 inputData.getSpecificBenefit(),
                 inputData.getBonusPoint(),
+                inputData.getBudget(),
                 departmentService.findById(inputData.getDepartmentId()).get(),
                 employeeService.findById(inputData.getHiringManagerId()).get(),
                 employeeService.findById(inputData.getHrOfficerId()).get()

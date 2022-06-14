@@ -14,6 +14,8 @@ public class HiringRequestRequest {
     private String position;
     private String specificBenefit;
     private  Double bonusPoint;
+    private Double budget;
+
     private Integer departmentId;
     private Integer hiringManagerId;
     private Integer hrOfficerId;

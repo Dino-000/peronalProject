@@ -19,6 +19,7 @@ public class HiringRequest {
     private String position;
     private String specificBenefit;
     private  Double bonusPoint;
+    private Double budget;
     @ManyToOne
     private Department department;
     @ManyToOne

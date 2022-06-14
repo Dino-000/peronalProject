@@ -47,6 +47,7 @@ public class WorkingHistoryRecordResource {
                 inputData.getResponsibility(),
                 inputData.getClient(),
                 inputData.getTeamSize(),
+                inputData.getJobType(),
                 inputData.getReferencesPeoplePhone(),
                 candidateService.findById(inputData.getCandidateId()).get()
         ));
