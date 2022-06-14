@@ -48,7 +48,7 @@ public class ApplicationFormResource {
 
 
   @GetMapping
-  public ResponseEntity<List<ApplicationFormDto>> getAll() {
+  public ResponseEntity<List<ApplicationFormDto>> getAll(@RequestHeader("Authentication")String authentication) {
     return ResponseEntity.ok().body(ApplicationFormMapper.INSTANCE.toDtos(applicationFormService.findAll()));
   }
 
