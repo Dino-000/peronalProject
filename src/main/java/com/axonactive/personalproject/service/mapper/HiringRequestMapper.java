@@ -15,7 +15,6 @@ public interface HiringRequestMapper {
 
     @Mapping(source = "department.name",target = "departmentName")
     @Mapping(source = "hiringManager.name",target = "hiringManagerName")
-    @Mapping(source = "hrOfficer.name",target = "hrOfficerName")
     HiringRequestDto toDto (HiringRequest hiringRequest);
     List<HiringRequestDto> toDtos(List<HiringRequest> hiringRequests);
 }

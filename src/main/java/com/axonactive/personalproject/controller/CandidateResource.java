@@ -18,7 +18,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @RequestMapping(CandidateResource.PATH)
 public class CandidateResource {
-  public static final String PATH = "api/Candidates";
+  public static final String PATH = "api/candidates";
   @Autowired
   CandidateService candidateService;
   @Autowired

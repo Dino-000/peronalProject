@@ -12,11 +12,10 @@ import java.time.LocalDate;
 public class HiringRequestRequest {
     private LocalDate onBoardingDate;
     private String position;
+    private String level;
     private String specificBenefit;
-    private  Double bonusPoint;
     private Double budget;
 
     private Integer departmentId;
     private Integer hiringManagerId;
-    private Integer hrOfficerId;
 }

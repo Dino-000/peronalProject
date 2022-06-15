@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping(path = CertificationResource.PATH)
 @RequiredArgsConstructor
 public class CertificationResource {
-    public static final String PATH ="api/Certifications";
+    public static final String PATH ="api/certifications";
     @Autowired
     CertificationService certificationService;
 

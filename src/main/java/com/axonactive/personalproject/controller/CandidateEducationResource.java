@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(CandidateEducationResource.PATH)
 public class CandidateEducationResource {
-  public static final String PATH = "api/CandidateEducations";
+  public static final String PATH = "api/candidate-educations";
   @Autowired CandidateEducationService candidateEducationService;
   @Autowired EducationService educationService;
   @Autowired CandidateService candidateService;
@@ -85,7 +85,7 @@ public class CandidateEducationResource {
             .findById(id)
             .orElseThrow(
                 () ->
-                    new ResourceNotFoundException("Can't not find Application Form with that id."));
+                    new ResourceNotFoundException("Can't not findCandidate Education with that id."));
     candidateEducationService.deleteById(id);
     return ResponseEntity.noContent().build();
   }

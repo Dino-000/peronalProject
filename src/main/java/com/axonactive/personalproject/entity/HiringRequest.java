@@ -17,13 +17,12 @@ public class HiringRequest {
     private Integer id;
     private LocalDate onBoardingDate;
     private String position;
+    private String level;
     private String specificBenefit;
-    private  Double bonusPoint;
     private Double budget;
     @ManyToOne
     private Department department;
     @ManyToOne
     private Employee hiringManager;
-    @ManyToOne
-    private Employee hrOfficer;
+
 }

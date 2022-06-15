@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping(path = RecruitmentChanelResource.PATH)
 @RequiredArgsConstructor
 public class RecruitmentChanelResource {
-    public static final String PATH ="api/RecruitmentChannels";
+    public static final String PATH ="api/recruitment-channels";
     @Autowired
     RecruitmentChanelService recruitmentChanelService;
 

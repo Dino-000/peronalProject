@@ -12,6 +12,8 @@ import java.time.LocalDate;
 public class CandidateCertificationDto {
     private String candidateName;
     private String certificationName;
+    private String issuerName;
+    private String type;
     private LocalDate issuedDate;
     private LocalDate expiredDate;
 

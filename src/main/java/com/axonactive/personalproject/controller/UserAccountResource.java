@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping(UserAccountResource.PATH)
 public class UserAccountResource {
-  public static final String PATH = "/api/UserAccounts";
+  public static final String PATH = "/api/useraccounts";
   @Autowired UserAccountService userAccountService;
   @Autowired JwtAuthenticationService jwtAuthenticationService;
 

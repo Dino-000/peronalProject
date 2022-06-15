@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CandidateEducationDto {
     private String employeeName;
-    private String educationSchoolName;
+    private String schoolName;
+    private String degree;
+    private String major;
+    private Double prestigeRate;
     private Integer graduationYear;
 }

@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping(SkillSetResource.PATH)
 @RequiredArgsConstructor
 public class SkillSetResource {
-    public static final String PATH="api/SkillSets";
+    public static final String PATH="api/skillsets";
     @Autowired
     SkillSetService skillSetService;
 

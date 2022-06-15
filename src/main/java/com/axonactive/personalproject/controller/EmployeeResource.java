@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping(path = EmployeeResource.PATH)
 @RequiredArgsConstructor
 public class EmployeeResource {
-    public static final String PATH ="api/Employees";
+    public static final String PATH ="api/employees";
     @Autowired
     EmployeeService employeeService;
     @Autowired

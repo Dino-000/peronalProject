@@ -11,12 +11,18 @@ import java.time.LocalDate;
 @AllArgsConstructor
 
 public class ApplicationFormDto {
+
     private LocalDate submittedDate;
     private Integer noticePeriods;
     private String urlCV;
     private double salaryExpectation;
     private String candidateName;
-    private String hiringRequestPosition;
+    private String position;
+    private String level;
+    private String specificBenefit;
+    private Double budget;
+    private String department;
+    private String hiringManager;
+    private String recruiter;
     private String recruitmentChanelName;
-    private String hrOfficerName;
 }

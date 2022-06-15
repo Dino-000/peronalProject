@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping(path = DepartmentResource.PATH)
 @RequiredArgsConstructor
 public class DepartmentResource {
-    public static final String PATH ="api/Departments";
+    public static final String PATH ="api/departments";
     @Autowired
     DepartmentService departmentService;
 

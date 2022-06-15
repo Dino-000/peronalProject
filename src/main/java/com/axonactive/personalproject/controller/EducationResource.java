@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping(path = EducationResource.PATH)
 @RequiredArgsConstructor
 public class EducationResource {
-    public static final String PATH ="api/Educations";
+    public static final String PATH ="api/educations";
     @Autowired
     EducationService educationService;
 

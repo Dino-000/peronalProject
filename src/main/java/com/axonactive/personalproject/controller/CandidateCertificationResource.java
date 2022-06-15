@@ -21,7 +21,7 @@ import java.util.List;
 @RequestMapping(CandidateCertificationResource.PATH)
 @RequiredArgsConstructor
 public class CandidateCertificationResource {
-  public static final String PATH = "api/CandidateCertifications";
+  public static final String PATH = "api/candidate-certifications";
   @Autowired CandidateCertificationService candidateCertificationService;
   @Autowired CandidateService candidateService;
   @Autowired CertificationService certificationService;

@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping(path = HiringRequestSkillSetResource.PATH)
 @RequiredArgsConstructor
 public class HiringRequestSkillSetResource {
-    public static final String PATH ="api/HiringRequestSkillSets";
+    public static final String PATH ="api/hiringrequest-skillsets";
     @Autowired
     HiringRequestSkillSetService hiringRequestSkillSetService;
     @Autowired
