@@ -35,9 +35,9 @@ public class CandidateResource {
     return ResponseEntity.ok().body(candidateService.findAll());
   }
 
-  @GetMapping("/FindByExperiencesInTeamSize")
+  @GetMapping("/team-size")
   public ResponseEntity<Set<Candidate>> findByExperiencesInTeamSize(
-      @RequestParam("teamSize") Integer teamSize) {
+      @RequestParam("size") Integer teamSize) {
     return ResponseEntity.ok().body(candidateService.findByExperiencedTeamSizeLargerThan(teamSize));
   }
 
@@ -52,78 +52,82 @@ public class CandidateResource {
     return ResponseEntity.created(URI.create(PATH + "/" + candidate.getId())).body(candidate);
   }
 
-  @GetMapping("/FindByGPAEduSkillAndSeniority")
+  @GetMapping("/gpa-edu-skill-seniority")
   public ResponseEntity<Set<Candidate>> findByGPAAndSkillSetAndEducationAndSeniority(
-      @RequestParam("GPA") Double gpa,
-      @RequestParam("Skill") String skillSetName,
-      @RequestParam("School") String schoolName,
-      @RequestParam("Seniority") String Seniority) {
+      @RequestParam("gpa") Double gpa,
+      @RequestParam("skill") String skillSetName,
+      @RequestParam("school") String schoolName,
+      @RequestParam("seniority") String Seniority) {
     return ResponseEntity.ok()
         .body(
             candidateService.findByGPAAndSkillSetAndEducationAndSeniority(
                 gpa, skillSetName, schoolName, Seniority));
   }
 
-  @GetMapping("/FindByExperiencedWithJobType")
+  @GetMapping("/job-type")
   public ResponseEntity<Set<Candidate>> findByExperiencedWithJobType(
-      @RequestParam("Type") String jobType) {
+      @RequestParam("type") String jobType) {
     return ResponseEntity.ok().body(candidateService.findByExperiencedWithJobType(jobType));
   }
 
-  @GetMapping("/FindBySkillSetAndMaxSalary")
+  @GetMapping("/skill-salary")
   public ResponseEntity<Set<Candidate>> findBySalaryAndSkillSet(
-      @RequestParam("maxSalary") Double maxSalaryExpectation,
-      @RequestParam("skillSet") String SkillSetName) {
+      @RequestParam("salary") Double maxSalaryExpectation,
+      @RequestParam("skill") String SkillSetName) {
     return ResponseEntity.ok()
         .body(
             candidateService.findBySalaryExpectationLessThanAndCandidateSkillSet(
                 maxSalaryExpectation, SkillSetName));
   }
 
-  @GetMapping("/findByLocationAndSkillSetAndSeniority")
+  @GetMapping("/location-skill-seniority")
   public ResponseEntity<Set<Candidate>> findByLocationAndSkillSetAndSeniority(
-      @RequestParam("Location") String location,
-      @RequestParam("SkillSet") String skillSetName,
-      @RequestParam("Seniority") String Seniority) {
+      @RequestParam("location") String location,
+      @RequestParam("skill") String skillSetName,
+      @RequestParam("seniority") String Seniority) {
     return ResponseEntity.ok()
         .body(
             candidateService.findByLocationAndSkillSetAndSeniority(
                 location, skillSetName, Seniority));
   }
 
-  @GetMapping("/findByExpectationGreaterThanBudget")
+  @GetMapping("/salary-expectation-over-budget")
   public ResponseEntity<Set<Candidate>> findBySalaryExpectationGreaterThanHiringRequestBudget() {
     return ResponseEntity.ok()
         .body(candidateService.findBySalaryExpectationGreaterThanHiringRequestBudget());
   }
 
-  @GetMapping("/findByExperiencedACompany")
+  @GetMapping("/company")
   public ResponseEntity<Set<Candidate>> findByExperiencedACompany(
-      @RequestParam("CompanyName") String companyName) {
+      @RequestParam("company") String companyName) {
     return ResponseEntity.ok()
         .body(candidateService.findByExperiencesInSpecificCompany(companyName));
   }
 
-  @GetMapping("/findByEducation")
+  @GetMapping("/education")
   public ResponseEntity<Set<Candidate>> findByEducation(
-      @RequestParam("SchoolName") String schoolName) {
+      @RequestParam("school") String schoolName) {
     return ResponseEntity.ok().body(candidateService.findByEducation(schoolName));
   }
 
-  @GetMapping("/FindByCertification")
+  @GetMapping("/certification")
   public ResponseEntity<Set<Candidate>> findByCertification(@RequestParam("name")String name) {
     return ResponseEntity.ok().body(candidateService.findByCertification(name));
   }
 
-  @GetMapping("/{id}/FindPortfolio")
+  @GetMapping("/{id}/portfolio")
   public ResponseEntity<CandidatePortfolioDto> findPortfolio(@PathVariable("id")Integer id) throws ResourceNotFoundException {
     Candidate foundCandidate = candidateService.findById(id).orElseThrow(
             () -> new ResourceNotFoundException("Can't not find Candidate with that id."));
+    System.out.println(foundCandidate);
     CandidatePortfolioDto candidatePortfolioDto =
             new CandidatePortfolioDto(foundCandidate,
                     certificationService.findByCandidateId(id),
+//                    null,
                     educationService.findByCandidateId(id),
+//                    null,
                     skillSetService.findByCandidateId(id),
+//                    null,
                     WorkingHistoryRecordMapper.INSTANCE.toDtos(workingHistoryRecordService.findByCandidateId(id))
 
             );

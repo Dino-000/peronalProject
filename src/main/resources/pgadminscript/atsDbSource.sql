@@ -205,17 +205,17 @@ INSERT INTO public.skill_set ( industry_category, level, name, type) VALUES (
 
 --hiring request
 INSERT INTO public.hiring_request (
- bonus_point, on_boarding_date, "position", specific_benefit, department_id, hiring_manager_id, hr_officer_id) VALUES (
- '2.0', '2022-06-06', 'Front End', 'work remote', 1, 1, 5);
+ bonus_point, on_boarding_date, "position", specific_benefit, department_id, hiring_manager_id, hr_officer_id,budget) VALUES (
+ '2.0', '2022-06-06', 'Front End', 'work remote', 1, 1, 5,1000);
 INSERT INTO public.hiring_request (
- bonus_point, on_boarding_date, "position", specific_benefit, department_id, hiring_manager_id, hr_officer_id) VALUES (
- '1.0', '2022-06-06', 'DevOps', 'voucher beer club', 1, 2, 6);
+ bonus_point, on_boarding_date, "position", specific_benefit, department_id, hiring_manager_id, hr_officer_id,budget) VALUES (
+ '1.0', '2022-06-06', 'DevOps', 'voucher beer club', 1, 2, 6,1200);
 INSERT INTO public.hiring_request (
- bonus_point, on_boarding_date, "position", specific_benefit, department_id, hiring_manager_id, hr_officer_id) VALUES (
- '1.5', '2022-06-06', 'Back End', 'spa discount', 1, 3, 5);
+ bonus_point, on_boarding_date, "position", specific_benefit, department_id, hiring_manager_id, hr_officer_id,budget) VALUES (
+ '1.5', '2022-06-06', 'Back End', 'spa discount', 1, 3, 5,1100);
 INSERT INTO public.hiring_request (
- bonus_point, on_boarding_date, "position", specific_benefit, department_id, hiring_manager_id, hr_officer_id) VALUES (
- '2.0', '2022-06-06', 'UX/UI Designer', 'bonus bug', 1, 4, 6);
+ bonus_point, on_boarding_date, "position", specific_benefit, department_id, hiring_manager_id, hr_officer_id,budget) VALUES (
+ '2.0', '2022-06-06', 'UX/UI Designer', 'bonus bug', 1, 4, 6,900);
 
 --recruitment channel
 INSERT INTO public.recruitment_chanel (
@@ -255,17 +255,6 @@ INSERT INTO public.application_form (
 INSERT INTO public.application_form (
  notice_periods, salary_expectation, submitted_date, candidate_id, hiring_request_id, hr_officer_id, recruitment_chanel_id) VALUES (
  '30', '1000', '2022-05-05', '1', '1', '6', '1');
-
-
---hr record
-
-INSERT INTO public.hr_performance_record (
- penalty, bonus, peak_rate, quarter, quarter_kpi, quarter_performance, hr_officer_id) VALUES (
- '100', '1000', false, '1', '200', '180', '5');
-
-INSERT INTO public.hr_performance_record (
- penalty, bonus, peak_rate, quarter, quarter_kpi, quarter_performance, hr_officer_id) VALUES (
- '100', '2000', true, '2', '400', '450', '5');
 
 
 
@@ -351,20 +340,20 @@ INSERT INTO public.hiring_request_skill_set (
 --working-record
 
 INSERT INTO public.working_history_record (
- client, company_name, joined_date, "position", project_name, references_people_phone, resignation_date, responsibility, team_size, candidate_id) VALUES (
- 'Manabie', 'SEA', '2017-01-01', 'lead Front End', 'SEA Talk', '0123', '2018-01-01', 'fix bug', '10', '1');
+ client, company_name, joined_date, "position", project_name, references_people_phone, resignation_date, responsibility, team_size, candidate_id,job_type) VALUES (
+ 'Manabie', 'SEA', '2017-01-01', 'lead Front End', 'SEA Talk', '0123', '2018-01-01', 'fix bug', '10', '1','onsite');
 
 INSERT INTO public.working_history_record (
- client, company_name, joined_date, "position", project_name, references_people_phone, resignation_date, responsibility, team_size, candidate_id) VALUES (
- 'Axon', 'Amazon', '2018-01-01', 'Solution Architect', 'Kinlde Server', '0123', '2019-01-01', 'fix bug', '10', '1');
+ client, company_name, joined_date, "position", project_name, references_people_phone, resignation_date, responsibility, team_size, candidate_id,job_type) VALUES (
+ 'Axon', 'Amazon', '2018-01-01', 'Solution Architect', 'Kinlde Server', '0123', '2019-01-01', 'fix bug', '10', '1','part-time');
 
 INSERT INTO public.working_history_record (
- client, company_name, joined_date, "position", project_name, references_people_phone, resignation_date, responsibility, team_size, candidate_id) VALUES (
- 'Google', 'SEA', '2019-01-01', 'Delivery Manager', 'VPN', '0123', '2020-01-01', 'fix bug', '10', '1');
+ client, company_name, joined_date, "position", project_name, references_people_phone, resignation_date, responsibility, team_size, candidate_id,job_type) VALUES (
+ 'Google', 'SEA', '2019-01-01', 'Delivery Manager', 'VPN', '0123', '2020-01-01', 'fix bug', '10', '1','fulltime');
 
 INSERT INTO public.working_history_record (
- client, company_name, joined_date, "position", project_name, references_people_phone, resignation_date, responsibility, team_size, candidate_id) VALUES (
- 'PhongVu', 'SEA', '2017-01-01', 'lead Front End', 'SEA Talk', '0123', '2018-01-01', 'fix bug', '10', '2');
+ client, company_name, joined_date, "position", project_name, references_people_phone, resignation_date, responsibility, team_size, candidate_id,job_type) VALUES (
+ 'PhongVu', 'SEA', '2017-01-01', 'lead Front End', 'SEA Talk', '0123', '2018-01-01', 'fix bug', '10', '2','freelance');
 
 
 --working-record skillset

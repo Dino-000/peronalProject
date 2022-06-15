@@ -13,6 +13,6 @@ import java.util.List;
 public interface EducationRepository extends JpaRepository<Education,Integer> {
     @Query(value = "SELECT c.education " +
             "FROM CandidateEducation c " +
-            "WHERE c.candidate = ?1")
+            "WHERE c.candidate.id = ?1")
     List<Education> findByCandidateId(Integer id);
 }

@@ -18,6 +18,8 @@ public class WorkingHistoryRecordDto {
     private String responsibility;
     private String client;
     private Integer teamSize;
+    private String jobType;
+
     private String referencesPeoplePhone;
     private String candidateName;
 }

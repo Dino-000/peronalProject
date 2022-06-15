@@ -43,7 +43,7 @@ public interface CandidateRepository extends JpaRepository<Candidate, Integer> {
 
     @Query(value = "SELECT a.candidate " +
             "FROM ApplicationForm a " +
-            "WHERE a.salaryExpectation = a.hiringRequest.budget")
+            "WHERE a.salaryExpectation > a.hiringRequest.budget")
 Set<Candidate> findBySalaryExpectationGreaterThanHiringRequestBudget();
 
     @Query(value = "SELECT w.candidate " +

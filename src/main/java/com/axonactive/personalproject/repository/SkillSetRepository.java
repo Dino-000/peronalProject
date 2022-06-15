@@ -12,6 +12,6 @@ import java.util.List;
 public interface SkillSetRepository extends JpaRepository<SkillSet,Integer> {
 @Query(value = "SELECT c.skillSet " +
         "FROM CandidateSkillSet c " +
-        "WHERE c.candidate = ?1")
+        "WHERE c.candidate.id = ?1")
     List<SkillSet> findByCandidateId(Integer id);
 }

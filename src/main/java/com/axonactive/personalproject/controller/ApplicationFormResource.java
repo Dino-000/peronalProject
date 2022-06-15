@@ -32,7 +32,7 @@ import java.util.List;
 @RequestMapping(path = ApplicationFormResource.PATH)
 @RequiredArgsConstructor
 public class ApplicationFormResource {
-  public static final String PATH = "/api/ApplicationForms";
+  public static final String PATH = "/api/application-forms";
   @Autowired ApplicationFormService applicationFormService;
 
   @Autowired CandidateService candidateService;
@@ -61,7 +61,7 @@ public class ApplicationFormResource {
         .body(ApplicationFormMapper.INSTANCE.toDto(applicationForm));
   }
 
-  @GetMapping("/{id}/SalaryExpectation")
+  @GetMapping("/{id}/salary-expectation")
   public ResponseEntity<Double> getSalary(
       @RequestHeader("Authentication") String authentication, @PathVariable("id") Integer id)
       throws ResourceNotFoundException {
@@ -76,18 +76,24 @@ public class ApplicationFormResource {
                 .getSalaryExpectation());
   }
 
-  @GetMapping("/FromDateRange")
-  public ResponseEntity<List<ApplicationForm>> findBySubmittedDateBetween(
+  @GetMapping("/date-range")
+  public ResponseEntity<List<ApplicationFormDto>> findBySubmittedDateBetween(
       @RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
     LocalDate beginDay = LocalDate.parse(fromDate);
     LocalDate untilDay = LocalDate.parse(toDate);
     return ResponseEntity.ok()
-        .body(applicationFormService.findBySubmittedDateBetween(beginDay, untilDay));
+        .body(
+            ApplicationFormMapper.INSTANCE.toDtos(
+                applicationFormService.findBySubmittedDateBetween(beginDay, untilDay)));
   }
 
-  @GetMapping("/findByHiringManageInCharge")
-  public ResponseEntity<List<ApplicationForm>> findByHiringManageInCharge(@RequestParam("id") Integer id){
-    return ResponseEntity.ok().body(applicationFormService.findByHiringRequestHiringManagerId(id));
+  @GetMapping("/hiring-manager")
+  public ResponseEntity<List<ApplicationFormDto>> findByHiringManageInCharge(
+      @RequestParam("id") Integer id) {
+    return ResponseEntity.ok()
+        .body(
+            ApplicationFormMapper.INSTANCE.toDtos(
+                applicationFormService.findByHiringRequestHiringManagerId(id)));
   }
 
   //    @GetMapping("/CV")
