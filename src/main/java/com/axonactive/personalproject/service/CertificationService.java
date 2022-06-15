@@ -12,4 +12,7 @@ public interface CertificationService {
     void deleteById(Integer id);
 
     Certification saveCertification(Certification certification);
+
+    List<Certification> findByCandidateId(Integer id);
+
 }

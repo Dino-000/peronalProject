@@ -35,4 +35,9 @@ public class EducationServiceImpl implements EducationService {
     public Education saveEducation(Education education) {
         return educationRepository.save(education);
     }
+
+    @Override
+    public List<Education> findByCandidateId(Integer id) {
+        return educationRepository.findByCandidateId(id);
+    }
 }

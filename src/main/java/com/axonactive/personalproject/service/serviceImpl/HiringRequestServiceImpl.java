@@ -35,4 +35,9 @@ hiringRequestRepository.deleteById(id);
     public HiringRequest saveHiringRequest(HiringRequest hiringRequest) {
         return hiringRequestRepository.save(hiringRequest);
     }
+
+    @Override
+    public List<HiringRequest> findByHiringManagerId(Integer Id) {
+        return hiringRequestRepository.findByHiringManagerId(Id);
+    }
 }

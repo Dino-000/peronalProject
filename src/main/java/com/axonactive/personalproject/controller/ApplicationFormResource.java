@@ -25,106 +25,157 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @RequestMapping(path = ApplicationFormResource.PATH)
 @RequiredArgsConstructor
-
 public class ApplicationFormResource {
   public static final String PATH = "/api/ApplicationForms";
   @Autowired ApplicationFormService applicationFormService;
 
-    @Autowired
-    CandidateService candidateService;
-    @Autowired
-    HiringRequestService hiringRequestService;
-    @Autowired
-    RecruitmentChanelService recruitmentChanelService;
-    @Autowired
-    EmployeeService employeeService;
-    @Autowired
-    ServletContext application;
-
+  @Autowired CandidateService candidateService;
+  @Autowired HiringRequestService hiringRequestService;
+  @Autowired RecruitmentChanelService recruitmentChanelService;
+  @Autowired EmployeeService employeeService;
+  @Autowired ServletContext application;
 
   @GetMapping
-  public ResponseEntity<List<ApplicationFormDto>> getAll(@RequestHeader("Authentication")String authentication) {
-    return ResponseEntity.ok().body(ApplicationFormMapper.INSTANCE.toDtos(applicationFormService.findAll()));
+  public ResponseEntity<List<ApplicationFormDto>> getAll(
+      @RequestHeader("Authentication") String authentication) {
+    return ResponseEntity.ok()
+        .body(ApplicationFormMapper.INSTANCE.toDtos(applicationFormService.findAll()));
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<ApplicationFormDto> getById (@PathVariable("id") Integer id) throws ResourceNotFoundException {
-      ApplicationForm applicationForm= applicationFormService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Can't not find Application Form with that id."));
-      return ResponseEntity.created(URI.create(PATH+"/"+applicationForm.getId())).body(ApplicationFormMapper.INSTANCE.toDto(applicationForm));
+  public ResponseEntity<ApplicationFormDto> getById(@PathVariable("id") Integer id)
+      throws ResourceNotFoundException {
+    ApplicationForm applicationForm =
+        applicationFormService
+            .findById(id)
+            .orElseThrow(
+                () ->
+                    new ResourceNotFoundException("Can't not find Application Form with that id."));
+    return ResponseEntity.created(URI.create(PATH + "/" + applicationForm.getId()))
+        .body(ApplicationFormMapper.INSTANCE.toDto(applicationForm));
   }
 
-  @PostMapping
-  public ResponseEntity<ApplicationFormDto> add(
-      @RequestBody ApplicationFormRequest formRequest) {
-    ApplicationForm newForm =applicationFormService.saveApplicationForm(
-        new ApplicationForm(
-            null,
-            formRequest.getSubmittedDate(),
-            formRequest.getNoticePeriods(),
-            formRequest.getUrlCV(),
-            formRequest.getSalaryExpectation(),
-            candidateService.findById(formRequest.getCandidateId()).get(),
-            hiringRequestService.findById(formRequest.getHiringRequestId()).get(),
-            recruitmentChanelService.findById(formRequest.getRecruitmentChanelId()).get(),
-            employeeService.findById(formRequest.getHrOfficerId()).get()
-        ));
+  @GetMapping("/{id}/SalaryExpectation")
+  public ResponseEntity<Double> getSalary(
+      @RequestHeader("Authentication") String authentication, @PathVariable("id") Integer id)
+      throws ResourceNotFoundException {
+    return ResponseEntity.ok()
+        .body(
+            applicationFormService
+                .findById(id)
+                .orElseThrow(
+                    () ->
+                        new ResourceNotFoundException(
+                            "Can't not find Application Form with that id."))
+                .getSalaryExpectation());
+  }
 
-    return ResponseEntity.created(URI.create(PATH + "/" + newForm.getId())).body(ApplicationFormMapper.INSTANCE.toDto(newForm));
+  @GetMapping("/FromDateRange")
+  public ResponseEntity<List<ApplicationForm>> findBySubmittedDateBetween(
+      @RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
+    LocalDate beginDay = LocalDate.parse(fromDate);
+    LocalDate untilDay = LocalDate.parse(toDate);
+    return ResponseEntity.ok()
+        .body(applicationFormService.findBySubmittedDateBetween(beginDay, untilDay));
+  }
+
+  @GetMapping("/findByHiringManageInCharge")
+  public ResponseEntity<List<ApplicationForm>> findByHiringManageInCharge(@RequestParam("id") Integer id){
+    return ResponseEntity.ok().body(applicationFormService.findByHiringRequestHiringManagerId(id));
+  }
+
+  //    @GetMapping("/CV")
+  //    public void getById (@RequestParam("path") String path) throws ResourceNotFoundException {
+  //        InputStream in =
+  // servletContext.getResourceAsStream("/WEB-INF/images/image-example.jpg");
+  //        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+  //        IOUtils.copy(in, response.getOutputStream());
+  //    }
+
+  @PostMapping
+  public ResponseEntity<ApplicationFormDto> add(@RequestBody ApplicationFormRequest formRequest) {
+    ApplicationForm newForm =
+        applicationFormService.saveApplicationForm(
+            new ApplicationForm(
+                null,
+                formRequest.getSubmittedDate(),
+                formRequest.getNoticePeriods(),
+                formRequest.getUrlCV(),
+                formRequest.getSalaryExpectation(),
+                candidateService.findById(formRequest.getCandidateId()).get(),
+                hiringRequestService.findById(formRequest.getHiringRequestId()).get(),
+                recruitmentChanelService.findById(formRequest.getRecruitmentChanelId()).get(),
+                employeeService.findById(formRequest.getHrOfficerId()).get()));
+
+    return ResponseEntity.created(URI.create(PATH + "/" + newForm.getId()))
+        .body(ApplicationFormMapper.INSTANCE.toDto(newForm));
   }
 
   @PutMapping("/{id}")
-    public  ResponseEntity<ApplicationFormDto> update(@PathVariable("id") Integer id,@RequestBody ApplicationFormRequest updatingRequest) throws ResourceNotFoundException {
-      ApplicationForm updatingForm = applicationFormService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
-      updatingForm.setSubmittedDate(updatingRequest.getSubmittedDate());
-      updatingForm.setNoticePeriods(updatingRequest.getNoticePeriods());
-      updatingForm.setUrlCV(updatingRequest.getUrlCV());
-      updatingForm.setSalaryExpectation(updatingRequest.getSalaryExpectation());
-      updatingForm.setCandidate(candidateService.findById(updatingRequest.getCandidateId()).get());
-      updatingForm.setHiringRequest(hiringRequestService.findById(updatingRequest.getHiringRequestId()).get());
-      updatingForm.setRecruitmentChanel(recruitmentChanelService.findById(updatingRequest.getRecruitmentChanelId()).get());
+  public ResponseEntity<ApplicationFormDto> update(
+      @PathVariable("id") Integer id, @RequestBody ApplicationFormRequest updatingRequest)
+      throws ResourceNotFoundException {
+    ApplicationForm updatingForm =
+        applicationFormService
+            .findById(id)
+            .orElseThrow(
+                () ->
+                    new ResourceNotFoundException("Can't not find Application Form with that id."));
+    updatingForm.setSubmittedDate(updatingRequest.getSubmittedDate());
+    updatingForm.setNoticePeriods(updatingRequest.getNoticePeriods());
+    updatingForm.setUrlCV(updatingRequest.getUrlCV());
+    updatingForm.setSalaryExpectation(updatingRequest.getSalaryExpectation());
+    updatingForm.setCandidate(candidateService.findById(updatingRequest.getCandidateId()).get());
+    updatingForm.setHiringRequest(
+        hiringRequestService.findById(updatingRequest.getHiringRequestId()).get());
+    updatingForm.setRecruitmentChanel(
+        recruitmentChanelService.findById(updatingRequest.getRecruitmentChanelId()).get());
     updatingForm.setHrOfficer(employeeService.findById(updatingRequest.getHrOfficerId()).get());
     ApplicationForm updatedForm = applicationFormService.saveApplicationForm(updatingForm);
-    return  ResponseEntity.created(URI.create(PATH+"/"+id)).body(ApplicationFormMapper.INSTANCE.toDto(updatedForm));
+    return ResponseEntity.created(URI.create(PATH + "/" + id))
+        .body(ApplicationFormMapper.INSTANCE.toDto(updatedForm));
   }
 
-//      return ResponseEntity.created(URI.create(PATH + "/" + newForm.getId())).body(newForm);
-//    }
-        @PostMapping("/uploadImage")
-        public String addImage (
-                @RequestParam("file") MultipartFile file) throws Exception {
-            System.out.println(file.getBytes());
-            System.out.println(file.getName());
-            System.out.println(file.getOriginalFilename());
-            System.out.println(file.getContentType());
-//            String Path_directory = "/Users/dino/Downloads/personalproject/src/main/resources/static/Cv";
-    String Path_directory =new ClassPathResource("static/Cv/").getFile().getAbsolutePath();
-            String CvUrl = Path_directory + File.separator + file.getOriginalFilename();
-            Files.copy(file.getInputStream(), Paths.get(CvUrl), StandardCopyOption.REPLACE_EXISTING);
+  //      return ResponseEntity.created(URI.create(PATH + "/" + newForm.getId())).body(newForm);
+  //    }
+  @PostMapping("/uploadImage")
+  public String addImage(@RequestParam("file") MultipartFile file) throws Exception {
+    System.out.println(file.getBytes());
+    System.out.println(file.getName());
+    System.out.println(file.getOriginalFilename());
+    System.out.println(file.getContentType());
+    //            String Path_directory =
+    // "/Users/dino/Downloads/personalproject/src/main/resources/static/Cv";
+    String Path_directory = new ClassPathResource("static/Cv/").getFile().getAbsolutePath();
+    String CvUrl = Path_directory + File.separator + file.getOriginalFilename();
+    Files.copy(file.getInputStream(), Paths.get(CvUrl), StandardCopyOption.REPLACE_EXISTING);
 
-            return CvUrl;
-        }
+    return CvUrl;
+  }
 
-        @GetMapping(
-                produces = MediaType.IMAGE_JPEG_VALUE
-        )
-        public @ResponseBody byte[] getImageWithMediaType(@RequestParam("code") String code) throws IOException {
-            InputStream in = getClass()
-                    .getResourceAsStream(code);
-            return IOUtils.toByteArray(in);
-        }
+  @GetMapping(produces = MediaType.IMAGE_JPEG_VALUE)
+  public @ResponseBody byte[] getImageWithMediaType(@RequestParam("code") String code)
+      throws IOException {
+    InputStream in = getClass().getResourceAsStream(code);
+    return IOUtils.toByteArray(in);
+  }
 
-
-
-
-        @DeleteMapping("/{id}")
-        public ResponseEntity<Void> delete (@PathVariable("id") Integer id) throws ResourceNotFoundException {
-            ApplicationForm foundForm = applicationFormService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Can't not find Application Form with that id."));
-            applicationFormService.deleteById(id);
-            return ResponseEntity.noContent().build();
-        }
-    }
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
+      throws ResourceNotFoundException {
+    ApplicationForm foundForm =
+        applicationFormService
+            .findById(id)
+            .orElseThrow(
+                () ->
+                    new ResourceNotFoundException("Can't not find Application Form with that id."));
+    applicationFormService.deleteById(id);
+    return ResponseEntity.noContent().build();
+  }
+}

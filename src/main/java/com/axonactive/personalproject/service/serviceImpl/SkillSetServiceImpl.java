@@ -35,4 +35,9 @@ skillSetRepository.deleteById(id);
     public SkillSet saveSkillSet(SkillSet skillSet) {
         return skillSetRepository.save(skillSet);
     }
+
+    @Override
+    public List<SkillSet> findByCandidateId(Integer id) {
+        return skillSetRepository.findByCandidateId(id);
+    }
 }

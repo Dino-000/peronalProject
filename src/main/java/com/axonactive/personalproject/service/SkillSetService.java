@@ -12,4 +12,7 @@ public interface SkillSetService {
     void deleteById(Integer id);
 
     SkillSet saveSkillSet(SkillSet skillSet);
+
+    List<SkillSet> findByCandidateId(Integer id);
+
 }

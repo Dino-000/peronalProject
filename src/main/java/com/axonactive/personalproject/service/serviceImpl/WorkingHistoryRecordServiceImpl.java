@@ -34,4 +34,9 @@ public class WorkingHistoryRecordServiceImpl implements WorkingHistoryRecordServ
   public WorkingHistoryRecord saveWorkingHistoryRecord(WorkingHistoryRecord workingHistoryRecord) {
     return workingHistoryRecordRepository.save(workingHistoryRecord);
   }
+
+  @Override
+  public List<WorkingHistoryRecord> findByCandidateId(Integer id) {
+    return workingHistoryRecordRepository.findByCandidateId(id);
+  }
 }

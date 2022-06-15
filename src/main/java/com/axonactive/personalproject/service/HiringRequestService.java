@@ -12,4 +12,6 @@ public interface HiringRequestService {
     void deleteById(Integer id);
 
     HiringRequest saveHiringRequest(HiringRequest hiringRequest);
+    List<HiringRequest> findByHiringManagerId(Integer Id);
+
 }

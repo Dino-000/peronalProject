@@ -5,7 +5,10 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.axonactive.personalproject.exception.UnauthorizedAccessException;
+import com.axonactive.personalproject.service.UserAccountService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.auth0.jwt.algorithms.Algorithm;
 
@@ -14,16 +17,27 @@ import java.util.Date;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class JwtAuthenticationService {
-  private User checkValidUser(User user) throws UnauthorizedAccessException {
-    if (!("superAdmin".equalsIgnoreCase(user.getUserName()) && user.getPassWord().equals("1234"))) {
+    @Autowired
+    UserAccountService userAccountService;
+
+    //check password from database
+  private UserAccount checkValidUserAccount(UserAccount user) throws UnauthorizedAccessException {
+//    if (!("superAdmin".equalsIgnoreCase(user.getUserName()) && user.getPassWord().equals("1234"))) {
+      if(userAccountService.findByUserName(user.getUserName())==null ||
+              userAccountService.findByUserName(
+                      user.getUserName()).
+                      get().getPassWord().
+                      equals(user.getPassWord())
+      ){
       throw new UnauthorizedAccessException("Unauthorized user");
     }
     return user;
   }
 
-  public Token createToKen(User user) throws UnauthorizedAccessException {
-    this.checkValidUser(user);
+  public Token createToKen(UserAccount user) throws UnauthorizedAccessException {
+    this.checkValidUserAccount(user);
     String token = null;
     String secretKey = "this is secret";
     String issuer = "Marvel";

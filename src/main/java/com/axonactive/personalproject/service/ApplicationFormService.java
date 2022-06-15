@@ -16,9 +16,11 @@ void deleteById(Integer id);
 
 ApplicationForm saveApplicationForm(ApplicationForm applicationForm);
 
-    List<ApplicationForm> findBySubmittedDateBetween(LocalDate fromDate,LocalDate untilDate);
+List<ApplicationForm> findBySubmittedDateBetween(LocalDate fromDate,LocalDate untilDate);
 
+    List<ApplicationForm> findFirstByCandidateIdOrderBySubmittedDateDesc(Integer Id);
 
+    List<ApplicationForm> findByHiringRequestHiringManagerId(Integer Id);
 
 
 }

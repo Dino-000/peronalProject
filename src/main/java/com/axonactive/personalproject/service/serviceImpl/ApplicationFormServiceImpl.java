@@ -40,6 +40,16 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 
     @Override
     public List<ApplicationForm> findBySubmittedDateBetween(LocalDate fromDate, LocalDate untilDate) {
-        return null;
+        return applicationFormRepository.findBySubmittedDateBetween(fromDate,untilDate);
+    }
+//no controller
+    @Override
+    public List<ApplicationForm> findFirstByCandidateIdOrderBySubmittedDateDesc(Integer Id) {
+        return applicationFormRepository.findFirstByCandidateIdOrderBySubmittedDateDesc(Id);
+    }
+
+    @Override
+    public List<ApplicationForm> findByHiringRequestHiringManagerId(Integer Id) {
+        return applicationFormRepository.findByHiringRequestHiringManagerId(Id);
     }
 }

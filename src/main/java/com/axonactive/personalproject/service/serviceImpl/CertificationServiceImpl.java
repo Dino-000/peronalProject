@@ -34,4 +34,9 @@ public class CertificationServiceImpl implements CertificationService {
   public Certification saveCertification(Certification certification) {
     return certificationRepository.save(certification);
   }
+
+  @Override
+  public List<Certification> findByCandidateId(Integer id) {
+    return certificationRepository.findByCandidateId(id);
+  }
 }

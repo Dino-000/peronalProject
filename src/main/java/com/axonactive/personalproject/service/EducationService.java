@@ -12,4 +12,7 @@ public interface EducationService {
     void deleteById(Integer id);
 
     Education saveEducation(Education education);
+
+    List<Education> findByCandidateId(Integer id);
+
 }

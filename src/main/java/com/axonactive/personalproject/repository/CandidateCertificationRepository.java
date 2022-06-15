@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface CandidateCertificationRepository extends JpaRepository<CandidateCertification,Integer> {
     List<CandidateCertification> findByCertificationNameOfCertification (String certificationName);
+    List<CandidateCertification> findByCandidateId (Integer Id);
+
 }

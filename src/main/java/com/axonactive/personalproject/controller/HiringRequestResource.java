@@ -41,6 +41,12 @@ public class HiringRequestResource {
         HiringRequest hiringRequest = hiringRequestService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find HiringRequest with that id."));
         return ResponseEntity.created(URI.create(PATH+"/"+hiringRequest.getId())).body(HiringRequestMapper.INSTANCE.toDto(hiringRequest));
     }
+
+    @GetMapping("/FindByHiringManagerId")
+    public ResponseEntity<List<HiringRequestDto>> findByHiringManagerId(@RequestParam("Id") Integer Id) {
+        return ResponseEntity.ok().body(HiringRequestMapper.INSTANCE.toDtos(hiringRequestService.findByHiringManagerId(Id)));
+    }
+
     @PostMapping
     public ResponseEntity<HiringRequestDto> add(
             @RequestBody HiringRequestRequest inputData) {

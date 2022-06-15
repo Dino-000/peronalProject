@@ -11,6 +11,8 @@ import java.util.List;
 public interface ApplicationFormRepository extends JpaRepository<ApplicationForm,Integer> {
      List<ApplicationForm> findBySubmittedDateBetween(LocalDate fromDate, LocalDate untilDate);
 
-//    List<ApplicationForm> findBySalaryExpectationGreaterThanHiringRequestBudget();
+
+     List<ApplicationForm> findByHiringRequestHiringManagerId(Integer Id);
+     List<ApplicationForm> findFirstByCandidateIdOrderBySubmittedDateDesc(Integer Id);
 
 }
