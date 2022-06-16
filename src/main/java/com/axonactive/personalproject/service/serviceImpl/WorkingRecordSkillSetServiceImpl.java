@@ -1,6 +1,5 @@
 package com.axonactive.personalproject.service.serviceImpl;
 
-import com.axonactive.personalproject.entity.WorkingHistoryRecord;
 import com.axonactive.personalproject.entity.WorkingHistoryRecordSkillSet;
 import com.axonactive.personalproject.repository.WorkingHistoryRecordSkillSetRepository;
 import com.axonactive.personalproject.service.WorkingHistoryRecordSkillSetService;
@@ -33,6 +32,11 @@ workingHistoryRecordSkillSetRepository.deleteById(id);
     @Override
     public WorkingHistoryRecordSkillSet saveWorkingHistoryRecordSkillSet(WorkingHistoryRecordSkillSet workingHistoryRecordSkillSet) {
         return workingHistoryRecordSkillSetRepository.save(workingHistoryRecordSkillSet);
+    }
+
+    @Override
+    public List<WorkingHistoryRecordSkillSet> findByWorkingHistoryRecordCandidateId(Integer id) {
+        return workingHistoryRecordSkillSetRepository.findByWorkingHistoryRecordCandidateId(id);
     }
 
 

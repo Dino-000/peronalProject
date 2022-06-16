@@ -1,7 +1,6 @@
 package com.axonactive.personalproject.repository;
 
 import com.axonactive.personalproject.entity.CandidateSkillSet;
-import com.axonactive.personalproject.entity.SkillSet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

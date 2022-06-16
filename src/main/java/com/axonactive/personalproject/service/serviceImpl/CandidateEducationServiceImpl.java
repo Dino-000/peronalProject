@@ -26,6 +26,11 @@ CandidateEducationRepository candidateEducationRepository;
     }
 
     @Override
+    public List<CandidateEducation> findByCandidateId(Integer id) {
+        return candidateEducationRepository.findByCandidateId(id);
+    }
+
+    @Override
     public void deleteById(Integer id) {
 candidateEducationRepository.deleteById(id);
     }

@@ -2,7 +2,6 @@ package com.axonactive.personalproject.service;
 
 import com.axonactive.personalproject.entity.Candidate;
 import com.axonactive.personalproject.service.dto.CandidatePortfolioDto;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;

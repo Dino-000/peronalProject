@@ -27,9 +27,9 @@ INSERT INTO public.education (
 INSERT INTO public.education (
  degree,  major, school_name, prestige_rate) VALUES (
  'Bachelor',  'Public Relation', 'Curtin University', '75.9');
-INSERT INTO public.education (
+/*INSERT INTO public.education (
  degree,  major, school_name, prestige_rate) VALUES (
- 'Bachelor',  'Nursing', 'HongKong University', '77.3');
+ 'Bachelor',  'Nursing', 'HongKong University', '77.3');*/
 
 -- candidate table
 
@@ -110,14 +110,14 @@ INSERT INTO public.certification (
 INSERT INTO public.certification (
   name_of_certification, type, issuer_name) VALUES (
  'AZ-400', 'DevOps', 'Microsoft');
-INSERT INTO public.certification (
+/*INSERT INTO public.certification (
   name_of_certification, type, issuer_name) VALUES (
  'A1-100', 'AI', 'Microoft');
 INSERT INTO public.certification (
   name_of_certification, type, issuer_name) VALUES (
- 'FOUNDATIONAL', 'Cloud Service', 'AWS');
+ 'FOUNDATIONAL', 'Cloud Service', 'AWS');*/
 
---department 
+--department
 INSERT INTO public.department (
  headcount, managerid, name, quantity_of_hiring_manager) VALUES (
  12, 'IT1', 'IT', 2);
@@ -205,17 +205,17 @@ INSERT INTO public.skill_set ( industry_category, level, name, type) VALUES (
 
 --hiring request
 INSERT INTO public.hiring_request (
- bonus_point, on_boarding_date, "position", specific_benefit, department_id, hiring_manager_id, hr_officer_id,budget) VALUES (
- '2.0', '2022-06-06', 'Front End', 'work remote', 1, 1, 5,1000);
+  on_boarding_date, "position", specific_benefit, department_id, hiring_manager_id,budget) VALUES (
+  '2022-06-06', 'Front End', 'work remote', 1, 1,1000);
 INSERT INTO public.hiring_request (
- bonus_point, on_boarding_date, "position", specific_benefit, department_id, hiring_manager_id, hr_officer_id,budget) VALUES (
- '1.0', '2022-06-06', 'DevOps', 'voucher beer club', 1, 2, 6,1200);
+  on_boarding_date, "position", specific_benefit, department_id, hiring_manager_id,budget) VALUES (
+  '2022-06-06', 'DevOps', 'voucher beer club', 1, 2,1200);
 INSERT INTO public.hiring_request (
- bonus_point, on_boarding_date, "position", specific_benefit, department_id, hiring_manager_id, hr_officer_id,budget) VALUES (
- '1.5', '2022-06-06', 'Back End', 'spa discount', 1, 3, 5,1100);
+  on_boarding_date, "position", specific_benefit, department_id, hiring_manager_id, budget) VALUES (
+  '2022-06-06', 'Back End', 'spa discount', 1, 3, 1100);
 INSERT INTO public.hiring_request (
- bonus_point, on_boarding_date, "position", specific_benefit, department_id, hiring_manager_id, hr_officer_id,budget) VALUES (
- '2.0', '2022-06-06', 'UX/UI Designer', 'bonus bug', 1, 4, 6,900);
+  on_boarding_date, "position", specific_benefit, department_id, hiring_manager_id, budget) VALUES (
+  '2022-06-06', 'UX/UI Designer', 'bonus bug', 1, 4, 900);
 
 --recruitment channel
 INSERT INTO public.recruitment_chanel (
@@ -369,7 +369,16 @@ INSERT INTO public.working_history_record_skill_set ( skill_set_id, working_hist
 INSERT INTO public.working_history_record_skill_set ( skill_set_id, working_history_record_id) VALUES (
  '2', '1');
 
+--new user
+INSERT INTO public.users (
+active, password, user_name) VALUES (
+true::boolean, '$2a$10$hD9FCjv8VBbC6uGZRMkydezWDZQlEHREeVndhwjbKfuAd5qT.toYW'::character varying, 'hrofficer01'::character varying)
+ returning id;
 
+ INSERT INTO public.users (
+active, password, user_name) VALUES (
+true::boolean, '$2a$10$hD9FCjv8VBbC6uGZRMkydezWDZQlEHREeVndhwjbKfuAd5qT.toYW'::character varying, 'hiringmanager01'::character varying)
+ returning id;
 
 
 

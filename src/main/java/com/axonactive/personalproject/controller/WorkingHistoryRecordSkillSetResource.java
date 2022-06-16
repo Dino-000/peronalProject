@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping(path = WorkingHistoryRecordSkillSetResource.PATH)
 @RequiredArgsConstructor
 public class WorkingHistoryRecordSkillSetResource {
-    public static final String PATH ="api/WorkingHistoryRecordSkillSets";
+    public static final String PATH ="api/working-history-records-skillsets";
     @Autowired
     WorkingHistoryRecordSkillSetService workingHistoryRecordSkillSetService;
     @Autowired

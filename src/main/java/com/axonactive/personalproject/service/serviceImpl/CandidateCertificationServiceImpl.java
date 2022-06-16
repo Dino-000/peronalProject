@@ -27,6 +27,11 @@ public class CandidateCertificationServiceImpl implements CandidateCertification
   }
 
   @Override
+  public List<CandidateCertification> findByCandidateId(Integer id) {
+    return candidateCertificationRepository.findByCandidateId(id);
+  }
+
+  @Override
   public void deleteById(Integer id) {
     candidateCertificationRepository.deleteById(id);
   }

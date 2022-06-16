@@ -4,7 +4,10 @@ import com.axonactive.personalproject.entity.Candidate;
 import com.axonactive.personalproject.exception.ResourceNotFoundException;
 import com.axonactive.personalproject.service.*;
 import com.axonactive.personalproject.service.dto.CandidatePortfolioDto;
-import com.axonactive.personalproject.service.mapper.WorkingHistoryRecordMapper;
+import com.axonactive.personalproject.service.mapper.CandidateCertificationMapper;
+import com.axonactive.personalproject.service.mapper.CandidateEducationMapper;
+import com.axonactive.personalproject.service.mapper.CandidateSkillSetMapper;
+import com.axonactive.personalproject.service.mapper.WorkingHistoryRecordSkillSetMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +25,13 @@ public class CandidateResource {
   @Autowired
   CandidateService candidateService;
   @Autowired
-  CertificationService certificationService;
+  CandidateCertificationService candidateCertificationService;
   @Autowired
-  EducationService educationService;
+  CandidateEducationService candidateEducationService;
   @Autowired
-  SkillSetService skillSetService;
+  CandidateSkillSetService candidateSkillSetService;
   @Autowired
-  WorkingHistoryRecordService workingHistoryRecordService;
+  WorkingHistoryRecordSkillSetService workingHistoryRecordSkillSetService;
 
   @GetMapping
   public ResponseEntity<List<Candidate>> getAll() {
@@ -122,14 +125,13 @@ public class CandidateResource {
     System.out.println(foundCandidate);
     CandidatePortfolioDto candidatePortfolioDto =
             new CandidatePortfolioDto(foundCandidate,
-                    certificationService.findByCandidateId(id),
+                    CandidateCertificationMapper.INSTANCE.toDtos(candidateCertificationService.findByCandidateId(id)),
 //                    null,
-                    educationService.findByCandidateId(id),
+                    CandidateEducationMapper.INSTANCE.toDtos(candidateEducationService.findByCandidateId(id)),
 //                    null,
-                    skillSetService.findByCandidateId(id),
+                    CandidateSkillSetMapper.INSTANCE.toDtos(candidateSkillSetService.findByCandidateId(id)),
 //                    null,
-                    WorkingHistoryRecordMapper.INSTANCE.toDtos(workingHistoryRecordService.findByCandidateId(id))
-
+                    WorkingHistoryRecordSkillSetMapper.INSTANCE.toDtos(workingHistoryRecordSkillSetService.findByWorkingHistoryRecordCandidateId(id))
             );
     return ResponseEntity.ok().body(candidatePortfolioDto);
   }

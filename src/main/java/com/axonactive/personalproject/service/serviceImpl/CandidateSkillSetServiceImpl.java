@@ -28,6 +28,11 @@ public class CandidateSkillSetServiceImpl implements CandidateSkillSetService {
     }
 
     @Override
+    public List<CandidateSkillSet> findByCandidateId(Integer id) {
+        return candidateSkillSetRepository.findByCandidateId(id);
+    }
+
+    @Override
     public void deleteById(Integer id) {
         candidateSkillSetRepository.deleteById(id);
     }

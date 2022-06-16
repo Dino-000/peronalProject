@@ -10,6 +10,8 @@ import java.util.Optional;
 public interface CandidateSkillSetService {
     List<CandidateSkillSet> findAll();
     Optional<CandidateSkillSet> findById(Integer id);
+    List<CandidateSkillSet> findByCandidateId(Integer id);
+
 
     void deleteById(Integer id);
 

@@ -1,8 +1,6 @@
 package com.axonactive.personalproject.service;
 
 import com.axonactive.personalproject.entity.ApplicationForm;
-import com.axonactive.personalproject.entity.Candidate;
-import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
 import java.util.List;

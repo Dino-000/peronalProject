@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping(path = WorkingHistoryRecordResource.PATH)
 @RequiredArgsConstructor
 public class WorkingHistoryRecordResource {
-    public static final String PATH ="api/WorkingHistoryRecords";
+    public static final String PATH ="api/working-history-records";
     @Autowired
     WorkingHistoryRecordService workingHistoryRecordService;
     @Autowired

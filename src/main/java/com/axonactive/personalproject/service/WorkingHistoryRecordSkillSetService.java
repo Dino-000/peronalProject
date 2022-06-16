@@ -1,6 +1,5 @@
 package com.axonactive.personalproject.service;
 
-import com.axonactive.personalproject.entity.WorkingHistoryRecord;
 import com.axonactive.personalproject.entity.WorkingHistoryRecordSkillSet;
 
 import java.util.List;
@@ -13,6 +12,7 @@ public interface WorkingHistoryRecordSkillSetService {
     void deleteById(Integer id);
 
     WorkingHistoryRecordSkillSet saveWorkingHistoryRecordSkillSet(WorkingHistoryRecordSkillSet workingHistoryRecordSkillSet);
+    List<WorkingHistoryRecordSkillSet> findByWorkingHistoryRecordCandidateId(Integer id);
 
 
 }

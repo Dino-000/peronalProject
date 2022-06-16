@@ -10,6 +10,8 @@ import java.util.Optional;
 public interface CandidateEducationService {
     List<CandidateEducation> findAll();
     Optional<CandidateEducation> findById(Integer id);
+    List<CandidateEducation> findByCandidateId (Integer Id);
+
 
     void deleteById(Integer id);
 
