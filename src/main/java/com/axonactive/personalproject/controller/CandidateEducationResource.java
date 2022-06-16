@@ -20,73 +20,48 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(CandidateEducationResource.PATH)
 public class CandidateEducationResource {
-  public static final String PATH = "api/candidate-educations";
-  @Autowired CandidateEducationService candidateEducationService;
-  @Autowired EducationService educationService;
-  @Autowired CandidateService candidateService;
+    public static final String PATH = "api/candidate-educations";
+    @Autowired
+    CandidateEducationService candidateEducationService;
 
-  @GetMapping
-  public ResponseEntity<List<CandidateEducationDto>> getAll() {
-    return ResponseEntity.ok()
-        .body(CandidateEducationMapper.INSTANCE.toDtos(candidateEducationService.findAll()));
-  }
 
-  @GetMapping("/{id}")
-  public ResponseEntity<CandidateEducationDto> getById (@PathVariable("id") Integer id) throws ResourceNotFoundException {
-    CandidateEducation candidateEducation =
-            candidateEducationService
-                    .findById(id)
-                    .orElseThrow(
-                            () ->
-                                    new ResourceNotFoundException("Can't not find Candidate Education with that id."));
-    return ResponseEntity.created(URI.create(PATH+"/"+id)).body(CandidateEducationMapper.INSTANCE.toDto(candidateEducation));
-  }
-  @PostMapping
-  public ResponseEntity<CandidateEducationDto> add(
-      @RequestBody CandidateEducationRequest inputData) {
-    CandidateEducation newCandidateEducation =
-        candidateEducationService.saveEducationList(
-            new CandidateEducation(
-                null,
-                candidateService.findById(inputData.getCandidateId()).get(),
-                educationService.findById(inputData.getEducationId()).get(),
-                inputData.getGraduationYear()));
+    @GetMapping
+    public ResponseEntity<List<CandidateEducationDto>> getAll() {
+        return ResponseEntity.ok()
+                .body(candidateEducationService.findAll());
+    }
 
-    return ResponseEntity.created(URI.create(PATH + "/" + newCandidateEducation.getId()))
-        .body(CandidateEducationMapper.INSTANCE.toDto(newCandidateEducation));
-  }
+    @GetMapping("/{id}")
+    public ResponseEntity<CandidateEducationDto> getById(@PathVariable("id") Integer id) throws ResourceNotFoundException {
 
-  @PutMapping("/{id}")
-  public ResponseEntity<CandidateEducationDto> update(
-      @PathVariable("id") Integer id, @RequestBody CandidateEducationRequest inputData)
-      throws ResourceNotFoundException {
-    CandidateEducation updatingCandidateEducation =
-        candidateEducationService
-            .findById(id)
-            .orElseThrow(
-                () ->
-                    new ResourceNotFoundException("Can't not find Candidate Education with that id."));
-    updatingCandidateEducation.setCandidate(
-        candidateService.findById(inputData.getCandidateId()).get());
-    updatingCandidateEducation.setEducation(
-        educationService.findById(inputData.getEducationId()).get());
-    updatingCandidateEducation.setGraduationYear(inputData.getGraduationYear());
-    CandidateEducation updatedCandidateEducation =
-        candidateEducationService.saveEducationList(updatingCandidateEducation);
-    return ResponseEntity.created(URI.create(PATH + "/" + id))
-        .body(CandidateEducationMapper.INSTANCE.toDto(updatedCandidateEducation));
-  }
+        return ResponseEntity.created(URI.create(PATH + "/" + id)).body(candidateEducationService.findById(id));
+    }
 
-  @DeleteMapping("/{id}")
-  public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
-      throws ResourceNotFoundException {
-    CandidateEducation deletingCandidateEducation =
-        candidateEducationService
-            .findById(id)
-            .orElseThrow(
-                () ->
-                    new ResourceNotFoundException("Can't not findCandidate Education with that id."));
-    candidateEducationService.deleteById(id);
-    return ResponseEntity.noContent().build();
-  }
+    @PostMapping
+    public ResponseEntity<CandidateEducationDto> add(
+            @RequestBody CandidateEducationRequest inputData) throws ResourceNotFoundException {
+        CandidateEducation newCandidateEducation =
+                candidateEducationService.add(inputData);
+
+        return ResponseEntity.created(URI.create(PATH + "/" + newCandidateEducation.getId()))
+                .body(CandidateEducationMapper.INSTANCE.toDto(newCandidateEducation));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CandidateEducationDto> update(
+            @PathVariable("id") Integer id, @RequestBody CandidateEducationRequest inputData)
+            throws ResourceNotFoundException {
+
+
+        return ResponseEntity.created(URI.create(PATH + "/" + id))
+                .body(candidateEducationService.update(inputData, id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
+            throws ResourceNotFoundException {
+
+        candidateEducationService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }

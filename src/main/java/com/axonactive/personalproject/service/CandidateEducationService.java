@@ -1,19 +1,24 @@
 package com.axonactive.personalproject.service;
 
+import com.axonactive.personalproject.controller.request.CandidateEducationRequest;
 import com.axonactive.personalproject.entity.CandidateEducation;
+import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.service.dto.CandidateEducationDto;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface CandidateEducationService {
-    List<CandidateEducation> findAll();
-    Optional<CandidateEducation> findById(Integer id);
-    List<CandidateEducation> findByCandidateId (Integer Id);
+    List<CandidateEducationDto> findAll();
+    CandidateEducationDto findById(Integer id) throws ResourceNotFoundException;
+    List<CandidateEducationDto> findByCandidateId (Integer Id);
 
+    CandidateEducation add(CandidateEducationRequest request) throws ResourceNotFoundException;
 
-    void deleteById(Integer id);
+    CandidateEducationDto update (CandidateEducationRequest request, Integer id) throws ResourceNotFoundException;
 
-    CandidateEducation saveEducationList(CandidateEducation candidateEducation);
+    void deleteById(Integer id) throws ResourceNotFoundException;
+
+    CandidateEducation convertFromRequestToEntity(CandidateEducationRequest request) throws ResourceNotFoundException;
 }
