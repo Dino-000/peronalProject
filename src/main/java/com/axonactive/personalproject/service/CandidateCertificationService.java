@@ -1,17 +1,24 @@
 package com.axonactive.personalproject.service;
 
+import com.axonactive.personalproject.controller.request.CandidateCertificationRequest;
 import com.axonactive.personalproject.entity.CandidateCertification;
+import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.service.dto.CandidateCertificationDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface CandidateCertificationService {
-    List<CandidateCertification> findAll();
-    Optional<CandidateCertification> findById(Integer id);
-    List<CandidateCertification> findByCandidateId (Integer Id);
+    List<CandidateCertificationDto> findAll();
+    CandidateCertificationDto findById(Integer id) throws ResourceNotFoundException;
+    List<CandidateCertificationDto> findByCandidateId (Integer Id);
+
+    CandidateCertification add (CandidateCertificationRequest request) throws ResourceNotFoundException;
 
 
-    void deleteById(Integer id);
+    void deleteById(Integer id) throws ResourceNotFoundException;
 
-    CandidateCertification saveCertificationList(CandidateCertification candidateCertification);
+    CandidateCertificationDto update(CandidateCertificationRequest request,Integer id) throws ResourceNotFoundException;
+
+
+    CandidateCertification convertRequestToEntity(CandidateCertificationRequest request) throws ResourceNotFoundException;
 }

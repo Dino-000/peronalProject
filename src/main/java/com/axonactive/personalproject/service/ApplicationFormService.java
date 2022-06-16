@@ -1,24 +1,32 @@
 package com.axonactive.personalproject.service;
 
+import com.axonactive.personalproject.controller.request.ApplicationFormRequest;
 import com.axonactive.personalproject.entity.ApplicationForm;
 import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.service.dto.ApplicationFormDto;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public interface ApplicationFormService {
-  List<ApplicationForm> findAll();
+  List<ApplicationFormDto> findAll();
 
-  ApplicationForm findById(Integer id) throws ResourceNotFoundException;
+  ApplicationFormDto findById(Integer id) throws ResourceNotFoundException;
 
-  void deleteById(Integer id);
+  void deleteById(Integer id) throws ResourceNotFoundException;
 
-  ApplicationForm saveApplicationForm(ApplicationForm applicationForm);
+  ApplicationForm add(ApplicationFormRequest request) throws ResourceNotFoundException;
 
-  List<ApplicationForm> findBySubmittedDateBetween(LocalDate fromDate, LocalDate untilDate);
+  ApplicationForm convertRequestToEntity(ApplicationFormRequest request) throws ResourceNotFoundException;
 
-  List<ApplicationForm> findFirstByCandidateIdOrderBySubmittedDateDesc(Integer Id);
+  ApplicationFormDto save(ApplicationFormRequest request) throws ResourceNotFoundException;
 
-  List<ApplicationForm> findByHiringRequestHiringManagerId(Integer Id);
+  List<ApplicationFormDto> findBySubmittedDateBetween(String fromDate, String toDate);
+
+//  List<ApplicationFormDto> findFirstByCandidateIdOrderBySubmittedDateDesc(Integer Id);
+
+  List<ApplicationFormDto> findByHiringRequestHiringManagerId(Integer Id);
+
+  ApplicationFormDto update(Integer id,ApplicationFormRequest updateForm) throws ResourceNotFoundException;
+
+  Double getSalary (Integer id) throws ResourceNotFoundException;
 }

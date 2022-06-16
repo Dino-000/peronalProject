@@ -4,8 +4,6 @@ import com.axonactive.personalproject.controller.request.CandidateCertificationR
 import com.axonactive.personalproject.entity.CandidateCertification;
 import com.axonactive.personalproject.exception.ResourceNotFoundException;
 import com.axonactive.personalproject.service.CandidateCertificationService;
-import com.axonactive.personalproject.service.CandidateService;
-import com.axonactive.personalproject.service.CertificationService;
 import com.axonactive.personalproject.service.dto.CandidateCertificationDto;
 import com.axonactive.personalproject.service.mapper.CandidateCertificationMapper;
 import lombok.RequiredArgsConstructor;
@@ -16,79 +14,54 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+
 @PreAuthorize("hasRole('ROLE_HIRINGMANAGER')")
 
 @RestController
 @RequestMapping(CandidateCertificationResource.PATH)
 @RequiredArgsConstructor
 public class CandidateCertificationResource {
-  public static final String PATH = "api/candidate-certifications";
-  @Autowired CandidateCertificationService candidateCertificationService;
-  @Autowired CandidateService candidateService;
-  @Autowired CertificationService certificationService;
+    public static final String PATH = "api/candidate-certifications";
+    @Autowired
+    CandidateCertificationService candidateCertificationService;
 
-  @GetMapping
-  public ResponseEntity<List<CandidateCertificationDto>> getAll() {
-    return ResponseEntity.ok()
-        .body(
-            CandidateCertificationMapper.INSTANCE.toDtos(candidateCertificationService.findAll()));
-  }
+    @GetMapping
+    public ResponseEntity<List<CandidateCertificationDto>> getAll() {
 
-  @GetMapping("/{id}")
-  public ResponseEntity<CandidateCertificationDto> getById (@PathVariable("id") Integer id) throws ResourceNotFoundException {
-      CandidateCertification candidateCertification= candidateCertificationService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Can't not find CandidateCertification with that id."));
-    return ResponseEntity.created(URI.create(PATH+"/"+candidateCertification.getId())).body(CandidateCertificationMapper.INSTANCE.toDto(candidateCertification));
-  }
-  @PostMapping
-  public ResponseEntity<CandidateCertificationDto> add(
-      @RequestBody CandidateCertificationRequest inputData) {
+        return ResponseEntity.ok()
+                .body(candidateCertificationService.findAll());
+    }
 
-    CandidateCertification newCandidateCertification =
-        candidateCertificationService.saveCertificationList(
-            new CandidateCertification(
-                null,
-                candidateService.findById(inputData.getCandidateId()).get(),
-                certificationService.findById(inputData.getCertificationId()).get(),
-                   inputData.getIssuedDate(),
-                    inputData.getExpiredDate()));
+    @GetMapping("/{id}")
+    public ResponseEntity<CandidateCertificationDto> getById(@PathVariable("id") Integer id) throws ResourceNotFoundException {
 
-    return ResponseEntity.created(URI.create(PATH + "/" + newCandidateCertification.getId()))
-        .body(CandidateCertificationMapper.INSTANCE.toDto(newCandidateCertification));
-  }
+        return ResponseEntity.created(URI.create(PATH + "/" + id))
+                .body(candidateCertificationService.findById(id));
+    }
 
-  @PutMapping("/{id}")
-  public ResponseEntity<CandidateCertificationDto> update(
-      @PathVariable("id") Integer id, @RequestBody CandidateCertificationRequest updateDetail)
-      throws ResourceNotFoundException {
-    CandidateCertification updatingCandidateCertification =
-        candidateCertificationService
-            .findById(id)
-            .orElseThrow(
-                () ->
-                    new ResourceNotFoundException(
-                        "Can't not find CandidateCertification with that id."));
-    updatingCandidateCertification.setCandidate(
-        candidateService.findById(updateDetail.getCandidateId()).get());
-    updatingCandidateCertification.setCertification(
-        certificationService.findById(updateDetail.getCertificationId()).get());
-    CandidateCertification updatedCandidateCertification =
-        candidateCertificationService.saveCertificationList(updatingCandidateCertification);
-    updatingCandidateCertification.setExpiredDate(updateDetail.getExpiredDate());
-    updatingCandidateCertification.setIssuedDate(updateDetail.getIssuedDate());
-    return ResponseEntity.created(URI.create(PATH + "/" + id))
-        .body(CandidateCertificationMapper.INSTANCE.toDto(updatedCandidateCertification));
-  }
+    @PostMapping
+    public ResponseEntity<CandidateCertificationDto> add(
+            @RequestBody CandidateCertificationRequest inputData) throws ResourceNotFoundException {
+        CandidateCertification newCandidateCertification = candidateCertificationService.add(inputData);
 
-  @DeleteMapping("/{id}")
-  public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
-      throws ResourceNotFoundException {
-    CandidateCertification deletingCandidateCertification =
-        candidateCertificationService
-            .findById(id)
-            .orElseThrow(
-                () ->
-                    new ResourceNotFoundException("Can't not find Application Form with that id."));
-    candidateCertificationService.deleteById(id);
-    return ResponseEntity.noContent().build();
-  }
+        return ResponseEntity.created(URI.create(PATH + "/" + newCandidateCertification.getId()))
+                .body(CandidateCertificationMapper.INSTANCE.toDto(newCandidateCertification));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CandidateCertificationDto> update(
+            @PathVariable("id") Integer id, @RequestBody CandidateCertificationRequest updateDetail)
+            throws ResourceNotFoundException {
+
+        return ResponseEntity.created(URI.create(PATH + "/" + id))
+                .body(candidateCertificationService.update(updateDetail, id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
+            throws ResourceNotFoundException {
+
+        candidateCertificationService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }
