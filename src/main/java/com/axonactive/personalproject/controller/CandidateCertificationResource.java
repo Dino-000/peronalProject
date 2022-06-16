@@ -11,10 +11,12 @@ import com.axonactive.personalproject.service.mapper.CandidateCertificationMappe
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+@PreAuthorize("hasRole('ROLE_HIRINGMANAGER')")
 
 @RestController
 @RequestMapping(CandidateCertificationResource.PATH)

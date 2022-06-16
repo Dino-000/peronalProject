@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,13 +40,14 @@ public class ApplicationFormResource {
   @Autowired EmployeeService employeeService;
   @Autowired ServletContext application;
 
+  @PreAuthorize("hasAnyRole('HR','HIRINGMANAGER')")
   @GetMapping
   public ResponseEntity<List<ApplicationFormDto>> getAll(
-      @RequestHeader("Authentication") String authentication) {
+      @RequestHeader("Authorization") String authentication) {
     return ResponseEntity.ok()
         .body(ApplicationFormMapper.INSTANCE.toDtos(applicationFormService.findAll()));
   }
-
+  @PreAuthorize("hasAnyRole('HR','HIRINGMANAGER')")
   @GetMapping("/{id}")
   public ResponseEntity<ApplicationFormDto> getById(@PathVariable("id") Integer id)
       throws ResourceNotFoundException {
@@ -59,9 +61,11 @@ public class ApplicationFormResource {
         .body(ApplicationFormMapper.INSTANCE.toDto(applicationForm));
   }
 
+  @PreAuthorize("hasRole('HR')")
   @GetMapping("/{id}/salary-expectation")
   public ResponseEntity<Double> getSalary(
-      @RequestHeader("Authentication") String authentication, @PathVariable("id") Integer id)
+//      @RequestHeader("Authentication") String authentication,
+      @PathVariable("id") Integer id)
       throws ResourceNotFoundException {
     return ResponseEntity.ok()
         .body(
@@ -73,7 +77,7 @@ public class ApplicationFormResource {
                             "Can't not find Application Form with that id."))
                 .getSalaryExpectation());
   }
-
+  @PreAuthorize("hasRole('HR')")
   @GetMapping("/date-range")
   public ResponseEntity<List<ApplicationFormDto>> findBySubmittedDateBetween(
       @RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
@@ -84,6 +88,7 @@ public class ApplicationFormResource {
             ApplicationFormMapper.INSTANCE.toDtos(
                 applicationFormService.findBySubmittedDateBetween(beginDay, untilDay)));
   }
+  @PreAuthorize("hasRole('HIRINGMANAGER')")
 
   @GetMapping("/hiring-manager")
   public ResponseEntity<List<ApplicationFormDto>> findByHiringManageInCharge(
@@ -101,7 +106,7 @@ public class ApplicationFormResource {
   //        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
   //        IOUtils.copy(in, response.getOutputStream());
   //    }
-
+  @PreAuthorize("hasRole('HR')")
   @PostMapping
   public ResponseEntity<ApplicationFormDto> add(@RequestBody ApplicationFormRequest formRequest) {
     ApplicationForm newForm =
@@ -121,6 +126,7 @@ public class ApplicationFormResource {
         .body(ApplicationFormMapper.INSTANCE.toDto(newForm));
   }
 
+  @PreAuthorize("hasRole('HR')")
   @PutMapping("/{id}")
   public ResponseEntity<ApplicationFormDto> update(
       @PathVariable("id") Integer id, @RequestBody ApplicationFormRequest updatingRequest)
@@ -170,6 +176,7 @@ public class ApplicationFormResource {
     return IOUtils.toByteArray(in);
   }
 
+  @PreAuthorize("hasRole('ADMIN')")
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
       throws ResourceNotFoundException {

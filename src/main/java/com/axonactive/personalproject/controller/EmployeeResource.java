@@ -31,7 +31,8 @@ public class EmployeeResource {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeDto> getById (@PathVariable("id") Integer id) throws ResourceNotFoundException {
+    public ResponseEntity<EmployeeDto> getById (@PathVariable("id") Integer id,@RequestParam(value = "phoneNumber",required = false)String phoneNumber) throws ResourceNotFoundException {
+
         Employee employee = employeeService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Employee with that id."));
         return ResponseEntity.created(URI.create(PATH+"/"+employee.getId())).body(EmployeeMapper.INSTANCE.toDto(employee));
     }

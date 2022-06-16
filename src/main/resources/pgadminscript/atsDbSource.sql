@@ -381,6 +381,17 @@ true::boolean, '$2a$10$hD9FCjv8VBbC6uGZRMkydezWDZQlEHREeVndhwjbKfuAd5qT.toYW'::c
  returning id;
 
 
+--user & role
+INSERT INTO public.user_role_assignment (
+user_id, role) VALUES (
+'2'::integer, 'ROLE_HIRING_MANAGER'::character varying)
+ returning id;
+
+ INSERT INTO public.user_role_assignment (
+ role, user_id) VALUES (
+ 'ROLE_HR'::character varying, '1'::integer)
+  returning id;
+
 
 
 
