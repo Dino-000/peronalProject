@@ -1,24 +1,24 @@
 package com.axonactive.personalproject.service;
 
 import com.axonactive.personalproject.entity.ApplicationForm;
+import com.axonactive.personalproject.exception.ResourceNotFoundException;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 public interface ApplicationFormService {
-List<ApplicationForm> findAll();
-Optional<ApplicationForm> findById(Integer id);
+  List<ApplicationForm> findAll();
 
-void deleteById(Integer id);
+  ApplicationForm findById(Integer id) throws ResourceNotFoundException;
 
-ApplicationForm saveApplicationForm(ApplicationForm applicationForm);
+  void deleteById(Integer id);
 
-List<ApplicationForm> findBySubmittedDateBetween(LocalDate fromDate,LocalDate untilDate);
+  ApplicationForm saveApplicationForm(ApplicationForm applicationForm);
 
-    List<ApplicationForm> findFirstByCandidateIdOrderBySubmittedDateDesc(Integer Id);
+  List<ApplicationForm> findBySubmittedDateBetween(LocalDate fromDate, LocalDate untilDate);
 
-    List<ApplicationForm> findByHiringRequestHiringManagerId(Integer Id);
+  List<ApplicationForm> findFirstByCandidateIdOrderBySubmittedDateDesc(Integer Id);
 
-
+  List<ApplicationForm> findByHiringRequestHiringManagerId(Integer Id);
 }

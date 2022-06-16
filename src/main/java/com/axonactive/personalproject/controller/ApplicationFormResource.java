@@ -54,9 +54,7 @@ public class ApplicationFormResource {
     ApplicationForm applicationForm =
         applicationFormService
             .findById(id)
-            .orElseThrow(
-                () ->
-                    new ResourceNotFoundException("Can't not find Application Form with that id."));
+            ;
     return ResponseEntity.created(URI.create(PATH + "/" + applicationForm.getId()))
         .body(ApplicationFormMapper.INSTANCE.toDto(applicationForm));
   }
@@ -71,10 +69,7 @@ public class ApplicationFormResource {
         .body(
             applicationFormService
                 .findById(id)
-                .orElseThrow(
-                    () ->
-                        new ResourceNotFoundException(
-                            "Can't not find Application Form with that id."))
+
                 .getSalaryExpectation());
   }
   @PreAuthorize("hasRole('HR')")
@@ -133,10 +128,7 @@ public class ApplicationFormResource {
       throws ResourceNotFoundException {
     ApplicationForm updatingForm =
         applicationFormService
-            .findById(id)
-            .orElseThrow(
-                () ->
-                    new ResourceNotFoundException("Can't not find Application Form with that id."));
+            .findById(id);
     updatingForm.setSubmittedDate(updatingRequest.getSubmittedDate());
     updatingForm.setNoticePeriods(updatingRequest.getNoticePeriods());
     updatingForm.setUrlCV(updatingRequest.getUrlCV());
@@ -183,9 +175,7 @@ public class ApplicationFormResource {
     ApplicationForm foundForm =
         applicationFormService
             .findById(id)
-            .orElseThrow(
-                () ->
-                    new ResourceNotFoundException("Can't not find Application Form with that id."));
+            ;
     applicationFormService.deleteById(id);
     return ResponseEntity.noContent().build();
   }

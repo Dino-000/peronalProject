@@ -1,6 +1,7 @@
 package com.axonactive.personalproject.service.serviceImpl;
 
 import com.axonactive.personalproject.entity.ApplicationForm;
+import com.axonactive.personalproject.exception.ResourceNotFoundException;
 import com.axonactive.personalproject.repository.ApplicationFormRepository;
 import com.axonactive.personalproject.service.ApplicationFormService;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,9 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
     }
 
     @Override
-    public Optional<ApplicationForm> findById(Integer id) {
-        return applicationFormRepository.findById(id);
+    public ApplicationForm findById(Integer id) throws ResourceNotFoundException {
+        return applicationFormRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Can't not find Application Form with that id."));
     }
 
     @Override
