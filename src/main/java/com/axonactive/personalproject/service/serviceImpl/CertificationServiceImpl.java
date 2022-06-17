@@ -1,6 +1,7 @@
 package com.axonactive.personalproject.service.serviceImpl;
 
 import com.axonactive.personalproject.entity.Certification;
+import com.axonactive.personalproject.exception.ResourceNotFoundException;
 import com.axonactive.personalproject.repository.CertificationRepository;
 import com.axonactive.personalproject.service.CertificationService;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,12 +21,16 @@ public class CertificationServiceImpl implements CertificationService {
   }
 
   @Override
-  public Optional<Certification> findById(Integer id) {
-    return certificationRepository.findById(id);
+  public Certification findById(Integer id) throws ResourceNotFoundException {
+    return certificationRepository
+        .findById(id)
+        .orElseThrow(
+            () -> new ResourceNotFoundException("Can't not find Certification with that id."));
   }
 
   @Override
-  public void deleteById(Integer id) {
+  public void deleteById(Integer id) throws ResourceNotFoundException {
+    findById(id);
     certificationRepository.deleteById(id);
   }
 
@@ -38,5 +42,25 @@ public class CertificationServiceImpl implements CertificationService {
   @Override
   public List<Certification> findByCandidateId(Integer id) {
     return certificationRepository.findByCandidateId(id);
+  }
+
+  @Override
+  public Certification update(Certification request, Integer id) throws ResourceNotFoundException {
+    Certification updatingCertification =
+        certificationRepository
+            .findById(id)
+            .orElseThrow(
+                () -> new ResourceNotFoundException("Can't not find Certification with that id."));
+    updatingCertification.setIssuerName(request.getIssuerName());
+    updatingCertification.setNameOfCertification(request.getNameOfCertification());
+    updatingCertification.setType(request.getType());
+    return saveCertification(updatingCertification);
+  }
+
+  @Override
+  public Certification add(Certification request) {
+    return saveCertification(
+        new Certification(
+            null, request.getIssuerName(), request.getNameOfCertification(), request.getType()));
   }
 }

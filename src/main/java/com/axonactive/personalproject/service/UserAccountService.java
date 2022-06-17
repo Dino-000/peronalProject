@@ -1,14 +1,16 @@
 package com.axonactive.personalproject.service;
 
+import com.axonactive.personalproject.exception.ResourceNotFoundException;
 import com.axonactive.personalproject.service.security.UserAccount;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserAccountService {
     List<UserAccount> getAll();
-    Optional<UserAccount> findByUserName(String userName);
+    UserAccount findByUserName(String userName) throws ResourceNotFoundException;
     UserAccount add(UserAccount userAccount);
     void deleteByUsername(String userName);
+    UserAccount update (String userName, String password) throws ResourceNotFoundException;
+
 
 }

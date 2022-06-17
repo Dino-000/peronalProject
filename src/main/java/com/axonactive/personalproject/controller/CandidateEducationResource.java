@@ -4,8 +4,6 @@ import com.axonactive.personalproject.controller.request.CandidateEducationReque
 import com.axonactive.personalproject.entity.CandidateEducation;
 import com.axonactive.personalproject.exception.ResourceNotFoundException;
 import com.axonactive.personalproject.service.CandidateEducationService;
-import com.axonactive.personalproject.service.CandidateService;
-import com.axonactive.personalproject.service.EducationService;
 import com.axonactive.personalproject.service.dto.CandidateEducationDto;
 import com.axonactive.personalproject.service.mapper.CandidateEducationMapper;
 import lombok.RequiredArgsConstructor;

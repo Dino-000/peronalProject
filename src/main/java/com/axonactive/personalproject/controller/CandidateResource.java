@@ -2,12 +2,8 @@ package com.axonactive.personalproject.controller;
 
 import com.axonactive.personalproject.entity.Candidate;
 import com.axonactive.personalproject.exception.ResourceNotFoundException;
-import com.axonactive.personalproject.service.*;
+import com.axonactive.personalproject.service.CandidateService;
 import com.axonactive.personalproject.service.dto.CandidatePortfolioDto;
-import com.axonactive.personalproject.service.mapper.CandidateCertificationMapper;
-import com.axonactive.personalproject.service.mapper.CandidateEducationMapper;
-import com.axonactive.personalproject.service.mapper.CandidateSkillSetMapper;
-import com.axonactive.personalproject.service.mapper.WorkingHistoryRecordSkillSetMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,16 +18,7 @@ import java.util.Set;
 @RequestMapping(CandidateResource.PATH)
 public class CandidateResource {
   public static final String PATH = "api/candidates";
-  @Autowired
-  CandidateService candidateService;
-  @Autowired
-  CandidateCertificationService candidateCertificationService;
-  @Autowired
-  CandidateEducationService candidateEducationService;
-  @Autowired
-  CandidateSkillSetService candidateSkillSetService;
-  @Autowired
-  WorkingHistoryRecordSkillSetService workingHistoryRecordSkillSetService;
+  @Autowired CandidateService candidateService;
 
   @GetMapping
   public ResponseEntity<List<Candidate>> getAll() {
@@ -47,12 +34,7 @@ public class CandidateResource {
   @GetMapping("/{id}")
   public ResponseEntity<Candidate> getById(@PathVariable("id") Integer id)
       throws ResourceNotFoundException {
-    Candidate candidate =
-        candidateService
-            .findById(id)
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find Candidate with that id."));
-    return ResponseEntity.created(URI.create(PATH + "/" + candidate.getId())).body(candidate);
+    return ResponseEntity.created(URI.create(PATH + "/" + id)).body(candidateService.findById(id));
   }
 
   @GetMapping("/gpa-edu-skill-seniority")
@@ -108,38 +90,24 @@ public class CandidateResource {
   }
 
   @GetMapping("/education")
-  public ResponseEntity<Set<Candidate>> findByEducation(
-      @RequestParam("school") String schoolName) {
+  public ResponseEntity<Set<Candidate>> findByEducation(@RequestParam("school") String schoolName) {
     return ResponseEntity.ok().body(candidateService.findByEducation(schoolName));
   }
 
   @GetMapping("/certification")
-  public ResponseEntity<Set<Candidate>> findByCertification(@RequestParam("name")String name) {
+  public ResponseEntity<Set<Candidate>> findByCertification(@RequestParam("name") String name) {
     return ResponseEntity.ok().body(candidateService.findByCertification(name));
   }
 
   @GetMapping("/{id}/portfolio")
-  public ResponseEntity<CandidatePortfolioDto> findPortfolio(@PathVariable("id")Integer id) throws ResourceNotFoundException {
-    Candidate foundCandidate = candidateService.findById(id).orElseThrow(
-            () -> new ResourceNotFoundException("Can't not find Candidate with that id."));
-    System.out.println(foundCandidate);
-    CandidatePortfolioDto candidatePortfolioDto =
-            new CandidatePortfolioDto(foundCandidate,
-                    CandidateCertificationMapper.INSTANCE.toDtos(candidateCertificationService.findByCandidateId(id)),
-//                    null,
-                    CandidateEducationMapper.INSTANCE.toDtos(candidateEducationService.findByCandidateId(id)),
-//                    null,
-                    CandidateSkillSetMapper.INSTANCE.toDtos(candidateSkillSetService.findByCandidateId(id)),
-//                    null,
-                    WorkingHistoryRecordSkillSetMapper.INSTANCE.toDtos(workingHistoryRecordSkillSetService.findByWorkingHistoryRecordCandidateId(id))
-            );
-    return ResponseEntity.ok().body(candidatePortfolioDto);
+  public ResponseEntity<CandidatePortfolioDto> findPortfolio(@PathVariable("id") Integer id)
+      throws ResourceNotFoundException {
+    return ResponseEntity.ok().body(candidateService.findPortfolio(id));
   }
 
-
-    @PostMapping
+  @PostMapping
   public ResponseEntity<Candidate> add(@RequestBody Candidate inputData) {
-    Candidate newCandidate = candidateService.saveCandidate(inputData);
+    Candidate newCandidate = candidateService.add(inputData);
 
     return ResponseEntity.created(URI.create(PATH + "/" + newCandidate.getId())).body(newCandidate);
   }
@@ -148,30 +116,15 @@ public class CandidateResource {
   public ResponseEntity<Candidate> update(
       @PathVariable("id") Integer id, @RequestBody Candidate updateDetail)
       throws ResourceNotFoundException {
-    Candidate updatingCandidate =
-        candidateService
-            .findById(id)
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find Candidate with that id."));
-    updatingCandidate.setName(updateDetail.getName());
-    updatingCandidate.setDateOfBirth(updateDetail.getDateOfBirth());
-    updatingCandidate.setLocation(updateDetail.getLocation());
-    updatingCandidate.setOccupation(updateDetail.getOccupation());
-    updatingCandidate.setSeniority(updateDetail.getSeniority());
-    updatingCandidate.setGpa(updateDetail.getGpa());
-    Candidate updatedCandidate = candidateService.saveCandidate(updatingCandidate);
-    return ResponseEntity.created(URI.create(PATH + "/" + id)).body(updatedCandidate);
+
+    return ResponseEntity.created(URI.create(PATH + "/" + id))
+        .body(candidateService.update(updateDetail, id));
   }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
       throws ResourceNotFoundException {
-    Candidate deletingCandidate =
-        candidateService
-            .findById(id)
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find Candidate with that id."));
-    candidateService.deleteById(id);
+    candidateService.delete(id);
     return ResponseEntity.noContent().build();
   }
 }

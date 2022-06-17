@@ -1,19 +1,21 @@
 package com.axonactive.personalproject.service;
 
+import com.axonactive.personalproject.controller.request.CandidateSkillSetRequest;
 import com.axonactive.personalproject.entity.CandidateSkillSet;
+import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.service.dto.CandidateSkillSetDto;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface CandidateSkillSetService {
-    List<CandidateSkillSet> findAll();
-    Optional<CandidateSkillSet> findById(Integer id);
-    List<CandidateSkillSet> findByCandidateId(Integer id);
+    List<CandidateSkillSetDto> findAll();
+    CandidateSkillSetDto findById(Integer id) throws ResourceNotFoundException;
+    List<CandidateSkillSetDto> findByCandidateId(Integer id);
 
-
-    void deleteById(Integer id);
-
-    CandidateSkillSet saveSkillSetList(CandidateSkillSet candidateSkillSet);
+    CandidateSkillSet convertRequestToEntity (CandidateSkillSetRequest request) throws ResourceNotFoundException;
+    void deleteById(Integer id) throws ResourceNotFoundException;
+    CandidateSkillSetDto update (CandidateSkillSetRequest request, Integer id) throws ResourceNotFoundException;
+    CandidateSkillSet add(CandidateSkillSetRequest request) throws ResourceNotFoundException;
 }

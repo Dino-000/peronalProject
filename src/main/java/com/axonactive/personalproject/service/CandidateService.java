@@ -1,19 +1,17 @@
 package com.axonactive.personalproject.service;
 
 import com.axonactive.personalproject.entity.Candidate;
+import com.axonactive.personalproject.exception.ResourceNotFoundException;
 import com.axonactive.personalproject.service.dto.CandidatePortfolioDto;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 public interface CandidateService {
     List<Candidate> findAll();
-    Optional<Candidate> findById(Integer id);
+    Candidate findById(Integer id) throws ResourceNotFoundException;
 
-    void deleteById(Integer id);
 
-    Candidate saveCandidate(Candidate candidate);
 
     Set<Candidate> findBySalaryExpectationLessThanAndCandidateSkillSet (Double salaryExpectation, String SkillSetName);
 
@@ -28,6 +26,8 @@ public interface CandidateService {
     CandidatePortfolioDto findBCandidatePortfolioById (Integer id);
     Set<Candidate> findByCertification (String nameOfCertification);
 
-
-
+    CandidatePortfolioDto findPortfolio (Integer id) throws ResourceNotFoundException;
+    Candidate add(Candidate candidate);
+    Candidate update (Candidate candidate,Integer id) throws ResourceNotFoundException;
+    void delete(Integer id) throws ResourceNotFoundException;
 }

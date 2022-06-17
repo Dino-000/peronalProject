@@ -1,15 +1,18 @@
 package com.axonactive.personalproject.service;
 
 import com.axonactive.personalproject.entity.Department;
+import com.axonactive.personalproject.exception.ResourceNotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface DepartmentService {
-    List<Department> findAll();
-    Optional<Department> findById(Integer id);
+  List<Department> findAll();
 
-    void deleteById(Integer id);
+  Department findById(Integer id) throws ResourceNotFoundException;
 
-    Department saveDepartment(Department department);
+  void deleteById(Integer id) throws ResourceNotFoundException;
+
+  Department saveDepartment(Department input);
+
+  Department update(Department input, Integer id) throws ResourceNotFoundException;
 }

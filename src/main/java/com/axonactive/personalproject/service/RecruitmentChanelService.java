@@ -1,15 +1,19 @@
 package com.axonactive.personalproject.service;
 
 import com.axonactive.personalproject.entity.RecruitmentChanel;
+import com.axonactive.personalproject.exception.ResourceNotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface RecruitmentChanelService {
     List<RecruitmentChanel> findAll();
-    Optional<RecruitmentChanel> findById(Integer id);
+    RecruitmentChanel findById(Integer id) throws ResourceNotFoundException;
 
-    void deleteById(Integer id);
+
+    RecruitmentChanel add (RecruitmentChanel inputData);
+    RecruitmentChanel update (RecruitmentChanel request, Integer id) throws ResourceNotFoundException;
+
+    void deleteById(Integer id) throws ResourceNotFoundException;
 
     RecruitmentChanel saveRecruitmentChanel(RecruitmentChanel recruitmentChanel);
 }

@@ -1,18 +1,18 @@
 package com.axonactive.personalproject.service;
 
 import com.axonactive.personalproject.entity.Education;
+import com.axonactive.personalproject.exception.ResourceNotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface EducationService {
     List<Education> findAll();
-    Optional<Education> findById(Integer id);
+    Education findById(Integer id) throws ResourceNotFoundException;
 
-    void deleteById(Integer id);
+    void deleteById(Integer id) throws ResourceNotFoundException;
 
-    Education saveEducation(Education education);
+    Education saveEducation(Education inputData);
 
     List<Education> findByCandidateId(Integer id);
-
+    Education update(Education inputData, Integer id) throws ResourceNotFoundException;
 }

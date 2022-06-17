@@ -1,18 +1,23 @@
 package com.axonactive.personalproject.service;
 
+import com.axonactive.personalproject.controller.request.WorkingHistoryRecordSkillSetRequest;
 import com.axonactive.personalproject.entity.WorkingHistoryRecordSkillSet;
+import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.service.dto.WorkingHistoryRecordSkillSetDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface WorkingHistoryRecordSkillSetService {
-    List<WorkingHistoryRecordSkillSet> findAll();
-    Optional<WorkingHistoryRecordSkillSet> findById(Integer id);
+    List<WorkingHistoryRecordSkillSetDto> findAll();
+    WorkingHistoryRecordSkillSetDto findById(Integer id) throws ResourceNotFoundException;
 
-    void deleteById(Integer id);
+    void deleteById(Integer id) throws ResourceNotFoundException;
 
-    WorkingHistoryRecordSkillSet saveWorkingHistoryRecordSkillSet(WorkingHistoryRecordSkillSet workingHistoryRecordSkillSet);
-    List<WorkingHistoryRecordSkillSet> findByWorkingHistoryRecordCandidateId(Integer id);
+    WorkingHistoryRecordSkillSet add (WorkingHistoryRecordSkillSetRequest request) throws ResourceNotFoundException;
 
+    WorkingHistoryRecordSkillSetDto update(WorkingHistoryRecordSkillSetRequest request ,Integer id) throws ResourceNotFoundException;
 
+    List<WorkingHistoryRecordSkillSetDto> findByWorkingHistoryRecordCandidateId(Integer id);
+
+    WorkingHistoryRecordSkillSet convertRequestToEntity (WorkingHistoryRecordSkillSetRequest request) throws ResourceNotFoundException;
 }

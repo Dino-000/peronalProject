@@ -20,47 +20,46 @@ public class UserAccountResource {
   @Autowired UserAccountService userAccountService;
   @Autowired JwtAuthenticationService jwtAuthenticationService;
 
+  @GetMapping
+  public ResponseEntity<List<UserAccount>> getAll() {
+    return ResponseEntity.ok().body(userAccountService.getAll());
+  }
 
-    @GetMapping
-    public ResponseEntity<List<UserAccount>> getAll() {
-        return ResponseEntity.ok().body(userAccountService.getAll());
-    }
+  @GetMapping("/{userName}")
+  public ResponseEntity<UserAccount> findByUserName(@PathVariable("userName") String userName)
+      throws ResourceNotFoundException {
+    UserAccount userAccount = userAccountService.findByUserName(userName);
+    return ResponseEntity.created(URI.create(PATH + "/" + userAccount.getUserName()))
+        .body(userAccount);
+  }
 
-    @GetMapping("/{userName}")
-    public ResponseEntity<UserAccount> getById (@PathVariable("userName") String userName) throws ResourceNotFoundException {
-        UserAccount userAccount= userAccountService.findByUserName(userName).orElseThrow(()-> new ResourceNotFoundException("Can not found the account with this userName: "+userName));
-           return ResponseEntity.created(URI.create(PATH+"/"+userAccount.getUserName())).body(userAccount);
-    }
+  @PostMapping
+  public ResponseEntity<UserAccount> add(@RequestBody UserAccount inputData) {
+    UserAccount newUserAccount = userAccountService.add(inputData);
 
-    @PostMapping
-    public ResponseEntity<UserAccount> add(
-            @RequestBody UserAccount inputData) {
-        UserAccount newUserAccount = userAccountService.add(inputData);
+    return ResponseEntity.created(URI.create(PATH + "/" + newUserAccount.getUserName()))
+        .body(newUserAccount);
+  }
 
-        return ResponseEntity.created(URI.create(PATH + "/" + newUserAccount.getUserName())).body(newUserAccount);
-    }
+  @PutMapping("/{userName}")
+  public ResponseEntity<UserAccount> update(
+      @PathVariable("userName") String userName, @RequestParam("password") String password)
+      throws ResourceNotFoundException {
 
-    @PutMapping("/{userName}")
-    public  ResponseEntity<UserAccount> update(@PathVariable("id") String userName, @RequestParam("password") String inputData) throws ResourceNotFoundException {
-        UserAccount updatingUserAccount = userAccountService.findByUserName(userName).orElseThrow(()->new ResourceNotFoundException("Can not found the account with this userName: "+userName));
-        updatingUserAccount.setPassWord(inputData);
+    return ResponseEntity.created(URI.create(PATH + "/" + userName))
+        .body(userAccountService.update(userName, password));
+  }
 
-        UserAccount updatedUserAccount = userAccountService.add(updatingUserAccount);
-        return  ResponseEntity.created(URI.create(PATH+"/"+updatedUserAccount.getUserName())).body(updatedUserAccount);
-    }
-
-    @DeleteMapping("/{userName}")
-    public ResponseEntity<Void> delete(@PathVariable("userName") String userName) throws ResourceNotFoundException {
-        UserAccount deletingUserAccount = userAccountService.findByUserName(userName).orElseThrow(()->new ResourceNotFoundException("Can not found the account with this userName: "+userName));
-        userAccountService.deleteByUsername(userName);
-        return ResponseEntity.noContent().build();
-    }
+  @DeleteMapping("/{userName}")
+  public ResponseEntity<Void> delete(@PathVariable("userName") String userName)
+      throws ResourceNotFoundException {
+    userAccountService.deleteByUsername(userName);
+    return ResponseEntity.noContent().build();
+  }
 
   @PostMapping("/GetToken")
   public Token getAuthenticationToken(@RequestBody UserAccount userAccount)
-      throws UnauthorizedAccessException {
+          throws UnauthorizedAccessException, ResourceNotFoundException {
     return jwtAuthenticationService.createToKen(userAccount);
   }
-
-
 }

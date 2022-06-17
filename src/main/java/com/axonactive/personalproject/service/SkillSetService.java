@@ -1,18 +1,20 @@
 package com.axonactive.personalproject.service;
 
 import com.axonactive.personalproject.entity.SkillSet;
+import com.axonactive.personalproject.exception.ResourceNotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface SkillSetService {
-    List<SkillSet> findAll();
-    Optional<SkillSet> findById(Integer id);
+  List<SkillSet> findAll();
 
-    void deleteById(Integer id);
+  SkillSet findById(Integer id) throws ResourceNotFoundException;
 
-    SkillSet saveSkillSet(SkillSet skillSet);
+  void deleteById(Integer id) throws ResourceNotFoundException;
 
-    List<SkillSet> findByCandidateId(Integer id);
+  SkillSet add(SkillSet skillSet);
 
+  List<SkillSet> findByCandidateId(Integer id);
+
+  SkillSet update(SkillSet skillSet, Integer id) throws ResourceNotFoundException;
 }

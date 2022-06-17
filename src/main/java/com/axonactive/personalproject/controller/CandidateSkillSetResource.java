@@ -3,9 +3,7 @@ package com.axonactive.personalproject.controller;
 import com.axonactive.personalproject.controller.request.CandidateSkillSetRequest;
 import com.axonactive.personalproject.entity.CandidateSkillSet;
 import com.axonactive.personalproject.exception.ResourceNotFoundException;
-import com.axonactive.personalproject.service.CandidateService;
 import com.axonactive.personalproject.service.CandidateSkillSetService;
-import com.axonactive.personalproject.service.SkillSetService;
 import com.axonactive.personalproject.service.dto.CandidateSkillSetDto;
 import com.axonactive.personalproject.service.mapper.CandidateSkillSetMapper;
 import lombok.RequiredArgsConstructor;
@@ -23,45 +21,33 @@ public class CandidateSkillSetResource {
     public static final String PATH ="api/candidate-skillsets";
     @Autowired
     CandidateSkillSetService candidateSkillSetService;
-    @Autowired
-    SkillSetService skillSetService;
-    @Autowired
-    CandidateService candidateService;
+
 
     @GetMapping
     public ResponseEntity<List<CandidateSkillSetDto>> getAll() {
-        return ResponseEntity.ok().body(CandidateSkillSetMapper.INSTANCE.toDtos(candidateSkillSetService.findAll()));
+        return ResponseEntity.ok().body(candidateSkillSetService.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CandidateSkillSetDto> getById (@PathVariable("id") Integer id) throws ResourceNotFoundException {
-        CandidateSkillSet candidateSkillSet = candidateSkillSetService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Candidate SkillSet with that id."));
-        return ResponseEntity.created(URI.create(PATH+"/"+candidateSkillSet.getId())).body(CandidateSkillSetMapper.INSTANCE.toDto(candidateSkillSet));
+        return ResponseEntity.created(URI.create(PATH+"/"+id)).body(candidateSkillSetService.findById(id));
     }
 
     @PostMapping
     public ResponseEntity<CandidateSkillSetDto> add(
-            @RequestBody CandidateSkillSetRequest inputData) {
-        CandidateSkillSet newCandidateSkillSet = candidateSkillSetService.saveSkillSetList(new CandidateSkillSet(null,
-                candidateService.findById(inputData.getCandidateId()).get(),
-                skillSetService.findById(inputData.getSkillSetId()).get()
-        ));
+            @RequestBody CandidateSkillSetRequest inputData) throws ResourceNotFoundException {
+        CandidateSkillSet newCandidateSkillSet = candidateSkillSetService.add(inputData);
 
         return ResponseEntity.created(URI.create(PATH + "/" + newCandidateSkillSet.getId())).body(CandidateSkillSetMapper.INSTANCE.toDto(newCandidateSkillSet));
     }
 
     @PutMapping("/{id}")
     public  ResponseEntity<CandidateSkillSetDto> update(@PathVariable("id") Integer id, @RequestBody CandidateSkillSetRequest inputData) throws ResourceNotFoundException {
-        CandidateSkillSet updatingCandidateSkillSet = candidateSkillSetService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Candidate SkillSet with that id."));
-        updatingCandidateSkillSet.setCandidate(candidateService.findById(inputData.getCandidateId()).get());
-        updatingCandidateSkillSet.setSkillSet(skillSetService.findById(inputData.getSkillSetId()).get());
-        CandidateSkillSet updatedCandidateSkillSet = candidateSkillSetService.saveSkillSetList(updatingCandidateSkillSet);
-        return  ResponseEntity.created(URI.create(PATH+"/"+id)).body(CandidateSkillSetMapper.INSTANCE.toDto(updatedCandidateSkillSet));
+        return  ResponseEntity.created(URI.create(PATH+"/"+id)).body(candidateSkillSetService.update(inputData,id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws ResourceNotFoundException {
-        CandidateSkillSet deletingCandidateSkillSet = candidateSkillSetService.findById(id).orElseThrow(()->new ResourceNotFoundException("Can't not find Application Form with that id."));
         candidateSkillSetService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

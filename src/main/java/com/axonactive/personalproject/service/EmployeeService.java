@@ -1,15 +1,19 @@
 package com.axonactive.personalproject.service;
 
+import com.axonactive.personalproject.controller.request.EmployeeRequest;
 import com.axonactive.personalproject.entity.Employee;
+import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.service.dto.EmployeeDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface EmployeeService {
-    List<Employee> findAll();
-    Optional<Employee> findById(Integer id);
+    List<EmployeeDto> findAll();
+    EmployeeDto findById(Integer id) throws ResourceNotFoundException;
 
-    void deleteById(Integer id);
+    void deleteById(Integer id) throws ResourceNotFoundException;
+    EmployeeDto update (EmployeeRequest request, Integer id) throws ResourceNotFoundException;
 
-    Employee saveEmployee(Employee employee);
+    Employee convertFromRequestToEntity (EmployeeRequest request) throws ResourceNotFoundException;
+    Employee add(EmployeeRequest request) throws ResourceNotFoundException;
 }
