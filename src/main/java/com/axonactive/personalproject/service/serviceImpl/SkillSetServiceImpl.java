@@ -24,7 +24,7 @@ public class SkillSetServiceImpl implements SkillSetService {
   public SkillSet findById(Integer id) throws ResourceNotFoundException {
     return skillSetRepository
         .findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Can't not find SkillSet with that id."));
+        .orElseThrow(ResourceNotFoundException::skillSetNotFound);
   }
 
   @Override

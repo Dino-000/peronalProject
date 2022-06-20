@@ -25,7 +25,7 @@ public class CertificationServiceImpl implements CertificationService {
     return certificationRepository
         .findById(id)
         .orElseThrow(
-            () -> new ResourceNotFoundException("Can't not find Certification with that id."));
+                ResourceNotFoundException::certificationNotFound);
   }
 
   @Override
@@ -50,7 +50,7 @@ public class CertificationServiceImpl implements CertificationService {
         certificationRepository
             .findById(id)
             .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find Certification with that id."));
+                    ResourceNotFoundException::certificationNotFound);
     updatingCertification.setIssuerName(request.getIssuerName());
     updatingCertification.setNameOfCertification(request.getNameOfCertification());
     updatingCertification.setType(request.getType());

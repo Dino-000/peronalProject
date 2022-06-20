@@ -24,7 +24,7 @@ public class EducationServiceImpl implements EducationService {
   public Education findById(Integer id) throws ResourceNotFoundException {
     return educationRepository
         .findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Can't not find Education with that id."));
+        .orElseThrow(ResourceNotFoundException::educationNotFound);
   }
 
   @Override
@@ -55,7 +55,7 @@ public class EducationServiceImpl implements EducationService {
         educationRepository
             .findById(id)
             .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find Education with that id."));
+                    ResourceNotFoundException::educationNotFound);
     updatingEducation.setSchoolName(inputData.getSchoolName());
     updatingEducation.setDegree(inputData.getDegree());
     updatingEducation.setMajor(inputData.getMajor());

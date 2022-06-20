@@ -2,18 +2,21 @@ package com.axonactive.personalproject.service.serviceImpl;
 
 import com.axonactive.personalproject.controller.request.ApplicationFormRequest;
 import com.axonactive.personalproject.entity.ApplicationForm;
+import com.axonactive.personalproject.exception.BusinessConstraintException;
 import com.axonactive.personalproject.exception.ResourceNotFoundException;
 import com.axonactive.personalproject.repository.*;
 import com.axonactive.personalproject.service.ApplicationFormService;
 import com.axonactive.personalproject.service.dto.ApplicationFormDto;
 import com.axonactive.personalproject.service.mapper.ApplicationFormMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ApplicationFormServiceImpl implements ApplicationFormService {
@@ -33,14 +36,23 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
     ApplicationForm applicationForm =
         applicationFormRepository
             .findById(id)
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find Application Form with that id."));
+            .orElseThrow(ResourceNotFoundException::applicationFormNotFound);
     return ApplicationFormMapper.INSTANCE.toDto(applicationForm);
   }
 
   @Override
   public ApplicationForm add(ApplicationFormRequest request) throws ResourceNotFoundException {
-    return applicationFormRepository.save(convertRequestToEntity(request));
+    ApplicationForm applicationForm = convertRequestToEntity(request);
+    if (!isValidHrOfficer(applicationForm)) {
+      log.info(
+          "The HrOfficer's Department: "
+              + applicationForm.getHrOfficer().getDepartment().getName());
+      throw BusinessConstraintException.invalidHrOfficer();
+    } else if (!isValidSubmittedDate(request.getSubmittedDate())) {
+      log.info("The submitted date is: " + request.getSubmittedDate());
+      throw new IllegalArgumentException("The Submitted Date Is After Now.");
+    }
+    return applicationForm;
   }
 
   @Override
@@ -54,8 +66,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
     ApplicationForm foundForm =
         applicationFormRepository
             .findById(id)
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find Application Form with that id."));
+            .orElseThrow(ResourceNotFoundException::applicationFormNotFound);
     applicationFormRepository.deleteById(id);
   }
 
@@ -70,21 +81,16 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
         request.getSalaryExpectation(),
         candidateRepository
             .findById(request.getCandidateId())
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find candidate with that id.")),
+            .orElseThrow(ResourceNotFoundException::candidateNotFound),
         hiringRequestRepository
             .findById(request.getHiringRequestId())
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find hiring request with that id.")),
+            .orElseThrow(ResourceNotFoundException::hiringRequestNotFound),
         recruitmentChanelRepository
             .findById(request.getRecruitmentChanelId())
-            .orElseThrow(
-                () -> new ResourceNotFoundException(
-                        "Can't not find recruitment chanel with that id.")),
+            .orElseThrow(ResourceNotFoundException::recruitmentChannelNotFound),
         employeeRepository
             .findById(request.getHrOfficerId())
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find employee with that id.")));
+            .orElseThrow(ResourceNotFoundException::employeeNotFound));
   }
 
   @Override
@@ -94,11 +100,6 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
     return ApplicationFormMapper.INSTANCE.toDtos(
         applicationFormRepository.findBySubmittedDateBetween(beginDay, untilDay));
   }
-  // no controller
-  //    @Override
-  //    public List<ApplicationFormDto> findFirstByCandidateIdOrderBySubmittedDateDesc(Integer Id) {
-  //        return applicationFormRepository.findFirstByCandidateIdOrderBySubmittedDateDesc(Id);
-  //    }
 
   @Override
   public List<ApplicationFormDto> findByHiringRequestHiringManagerId(Integer Id) {
@@ -112,10 +113,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
     ApplicationForm updatingForm =
         applicationFormRepository
             .findById(id)
-            .orElseThrow(
-                () ->
-                    new ResourceNotFoundException("Can't not find Application Form with that id."));
-    ;
+            .orElseThrow(ResourceNotFoundException::applicationFormNotFound);
     updatingForm.setSubmittedDate(updateForm.getSubmittedDate());
     updatingForm.setNoticePeriods(updateForm.getNoticePeriods());
     updatingForm.setUrlCV(updateForm.getUrlCV());
@@ -123,36 +121,44 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
     updatingForm.setCandidate(
         candidateRepository
             .findById(updateForm.getCandidateId())
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find candidate with that id.")));
+            .orElseThrow(ResourceNotFoundException::candidateNotFound));
     updatingForm.setHiringRequest(
         hiringRequestRepository
             .findById(updateForm.getHiringRequestId())
-            .orElseThrow(
-                () ->
-                    new ResourceNotFoundException("Can't not find hiring request with that id.")));
+            .orElseThrow(ResourceNotFoundException::hiringRequestNotFound));
     updatingForm.setRecruitmentChanel(
         recruitmentChanelRepository
             .findById(updateForm.getRecruitmentChanelId())
-            .orElseThrow(
-                () ->
-                    new ResourceNotFoundException(
-                        "Can't not find recruitment chanel with that id.")));
+            .orElseThrow(ResourceNotFoundException::recruitmentChannelNotFound));
     updatingForm.setHrOfficer(
         employeeRepository
             .findById(updateForm.getHrOfficerId())
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find employee with that id.")));
+            .orElseThrow(ResourceNotFoundException::employeeNotFound));
 
-    return ApplicationFormMapper.INSTANCE.toDto(applicationFormRepository.save(updatingForm));
+    if (!isValidHrOfficer(updatingForm)) {
+      log.info(
+          "The HrOfficer's Department: " + updatingForm.getHrOfficer().getDepartment().getName());
+      throw BusinessConstraintException.invalidHrOfficer();
+    }
+      return ApplicationFormMapper.INSTANCE.toDto(applicationFormRepository.save(updatingForm));
+
   }
 
   @Override
   public Double getSalary(Integer id) throws ResourceNotFoundException {
     return applicationFormRepository
         .findById(id)
-        .orElseThrow(
-            () -> new ResourceNotFoundException("Can't not find Application Form with that id."))
+        .orElseThrow(ResourceNotFoundException::applicationFormNotFound)
         .getSalaryExpectation();
+  }
+
+  @Override
+  public Boolean isValidHrOfficer(ApplicationForm applicationForm) {
+    return applicationForm.getHrOfficer().getDepartment().getName().equalsIgnoreCase("hr");
+  }
+
+  @Override
+  public Boolean isValidSubmittedDate(LocalDate date) {
+    return !LocalDate.now().isBefore(date);
   }
 }

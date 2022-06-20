@@ -2,6 +2,7 @@ package com.axonactive.personalproject.service.serviceImpl;
 
 import com.axonactive.personalproject.controller.request.HiringRequestRequest;
 import com.axonactive.personalproject.entity.HiringRequest;
+import com.axonactive.personalproject.exception.BusinessConstraintException;
 import com.axonactive.personalproject.exception.ResourceNotFoundException;
 import com.axonactive.personalproject.repository.DepartmentRepository;
 import com.axonactive.personalproject.repository.EmployeeRepository;
@@ -10,11 +11,14 @@ import com.axonactive.personalproject.service.HiringRequestService;
 import com.axonactive.personalproject.service.dto.HiringRequestDto;
 import com.axonactive.personalproject.service.mapper.HiringRequestMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class HiringRequestServiceImpl implements HiringRequestService {
@@ -32,8 +36,7 @@ public class HiringRequestServiceImpl implements HiringRequestService {
     return HiringRequestMapper.INSTANCE.toDto(
         hiringRequestRepository
             .findById(id)
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find HiringRequest with that id.")));
+            .orElseThrow(ResourceNotFoundException::hiringRequestNotFound));
   }
 
   @Override
@@ -44,11 +47,28 @@ public class HiringRequestServiceImpl implements HiringRequestService {
 
   @Override
   public HiringRequest add(HiringRequestRequest request) throws ResourceNotFoundException {
-    return hiringRequestRepository.save(convertRequestToDto(request));
+    HiringRequest hiringRequest = convertRequestToEntity(request);
+    if (!isHiringManager(hiringRequest)) {
+      log.info("The Hiring Manger's Department: " + hiringRequest.getDepartment().getName());
+      log.info("The Hiring Manager Id: " + hiringRequest.getHiringManager().getEmployeeId());
+      log.info("This Department's Manager Id: " + hiringRequest.getDepartment().getManagerID());
+      throw BusinessConstraintException.invalidHiringManagerOfficer();
+    } else if (!isValidHiringManager(hiringRequest)) {
+      log.info(
+          "The Hiring Manger's Department: "
+              + hiringRequest.getHiringManager().getDepartment().getName());
+      log.info("This Hiring Request's Department: " + hiringRequest.getDepartment().getName());
+      throw BusinessConstraintException.hiringManagerDepartmentMissMatch();
+    }
+    if (!isValidOnboardDate(request.getOnBoardingDate())) {
+      log.info("The On-boarding Date is: " + hiringRequest.getOnBoardingDate());
+      throw BusinessConstraintException.invalidOnBoardDate();
+    }
+    return hiringRequestRepository.save(convertRequestToEntity(request));
   }
 
   @Override
-  public HiringRequest convertRequestToDto(HiringRequestRequest request)
+  public HiringRequest convertRequestToEntity(HiringRequestRequest request)
       throws ResourceNotFoundException {
     return new HiringRequest(
         null,
@@ -59,12 +79,36 @@ public class HiringRequestServiceImpl implements HiringRequestService {
         request.getBudget(),
         departmentRepository
             .findById(request.getDepartmentId())
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find Department with that id.")),
+            .orElseThrow(ResourceNotFoundException::departmentNotFound),
         employeeRepository
             .findById(request.getHiringManagerId())
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find Employee with that id.")));
+            .orElseThrow(ResourceNotFoundException::employeeNotFound));
+  }
+
+  @Override
+  public boolean isValidHiringManager(HiringRequest request) {
+    return request
+        .getHiringManager()
+        .getDepartment()
+        .getName()
+        .equals(request.getDepartment().getName());
+  }
+
+  @Override
+  public boolean isHiringManager(HiringRequest request) {
+
+    return !(request.getHiringManager().getDepartment().getName().equals("HR"))
+        || (request.getHiringManager().getDepartment().getName().equals("HR")
+            && request
+                .getHiringManager()
+                .getDepartment()
+                .getManagerID()
+                .equals(request.getHiringManager().getEmployeeId()));
+  }
+
+  @Override
+  public boolean isValidOnboardDate(LocalDate date) {
+    return !LocalDate.now().isAfter(date);
   }
 
   @Override
@@ -78,8 +122,7 @@ public class HiringRequestServiceImpl implements HiringRequestService {
     HiringRequest updatingHiringRequest =
         hiringRequestRepository
             .findById(id)
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find HiringRequest with that id."));
+            .orElseThrow(ResourceNotFoundException::hiringRequestNotFound);
     updatingHiringRequest.setOnBoardingDate(request.getOnBoardingDate());
     updatingHiringRequest.setPosition(request.getPosition());
     updatingHiringRequest.setLevel(request.getLevel());
@@ -87,13 +130,32 @@ public class HiringRequestServiceImpl implements HiringRequestService {
     updatingHiringRequest.setDepartment(
         departmentRepository
             .findById(request.getDepartmentId())
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find Department with that id.")));
+            .orElseThrow(ResourceNotFoundException::departmentNotFound));
     updatingHiringRequest.setHiringManager(
         employeeRepository
             .findById(request.getHiringManagerId())
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find Employee with that id.")));
+            .orElseThrow(ResourceNotFoundException::employeeNotFound));
+
+    if (!isHiringManager(updatingHiringRequest)) {
+      log.info(
+          "The Hiring Manger's Department: " + updatingHiringRequest.getDepartment().getName());
+      log.info(
+          "The Hiring Manager Id: " + updatingHiringRequest.getHiringManager().getEmployeeId());
+      log.info(
+          "This Department's Manager Id: " + updatingHiringRequest.getDepartment().getManagerID());
+      throw BusinessConstraintException.invalidHiringManagerOfficer();
+    } else if (!isValidHiringManager(updatingHiringRequest)) {
+      log.info(
+          "The Hiring Manger's Department: "
+              + updatingHiringRequest.getHiringManager().getDepartment().getName());
+      log.info(
+          "This Hiring Request's Department: " + updatingHiringRequest.getDepartment().getName());
+      throw BusinessConstraintException.hiringManagerDepartmentMissMatch();
+    }
+    if (!isValidOnboardDate(request.getOnBoardingDate())) {
+      log.info("The On-boarding Date is: " + updatingHiringRequest.getOnBoardingDate());
+      throw BusinessConstraintException.invalidOnBoardDate();
+    }
     return HiringRequestMapper.INSTANCE.toDto(hiringRequestRepository.save(updatingHiringRequest));
   }
 }

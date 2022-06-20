@@ -33,10 +33,7 @@ public class CandidateSkillSetServiceImpl implements CandidateSkillSetService {
     return CandidateSkillSetMapper.INSTANCE.toDto(
         candidateSkillSetRepository
             .findById(id)
-            .orElseThrow(
-                () ->
-                    new ResourceNotFoundException(
-                        "Can't not find Candidate SkillSet with that id.")));
+            .orElseThrow(ResourceNotFoundException::candidateSkillSetNotFound));
   }
 
   @Override
@@ -58,12 +55,10 @@ public class CandidateSkillSetServiceImpl implements CandidateSkillSetService {
         null,
         candidateRepository
             .findById(request.getCandidateId())
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find Candidate with that id.")),
+            .orElseThrow(ResourceNotFoundException::candidateNotFound),
         skillSetRepository
             .findById(request.getSkillSetId())
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find SkillSet with that id.")));
+            .orElseThrow(ResourceNotFoundException::skillSetNotFound));
   }
 
   @Override
@@ -72,20 +67,15 @@ public class CandidateSkillSetServiceImpl implements CandidateSkillSetService {
     CandidateSkillSet updatingCandidateSkillSet =
         candidateSkillSetRepository
             .findById(id)
-            .orElseThrow(
-                () ->
-                    new ResourceNotFoundException(
-                        "Can't not find Candidate SkillSet with that id."));
+            .orElseThrow(ResourceNotFoundException::candidateSkillSetNotFound);
     updatingCandidateSkillSet.setCandidate(
         candidateRepository
             .findById(request.getCandidateId())
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find Candidate with that id.")));
+            .orElseThrow(ResourceNotFoundException::candidateNotFound));
     updatingCandidateSkillSet.setSkillSet(
         skillSetRepository
             .findById(request.getSkillSetId())
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find SkillSet with that id.")));
+            .orElseThrow(ResourceNotFoundException::skillSetNotFound));
     return CandidateSkillSetMapper.INSTANCE.toDto(
         candidateSkillSetRepository.save(updatingCandidateSkillSet));
   }
@@ -95,9 +85,7 @@ public class CandidateSkillSetServiceImpl implements CandidateSkillSetService {
     CandidateSkillSet deletingCandidateSkillSet =
         candidateSkillSetRepository
             .findById(id)
-            .orElseThrow(
-                () ->
-                    new ResourceNotFoundException("Can't not find Application Form with that id."));
+            .orElseThrow(ResourceNotFoundException::applicationFormNotFound);
 
     candidateSkillSetRepository.deleteById(id);
   }

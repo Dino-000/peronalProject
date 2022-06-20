@@ -34,7 +34,7 @@ public class CandidateServiceImpl implements CandidateService {
   public Candidate findById(Integer id) throws ResourceNotFoundException {
     return candidateRepository
         .findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Can't not find Candidate with that id."));
+        .orElseThrow(ResourceNotFoundException::candidateNotFound);
   }
 
   @Override
@@ -108,10 +108,7 @@ public class CandidateServiceImpl implements CandidateService {
   @Override
   public CandidatePortfolioDto findPortfolio(Integer id) throws ResourceNotFoundException {
     return new CandidatePortfolioDto(
-        candidateRepository
-            .findById(id)
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find Candidate with that id.")),
+        candidateRepository.findById(id).orElseThrow(ResourceNotFoundException::candidateNotFound),
         CandidateCertificationMapper.INSTANCE.toDtos(
             candidateCertificationRepository.findByCandidateId(id)),
         CandidateEducationMapper.INSTANCE.toDtos(

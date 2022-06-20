@@ -1,11 +1,12 @@
 package com.axonactive.personalproject;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.SpringServletContainerInitializer;
-
+@Slf4j
 @SpringBootApplication
 public class DinoProjectApplication extends SpringServletContainerInitializer {
 
@@ -18,6 +19,7 @@ public class DinoProjectApplication extends SpringServletContainerInitializer {
 		SpringApplication.run(DinoProjectApplication.class, args);
 		String encryptedPassWord = new BCryptPasswordEncoder().encode("1234");
 		System.out.println(encryptedPassWord);
+		log.error("new testing");
 	}
 
 }

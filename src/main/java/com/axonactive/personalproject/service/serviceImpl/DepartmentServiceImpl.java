@@ -25,7 +25,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     return departmentRepository
         .findById(id)
         .orElseThrow(
-            () -> new ResourceNotFoundException("Can't not find Department with that id."));
+                ResourceNotFoundException::departmentNotFound);
   }
 
   @Override
@@ -51,7 +51,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         departmentRepository
             .findById(id)
             .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find Department with that id."));
+                    ResourceNotFoundException::departmentNotFound);
     updatingDepartment.setName(input.getName());
     updatingDepartment.setHeadcount(input.getHeadcount());
     updatingDepartment.setQuantityOfHiringManager(input.getQuantityOfHiringManager());

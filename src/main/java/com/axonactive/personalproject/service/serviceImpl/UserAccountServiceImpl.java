@@ -25,9 +25,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     return userAccountRepository
         .findById(userName)
         .orElseThrow(
-            () ->
-                new ResourceNotFoundException(
-                    "Can not found the account with this userName: " + userName));
+                ResourceNotFoundException::userAccountNotFound);
   }
 
   @Override

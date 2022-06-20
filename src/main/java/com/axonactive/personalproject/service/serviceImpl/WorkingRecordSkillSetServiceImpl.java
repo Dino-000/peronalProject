@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -34,9 +35,7 @@ public class WorkingRecordSkillSetServiceImpl implements WorkingHistoryRecordSki
         workingHistoryRecordSkillSetRepository
             .findById(id)
             .orElseThrow(
-                () ->
-                    new ResourceNotFoundException(
-                        "Can't not find Working History Record SkillSet with that id.")));
+                    ResourceNotFoundException::workingHistoryRecordSkillSetNotFound));
   }
 
   @Override
@@ -58,21 +57,17 @@ public class WorkingRecordSkillSetServiceImpl implements WorkingHistoryRecordSki
         workingHistoryRecordSkillSetRepository
             .findById(id)
             .orElseThrow(
-                () ->
-                    new ResourceNotFoundException(
-                        "Can't not find Working History Record SkillSet with that id."));
+                    ResourceNotFoundException::workingHistoryRecordSkillSetNotFound);
     updatingWorkingHistoryRecordSkillSet.setSkillSet(
         skillSetRepository
             .findById(request.getSkillSetId())
             .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find SkillSet with that id.")));
+                    ResourceNotFoundException::skillSetNotFound));
     updatingWorkingHistoryRecordSkillSet.setWorkingHistoryRecord(
         workingHistoryRecordRepository
             .findById(request.getWorkingHistoryRecordId())
             .orElseThrow(
-                () ->
-                    new ResourceNotFoundException(
-                        "Can't not find Working History Record with that id.")));
+                    ResourceNotFoundException::workingHistoryRecordNotFound));
     return WorkingHistoryRecordSkillSetMapper.INSTANCE.toDto(
         workingHistoryRecordSkillSetRepository.save(updatingWorkingHistoryRecordSkillSet));
   }
@@ -91,12 +86,20 @@ public class WorkingRecordSkillSetServiceImpl implements WorkingHistoryRecordSki
         workingHistoryRecordRepository
             .findById(request.getWorkingHistoryRecordId())
             .orElseThrow(
-                () ->
-                    new ResourceNotFoundException(
-                        "Can't not find Working History Record with that id.")),
+                    ResourceNotFoundException::workingHistoryRecordNotFound),
         skillSetRepository
             .findById(request.getSkillSetId())
             .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find SkillSet with that id.")));
+                    ResourceNotFoundException::skillSetNotFound));
+  }
+
+  @Override
+  public boolean isValidJoinedDate(LocalDate date) {
+    return !LocalDate.now().isBefore(date);
+  }
+
+  @Override
+  public boolean isResignedDate(LocalDate joinedDate,LocalDate resignDate) {
+    return !resignDate.isBefore(joinedDate);
   }
 }

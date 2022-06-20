@@ -33,9 +33,7 @@ public class HiringRequestSkillSetServiceImpl implements HiringRequestSkillSetSe
         hiringRequestSkillSetRepository
             .findById(id)
             .orElseThrow(
-                () ->
-                    new ResourceNotFoundException(
-                        "Can't not find HiringRequestSkillSet with that id.")));
+                    ResourceNotFoundException::hiringRequestSkillSetNotFound));
   }
 
   @Override
@@ -59,19 +57,17 @@ public class HiringRequestSkillSetServiceImpl implements HiringRequestSkillSetSe
         hiringRequestSkillSetRepository
             .findById(id)
             .orElseThrow(
-                () ->
-                    new ResourceNotFoundException(
-                        "Can't not find HiringRequestSkillSet with that id."));
+                    ResourceNotFoundException::hiringRequestSkillSetNotFound);
     updatingHiringRequestSkillSet.setHiringRequest(
         hiringRequestRepository
             .findById(request.getHiringRequestId())
             .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find HiringRequest with that id.")));
+                    ResourceNotFoundException::hiringRequestNotFound));
     updatingHiringRequestSkillSet.setSkillSet(
         skillSetRepository
             .findById(request.getSkillSetId())
             .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find SkillSet with that id.")));
+                    ResourceNotFoundException::skillSetNotFound));
     return HiringRequestSkillSetMapper.INSTANCE.toDto(
         hiringRequestSkillSetRepository.save(updatingHiringRequestSkillSet));
   }
@@ -84,10 +80,10 @@ public class HiringRequestSkillSetServiceImpl implements HiringRequestSkillSetSe
         hiringRequestRepository
             .findById(request.getHiringRequestId())
             .orElseThrow(
-                () -> new ResourceNotFoundException("Cant not found Hiring Request with that id")),
+                    ResourceNotFoundException::hiringRequestNotFound),
         skillSetRepository
             .findById(request.getSkillSetId())
             .orElseThrow(
-                () -> new ResourceNotFoundException("Cant not found SkillSet with that id")));
+                    ResourceNotFoundException::hiringRequestNotFound));
   }
 }

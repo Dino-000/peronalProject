@@ -31,7 +31,7 @@ public class EmployeeImpl implements EmployeeService {
         employeeRepository
             .findById(id)
             .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find Employee with that id.")));
+                    ResourceNotFoundException::employeeNotFound));
   }
 
   @Override
@@ -46,7 +46,7 @@ public class EmployeeImpl implements EmployeeService {
         employeeRepository
             .findById(id)
             .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find Employee with that id."));
+                    ResourceNotFoundException::employeeNotFound);
     updatingEmployee.setEmployeeId(request.getEmployeeId());
     updatingEmployee.setName(request.getName());
     updatingEmployee.setDateOfBirth(request.getDateOfBirth());
@@ -55,7 +55,7 @@ public class EmployeeImpl implements EmployeeService {
         departmentRepository
             .findById(request.getDepartmentId())
             .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find Department with that id.")));
+                    ResourceNotFoundException::employeeNotFound));
     return EmployeeMapper.INSTANCE.toDto(employeeRepository.save(updatingEmployee));
   }
 
@@ -71,7 +71,7 @@ public class EmployeeImpl implements EmployeeService {
         departmentRepository
             .findById(request.getDepartmentId())
             .orElseThrow(
-                () -> new ResourceNotFoundException("Can't not find Department with that id.")));
+                    ResourceNotFoundException::employeeNotFound));
   }
 
   @Override

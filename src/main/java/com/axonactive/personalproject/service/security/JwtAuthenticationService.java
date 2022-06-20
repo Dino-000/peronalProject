@@ -28,11 +28,11 @@ public class JwtAuthenticationService {
     //    if (!("superAdmin".equalsIgnoreCase(user.getUserName()) &&
     // user.getPassWord().equals("1234"))) {
     if (userAccountService.findByUserName(user.getUserName()) == null
-        || userAccountService
+        || !userAccountService
             .findByUserName(user.getUserName())
             .getPassWord()
             .equals(user.getPassWord())) {
-      throw new UnauthorizedAccessException("Unauthorized user");
+      throw UnauthorizedAccessException.unauthorized();
     }
     return user;
   }
@@ -56,7 +56,7 @@ public class JwtAuthenticationService {
       log.info(e.getMessage());
     }
     if (token == null) {
-      throw new UnauthorizedAccessException("Unauthorized");
+      throw UnauthorizedAccessException.forbidden();
     }
     return new Token(token, tokenDuration);
   }
@@ -64,7 +64,7 @@ public class JwtAuthenticationService {
   public void checkAuthorizedToken(String token) throws UnauthorizedAccessException {
     log.info("Input token is: {}", token);
     if (token == null) {
-      throw new UnauthorizedAccessException("Unauthorized");
+      throw new UnauthorizedAccessException();
     }
     try {
       String secretKey = "this is secret";
@@ -73,7 +73,7 @@ public class JwtAuthenticationService {
       DecodedJWT jwt = verifier.verify(token);
     } catch (JWTVerificationException e) {
       log.info(e.getMessage());
-      throw new UnauthorizedAccessException("Unauthorized");
+      throw UnauthorizedAccessException.forbidden();
     } catch (IllegalArgumentException e) {
       log.info(e.getMessage());
     }

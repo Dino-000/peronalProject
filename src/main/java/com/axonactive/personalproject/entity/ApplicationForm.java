@@ -31,4 +31,6 @@ public class ApplicationForm {
 
     @ManyToOne
     private  Employee hrOfficer;
+
+
 }

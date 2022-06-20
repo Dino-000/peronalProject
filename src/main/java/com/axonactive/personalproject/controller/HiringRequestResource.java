@@ -7,13 +7,13 @@ import com.axonactive.personalproject.service.HiringRequestService;
 import com.axonactive.personalproject.service.dto.HiringRequestDto;
 import com.axonactive.personalproject.service.mapper.HiringRequestMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-
 @RestController
 @RequestMapping(path = HiringRequestResource.PATH)
 @RequiredArgsConstructor

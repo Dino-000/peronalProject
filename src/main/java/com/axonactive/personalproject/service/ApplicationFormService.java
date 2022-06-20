@@ -5,6 +5,7 @@ import com.axonactive.personalproject.entity.ApplicationForm;
 import com.axonactive.personalproject.exception.ResourceNotFoundException;
 import com.axonactive.personalproject.service.dto.ApplicationFormDto;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ApplicationFormService {
@@ -29,4 +30,8 @@ public interface ApplicationFormService {
   ApplicationFormDto update(Integer id,ApplicationFormRequest updateForm) throws ResourceNotFoundException;
 
   Double getSalary (Integer id) throws ResourceNotFoundException;
+
+  Boolean isValidHrOfficer (ApplicationForm applicationForm);
+
+  Boolean isValidSubmittedDate(LocalDate date);
 }

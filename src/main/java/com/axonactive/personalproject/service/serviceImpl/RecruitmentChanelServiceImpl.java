@@ -25,9 +25,7 @@ public class RecruitmentChanelServiceImpl implements RecruitmentChanelService {
     return recruitmentChanelRepository
         .findById(id)
         .orElseThrow(
-            () ->
-                new ResourceNotFoundException(
-                    "Can't not found Recruitment Channel with id : " + id));
+                ResourceNotFoundException::recruitmentChannelNotFound);
   }
 
   @Override

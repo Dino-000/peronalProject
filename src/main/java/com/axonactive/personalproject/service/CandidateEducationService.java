@@ -21,4 +21,6 @@ public interface CandidateEducationService {
     void deleteById(Integer id) throws ResourceNotFoundException;
 
     CandidateEducation convertFromRequestToEntity(CandidateEducationRequest request) throws ResourceNotFoundException;
+
+
 }

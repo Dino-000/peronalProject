@@ -18,66 +18,69 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CandidateEducationServiceImpl implements CandidateEducationService {
-@Autowired
-CandidateEducationRepository candidateEducationRepository;
-@Autowired
-    CandidateRepository candidateRepository;
-@Autowired
-    EducationRepository educationRepository;
-    @Override
-    public List<CandidateEducationDto> findAll() {
-        return CandidateEducationMapper.INSTANCE.toDtos(candidateEducationRepository.findAll());
-    }
+  @Autowired CandidateEducationRepository candidateEducationRepository;
+  @Autowired CandidateRepository candidateRepository;
+  @Autowired EducationRepository educationRepository;
 
-    @Override
-    public CandidateEducationDto findById(Integer id) throws ResourceNotFoundException {
-        return CandidateEducationMapper.INSTANCE.toDto(candidateEducationRepository.findById(id).orElseThrow(
-                () ->new ResourceNotFoundException("Can't not find Candidate Education with that id.")));
-    }
+  @Override
+  public List<CandidateEducationDto> findAll() {
+    return CandidateEducationMapper.INSTANCE.toDtos(candidateEducationRepository.findAll());
+  }
 
-    @Override
-    public List<CandidateEducationDto> findByCandidateId(Integer id) {
-        return CandidateEducationMapper.INSTANCE.toDtos(candidateEducationRepository.findByCandidateId(id));
-    }
+  @Override
+  public CandidateEducationDto findById(Integer id) throws ResourceNotFoundException {
+    return CandidateEducationMapper.INSTANCE.toDto(
+        candidateEducationRepository
+            .findById(id)
+            .orElseThrow(ResourceNotFoundException::candidateEducationNotFound));
+  }
 
-    @Override
-    public CandidateEducation add(CandidateEducationRequest request) throws ResourceNotFoundException {
-        return candidateEducationRepository.save(convertFromRequestToEntity(request));
-    }
+  @Override
+  public List<CandidateEducationDto> findByCandidateId(Integer id) {
+    return CandidateEducationMapper.INSTANCE.toDtos(
+        candidateEducationRepository.findByCandidateId(id));
+  }
 
-    @Override
-    public CandidateEducationDto update(CandidateEducationRequest request, Integer id) throws ResourceNotFoundException {
-        CandidateEducation updatingCandidateEducation =
-                candidateEducationRepository
-                        .findById(id)
-                        .orElseThrow(
-                                () ->
-                                        new ResourceNotFoundException("Can't not find Candidate Education with that id."));
-        updatingCandidateEducation.setCandidate(
-                candidateRepository.findById(request.getCandidateId()).get());
-        updatingCandidateEducation.setEducation(
-                educationRepository.findById(request.getEducationId()).get());
-        updatingCandidateEducation.setGraduationYear(request.getGraduationYear());
+  @Override
+  public CandidateEducation add(CandidateEducationRequest request)
+      throws ResourceNotFoundException {
+    return candidateEducationRepository.save(convertFromRequestToEntity(request));
+  }
 
-        return CandidateEducationMapper.INSTANCE.toDto(candidateEducationRepository.save(updatingCandidateEducation));
-    }
+  @Override
+  public CandidateEducationDto update(CandidateEducationRequest request, Integer id)
+      throws ResourceNotFoundException {
+    CandidateEducation updatingCandidateEducation =
+        candidateEducationRepository
+            .findById(id)
+            .orElseThrow(ResourceNotFoundException::candidateEducationNotFound);
+    updatingCandidateEducation.setCandidate(
+        candidateRepository.findById(request.getCandidateId()).get());
+    updatingCandidateEducation.setEducation(
+        educationRepository.findById(request.getEducationId()).get());
+    updatingCandidateEducation.setGraduationYear(request.getGraduationYear());
 
-    @Override
-    public void deleteById(Integer id) throws ResourceNotFoundException {
-CandidateEducationDto foundCandidateEducation = findById(id);
-        candidateEducationRepository.deleteById(id);
-    }
+    return CandidateEducationMapper.INSTANCE.toDto(
+        candidateEducationRepository.save(updatingCandidateEducation));
+  }
 
-    @Override
-    public CandidateEducation convertFromRequestToEntity(CandidateEducationRequest request) throws ResourceNotFoundException {
-        return new CandidateEducation(
-                null,
-                candidateRepository.findById(request.getCandidateId()).orElseThrow(
-                () ->new ResourceNotFoundException("Can't not find Candidate with that id.")),
-                educationRepository.findById(request.getEducationId()).orElseThrow(
-                () ->new ResourceNotFoundException("Can't not find = Education with that id.")),
+  @Override
+  public void deleteById(Integer id) throws ResourceNotFoundException {
+    CandidateEducationDto foundCandidateEducation = findById(id);
+    candidateEducationRepository.deleteById(id);
+  }
+
+  @Override
+  public CandidateEducation convertFromRequestToEntity(CandidateEducationRequest request)
+      throws ResourceNotFoundException {
+    return new CandidateEducation(
+        null,
+        candidateRepository
+            .findById(request.getCandidateId())
+            .orElseThrow(ResourceNotFoundException::candidateNotFound),
+        educationRepository
+            .findById(request.getEducationId())
+            .orElseThrow(ResourceNotFoundException::candidateEducationNotFound),
         request.getGraduationYear());
-    }
-
-
+  }
 }

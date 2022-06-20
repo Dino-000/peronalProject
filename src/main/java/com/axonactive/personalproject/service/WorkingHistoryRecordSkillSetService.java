@@ -5,6 +5,7 @@ import com.axonactive.personalproject.entity.WorkingHistoryRecordSkillSet;
 import com.axonactive.personalproject.exception.ResourceNotFoundException;
 import com.axonactive.personalproject.service.dto.WorkingHistoryRecordSkillSetDto;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface WorkingHistoryRecordSkillSetService {
@@ -20,4 +21,9 @@ public interface WorkingHistoryRecordSkillSetService {
     List<WorkingHistoryRecordSkillSetDto> findByWorkingHistoryRecordCandidateId(Integer id);
 
     WorkingHistoryRecordSkillSet convertRequestToEntity (WorkingHistoryRecordSkillSetRequest request) throws ResourceNotFoundException;
+    boolean isValidJoinedDate (LocalDate date);
+
+    boolean isResignedDate(LocalDate joinedDate,LocalDate resignDate);
+
+
 }
