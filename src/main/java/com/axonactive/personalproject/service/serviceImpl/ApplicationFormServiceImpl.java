@@ -11,8 +11,17 @@ import com.axonactive.personalproject.service.mapper.ApplicationFormMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -25,6 +34,9 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
   @Autowired HiringRequestRepository hiringRequestRepository;
   @Autowired RecruitmentChanelRepository recruitmentChanelRepository;
   @Autowired EmployeeRepository employeeRepository;
+
+//  @Value("${cv.storage}")
+//  private final String resourcePath;
 
   @Override
   public List<ApplicationFormDto> findAll() {
@@ -147,6 +159,23 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
     }
     return ApplicationFormMapper.INSTANCE.toDto(applicationFormRepository.save(updatingForm));
   }
+
+
+  public String addCv(Integer id, MultipartFile file) throws IOException {
+
+
+    //            String Path_directory =
+    // "/Users/dino/Downloads/personalproject/src/main/resources/static/Cv";
+//    String Path_directory = new ClassPathResource("static/Cv/").getFile().getAbsolutePath();
+//    String CvUrl = Path_directory + File.separator + file.getOriginalFilename();
+    String pathDirectory = new File("").getAbsolutePath();
+    String CvUrl =  File.separator + file.getOriginalFilename();
+    String filePath= pathDirectory+File.separator+"src/main/resources/cv"+CvUrl;
+    Files.copy(file.getInputStream(), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
+
+    return CvUrl;
+  }
+
 
   @Override
   public Double getSalary(Integer id) {

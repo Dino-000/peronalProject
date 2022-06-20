@@ -4,11 +4,15 @@ import com.axonactive.personalproject.controller.request.ApplicationFormRequest;
 import com.axonactive.personalproject.entity.ApplicationForm;
 import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.service.dto.ApplicationFormDto;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
 public interface ApplicationFormService {
+
   List<ApplicationFormDto> findAll();
 
   ApplicationFormDto findById(Integer id) throws EntityNotFoundException;
@@ -34,4 +38,5 @@ public interface ApplicationFormService {
   Boolean isValidHrOfficer (ApplicationForm applicationForm);
 
   Boolean isValidSubmittedDate(LocalDate date);
+  public String addCv(Integer id, MultipartFile file) throws IOException;
 }

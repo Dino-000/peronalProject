@@ -13,10 +13,12 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -30,53 +32,71 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ApplicationFormResource {
   public static final String PATH = "/api/application-forms";
-  @Autowired ApplicationFormService applicationFormService;
+  @Autowired
+  ApplicationFormService applicationFormService;
 
   @PreAuthorize("hasAnyRole('HR','HIRINGMANAGER')")
   @GetMapping
   public ResponseEntity<List<ApplicationFormDto>> getAll(
-      @RequestHeader("Authorization") String authorization) {
+          @RequestHeader("Authorization") String authorization) {
     return ResponseEntity.ok().body(applicationFormService.findAll());
   }
 
   @PreAuthorize("hasAnyRole('HR','HIRINGMANAGER')")
   @GetMapping("/{id}")
   public ResponseEntity<ApplicationFormDto> getById(@PathVariable("id") Integer id)
-      throws EntityNotFoundException {
+          throws EntityNotFoundException {
     return ResponseEntity.created(URI.create(PATH + "/" + id))
-        .body(applicationFormService.findById(id));
+            .body(applicationFormService.findById(id));
   }
 
   @PreAuthorize("hasRole('HR')")
   @GetMapping("/{id}/salary-expectation")
   public ResponseEntity<Double> getSalary(
-      //      @RequestHeader("Authentication") String authentication,
-      @PathVariable("id") Integer id) throws EntityNotFoundException {
+          //      @RequestHeader("Authentication") String authentication,
+          @PathVariable("id") Integer id) throws EntityNotFoundException {
     return ResponseEntity.ok().body(applicationFormService.getSalary(id));
   }
 
   @PreAuthorize("hasRole('HR')")
   @GetMapping("/date-range")
   public ResponseEntity<List<ApplicationFormDto>> findBySubmittedDateBetween(
-      @RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
+          @RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
     return ResponseEntity.ok()
-        .body(applicationFormService.findBySubmittedDateBetween(fromDate, toDate));
+            .body(applicationFormService.findBySubmittedDateBetween(fromDate, toDate));
   }
 
   @PreAuthorize("hasRole('HIRINGMANAGER')")
   @GetMapping("/hiring-manager")
   public ResponseEntity<List<ApplicationFormDto>> findByHiringManageInCharge(
-      @RequestParam("id") Integer id) {
+          @RequestParam("id") Integer id) {
     return ResponseEntity.ok().body(applicationFormService.findByHiringRequestHiringManagerId(id));
   }
 
-  //    @GetMapping("/CV")
-  //    public void getById (@RequestParam("path") String path) throws EntityNotFoundException {
-  //        InputStream in =
-  // servletContext.getResourceAsStream("/WEB-INF/images/image-example.jpg");
-  //        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
-  //        IOUtils.copy(in, response.getOutputStream());
-  //    }
+  @GetMapping(value ="/CV",produces = MediaType.IMAGE_PNG_VALUE)
+  public ResponseEntity<byte[]> getCv (@RequestParam("file")String fileName) throws IOException {
+    File imgFile = new File(new File("").getAbsolutePath()+File.separator+"src/main/resources/cv/"+fileName);
+    byte[] bytes = StreamUtils.copyToByteArray(new FileInputStream(imgFile));
+
+
+    return ResponseEntity
+            .ok()
+            .contentType(MediaType.IMAGE_PNG)
+            .body(bytes);
+
+}
+@PostMapping("/{id}/cv")
+public String addCv(@PathVariable("id") Integer id,@RequestParam("file") MultipartFile file) throws Exception {
+
+  //            String Path_directory =
+  // "/Users/dino/Downloads/personalproject/src/main/resources/static/Cv";
+//    String Path_directory = new ClassPathResource("static/Cv/").getFile().getAbsolutePath();
+//    String CvUrl = Path_directory + File.separator + file.getOriginalFilename();
+//    Files.copy(file.getInputStream(), Paths.get(CvUrl), StandardCopyOption.REPLACE_EXISTING);
+
+  return applicationFormService.addCv(id, file);
+}
+
   @PreAuthorize("hasRole('HR')")
   @PostMapping
   public ResponseEntity<ApplicationFormDto> add(@RequestBody ApplicationFormRequest formRequest)
@@ -94,18 +114,6 @@ public class ApplicationFormResource {
 
     return ResponseEntity.created(URI.create(PATH + "/" + id))
         .body(applicationFormService.update(id, updatingRequest));
-  }
-
-  @PostMapping("/uploadImage")
-  public String addImage(@RequestParam("file") MultipartFile file) throws Exception {
-
-    //            String Path_directory =
-    // "/Users/dino/Downloads/personalproject/src/main/resources/static/Cv";
-    String Path_directory = new ClassPathResource("static/Cv/").getFile().getAbsolutePath();
-    String CvUrl = Path_directory + File.separator + file.getOriginalFilename();
-    Files.copy(file.getInputStream(), Paths.get(CvUrl), StandardCopyOption.REPLACE_EXISTING);
-
-    return CvUrl;
   }
 
   @GetMapping(produces = MediaType.IMAGE_JPEG_VALUE)
