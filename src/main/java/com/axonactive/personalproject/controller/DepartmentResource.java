@@ -1,7 +1,7 @@
 package com.axonactive.personalproject.controller;
 
 import com.axonactive.personalproject.entity.Department;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class DepartmentResource {
 
   @GetMapping("/{id}")
   public ResponseEntity<Department> getById(@PathVariable("id") Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     return ResponseEntity.created(URI.create(PATH + "/" + id)).body(departmentService.findById(id));
   }
 
@@ -40,7 +40,7 @@ public class DepartmentResource {
   @PutMapping("/{id}")
   public ResponseEntity<Department> update(
       @PathVariable("id") Integer id, @RequestBody Department inputData)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
 
     return ResponseEntity.created(URI.create(PATH + "/" + id))
         .body(departmentService.update(inputData, id));
@@ -48,7 +48,7 @@ public class DepartmentResource {
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     departmentService.deleteById(id);
     return ResponseEntity.noContent().build();
   }

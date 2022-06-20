@@ -1,7 +1,7 @@
 package com.axonactive.personalproject.service.serviceImpl;
 
 import com.axonactive.personalproject.entity.Candidate;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.repository.*;
 import com.axonactive.personalproject.service.CandidateService;
 import com.axonactive.personalproject.service.dto.CandidatePortfolioDto;
@@ -31,14 +31,14 @@ public class CandidateServiceImpl implements CandidateService {
   }
 
   @Override
-  public Candidate findById(Integer id) throws ResourceNotFoundException {
+  public Candidate findById(Integer id) throws EntityNotFoundException {
     return candidateRepository
         .findById(id)
-        .orElseThrow(ResourceNotFoundException::candidateNotFound);
+        .orElseThrow(EntityNotFoundException::candidateNotFound);
   }
 
   @Override
-  public void delete(Integer id) throws ResourceNotFoundException {
+  public void delete(Integer id) throws EntityNotFoundException {
     findById(id);
     candidateRepository.deleteById(id);
   }
@@ -106,9 +106,9 @@ public class CandidateServiceImpl implements CandidateService {
   }
 
   @Override
-  public CandidatePortfolioDto findPortfolio(Integer id) throws ResourceNotFoundException {
+  public CandidatePortfolioDto findPortfolio(Integer id) throws EntityNotFoundException {
     return new CandidatePortfolioDto(
-        candidateRepository.findById(id).orElseThrow(ResourceNotFoundException::candidateNotFound),
+        candidateRepository.findById(id).orElseThrow(EntityNotFoundException::candidateNotFound),
         CandidateCertificationMapper.INSTANCE.toDtos(
             candidateCertificationRepository.findByCandidateId(id)),
         CandidateEducationMapper.INSTANCE.toDtos(
@@ -119,7 +119,7 @@ public class CandidateServiceImpl implements CandidateService {
   }
 
   @Override
-  public Candidate update(Candidate updateDetail, Integer id) throws ResourceNotFoundException {
+  public Candidate update(Candidate updateDetail, Integer id) throws EntityNotFoundException {
     Candidate updatingCandidate = findById(id);
 
     updatingCandidate.setName(updateDetail.getName());

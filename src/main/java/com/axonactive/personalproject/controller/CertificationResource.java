@@ -1,7 +1,7 @@
 package com.axonactive.personalproject.controller;
 
 import com.axonactive.personalproject.entity.Certification;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.service.CertificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class CertificationResource {
 
   @GetMapping("/{id}")
   public ResponseEntity<Certification> getById(@PathVariable("id") Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
 
     return ResponseEntity.created(URI.create(PATH + "/" + id))
         .body(certificationService.findById(id));
@@ -43,14 +43,14 @@ public class CertificationResource {
   @PutMapping("/{id}")
   public ResponseEntity<Certification> update(
       @PathVariable("id") Integer id, @RequestBody Certification inputData)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     return ResponseEntity.created(URI.create(PATH + "/" + id))
         .body(certificationService.update(inputData, id));
   }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     certificationService.deleteById(id);
     return ResponseEntity.noContent().build();
   }

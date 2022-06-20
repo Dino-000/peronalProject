@@ -2,12 +2,11 @@ package com.axonactive.personalproject.controller;
 
 import com.axonactive.personalproject.controller.request.HiringRequestRequest;
 import com.axonactive.personalproject.entity.HiringRequest;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.service.HiringRequestService;
 import com.axonactive.personalproject.service.dto.HiringRequestDto;
 import com.axonactive.personalproject.service.mapper.HiringRequestMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +28,7 @@ public class HiringRequestResource {
 
   @GetMapping("/{id}")
   public ResponseEntity<HiringRequestDto> getById(@PathVariable("id") Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     return ResponseEntity.created(URI.create(PATH + "/" + id))
         .body(hiringRequestService.findById(id));
   }
@@ -42,7 +41,7 @@ public class HiringRequestResource {
 
   @PostMapping
   public ResponseEntity<HiringRequestDto> add(@RequestBody HiringRequestRequest inputData)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     HiringRequest newHiringRequest = hiringRequestService.add(inputData);
 
     return ResponseEntity.created(URI.create(PATH + "/" + newHiringRequest.getId()))
@@ -52,7 +51,7 @@ public class HiringRequestResource {
   @PutMapping("/{id}")
   public ResponseEntity<HiringRequestDto> update(
       @PathVariable("id") Integer id, @RequestBody HiringRequestRequest inputData)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
 
     return ResponseEntity.created(URI.create(PATH + "/" + id))
         .body(hiringRequestService.update(inputData, id));
@@ -60,7 +59,7 @@ public class HiringRequestResource {
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
 
     hiringRequestService.deleteById(id);
     return ResponseEntity.noContent().build();

@@ -1,7 +1,7 @@
 package com.axonactive.personalproject.controller;
 
 import com.axonactive.personalproject.entity.SkillSet;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.service.SkillSetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class SkillSetResource {
 
   @GetMapping("/{id}")
   public ResponseEntity<SkillSet> getById(@PathVariable("id") Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     return ResponseEntity.created(URI.create(PATH + "/" + id)).body(skillSetService.findById(id));
   }
 
@@ -39,14 +39,14 @@ public class SkillSetResource {
   @PutMapping("/{id}")
   public ResponseEntity<SkillSet> update(
       @PathVariable("id") Integer id, @RequestBody SkillSet updateDetail)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     return ResponseEntity.created(URI.create(PATH + "/" + id))
         .body(skillSetService.update(updateDetail, id));
   }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     skillSetService.deleteById(id);
     return ResponseEntity.noContent().build();
   }

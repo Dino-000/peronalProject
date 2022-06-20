@@ -2,7 +2,7 @@ package com.axonactive.personalproject.controller;
 
 import com.axonactive.personalproject.controller.request.HiringRequestSkillSetRequest;
 import com.axonactive.personalproject.entity.HiringRequestSkillSet;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.service.HiringRequestSkillSetService;
 import com.axonactive.personalproject.service.dto.HiringRequestSkillSetDto;
 import com.axonactive.personalproject.service.mapper.HiringRequestSkillSetMapper;
@@ -28,14 +28,14 @@ public class HiringRequestSkillSetResource {
 
   @GetMapping("/{id}")
   public ResponseEntity<HiringRequestSkillSetDto> getById(@PathVariable("id") Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     return ResponseEntity.created(URI.create(PATH + "/" + id))
         .body(hiringRequestSkillSetService.findById(id));
   }
 
   @PostMapping
   public ResponseEntity<HiringRequestSkillSetDto> add(
-      @RequestBody HiringRequestSkillSetRequest inputData) throws ResourceNotFoundException {
+      @RequestBody HiringRequestSkillSetRequest inputData) throws EntityNotFoundException {
     HiringRequestSkillSet newHiringRequestSkillSet = hiringRequestSkillSetService.add(inputData);
 
     return ResponseEntity.created(URI.create(PATH + "/" + newHiringRequestSkillSet.getId()))
@@ -45,7 +45,7 @@ public class HiringRequestSkillSetResource {
   @PutMapping("/{id}")
   public ResponseEntity<HiringRequestSkillSetDto> update(
       @PathVariable("id") Integer id, @RequestBody HiringRequestSkillSetRequest inputData)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
 
     return ResponseEntity.created(URI.create(PATH + "/" + id))
         .body(hiringRequestSkillSetService.update(inputData, id));
@@ -53,7 +53,7 @@ public class HiringRequestSkillSetResource {
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
 
     hiringRequestSkillSetService.deleteById(id);
     return ResponseEntity.noContent().build();

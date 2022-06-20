@@ -2,7 +2,7 @@ package com.axonactive.personalproject.service.serviceImpl;
 
 import com.axonactive.personalproject.controller.request.CandidateEducationRequest;
 import com.axonactive.personalproject.entity.CandidateEducation;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.repository.CandidateEducationRepository;
 import com.axonactive.personalproject.repository.CandidateRepository;
 import com.axonactive.personalproject.repository.EducationRepository;
@@ -28,11 +28,11 @@ public class CandidateEducationServiceImpl implements CandidateEducationService 
   }
 
   @Override
-  public CandidateEducationDto findById(Integer id) throws ResourceNotFoundException {
+  public CandidateEducationDto findById(Integer id) throws EntityNotFoundException {
     return CandidateEducationMapper.INSTANCE.toDto(
         candidateEducationRepository
             .findById(id)
-            .orElseThrow(ResourceNotFoundException::candidateEducationNotFound));
+            .orElseThrow(EntityNotFoundException::candidateEducationNotFound));
   }
 
   @Override
@@ -43,17 +43,17 @@ public class CandidateEducationServiceImpl implements CandidateEducationService 
 
   @Override
   public CandidateEducation add(CandidateEducationRequest request)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     return candidateEducationRepository.save(convertFromRequestToEntity(request));
   }
 
   @Override
   public CandidateEducationDto update(CandidateEducationRequest request, Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     CandidateEducation updatingCandidateEducation =
         candidateEducationRepository
             .findById(id)
-            .orElseThrow(ResourceNotFoundException::candidateEducationNotFound);
+            .orElseThrow(EntityNotFoundException::candidateEducationNotFound);
     updatingCandidateEducation.setCandidate(
         candidateRepository.findById(request.getCandidateId()).get());
     updatingCandidateEducation.setEducation(
@@ -65,22 +65,22 @@ public class CandidateEducationServiceImpl implements CandidateEducationService 
   }
 
   @Override
-  public void deleteById(Integer id) throws ResourceNotFoundException {
+  public void deleteById(Integer id) throws EntityNotFoundException {
     CandidateEducationDto foundCandidateEducation = findById(id);
     candidateEducationRepository.deleteById(id);
   }
 
   @Override
   public CandidateEducation convertFromRequestToEntity(CandidateEducationRequest request)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     return new CandidateEducation(
         null,
         candidateRepository
             .findById(request.getCandidateId())
-            .orElseThrow(ResourceNotFoundException::candidateNotFound),
+            .orElseThrow(EntityNotFoundException::candidateNotFound),
         educationRepository
             .findById(request.getEducationId())
-            .orElseThrow(ResourceNotFoundException::candidateEducationNotFound),
+            .orElseThrow(EntityNotFoundException::candidateEducationNotFound),
         request.getGraduationYear());
   }
 }

@@ -2,7 +2,7 @@ package com.axonactive.personalproject.service.serviceImpl;
 
 import com.axonactive.personalproject.controller.request.EmployeeRequest;
 import com.axonactive.personalproject.entity.Employee;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.repository.DepartmentRepository;
 import com.axonactive.personalproject.repository.EmployeeRepository;
 import com.axonactive.personalproject.service.EmployeeService;
@@ -26,27 +26,27 @@ public class EmployeeImpl implements EmployeeService {
   }
 
   @Override
-  public EmployeeDto findById(Integer id) throws ResourceNotFoundException {
+  public EmployeeDto findById(Integer id) throws EntityNotFoundException {
     return EmployeeMapper.INSTANCE.toDto(
         employeeRepository
             .findById(id)
             .orElseThrow(
-                    ResourceNotFoundException::employeeNotFound));
+                    EntityNotFoundException::employeeNotFound));
   }
 
   @Override
-  public void deleteById(Integer id) throws ResourceNotFoundException {
+  public void deleteById(Integer id) throws EntityNotFoundException {
     findById(id);
     employeeRepository.deleteById(id);
   }
 
   @Override
-  public EmployeeDto update(EmployeeRequest request, Integer id) throws ResourceNotFoundException {
+  public EmployeeDto update(EmployeeRequest request, Integer id) throws EntityNotFoundException {
     Employee updatingEmployee =
         employeeRepository
             .findById(id)
             .orElseThrow(
-                    ResourceNotFoundException::employeeNotFound);
+                    EntityNotFoundException::employeeNotFound);
     updatingEmployee.setEmployeeId(request.getEmployeeId());
     updatingEmployee.setName(request.getName());
     updatingEmployee.setDateOfBirth(request.getDateOfBirth());
@@ -55,13 +55,13 @@ public class EmployeeImpl implements EmployeeService {
         departmentRepository
             .findById(request.getDepartmentId())
             .orElseThrow(
-                    ResourceNotFoundException::employeeNotFound));
+                    EntityNotFoundException::employeeNotFound));
     return EmployeeMapper.INSTANCE.toDto(employeeRepository.save(updatingEmployee));
   }
 
   @Override
   public Employee convertFromRequestToEntity(EmployeeRequest request)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     return new Employee(
         null,
         request.getEmployeeId(),
@@ -71,11 +71,11 @@ public class EmployeeImpl implements EmployeeService {
         departmentRepository
             .findById(request.getDepartmentId())
             .orElseThrow(
-                    ResourceNotFoundException::employeeNotFound));
+                    EntityNotFoundException::employeeNotFound));
   }
 
   @Override
-  public Employee add(EmployeeRequest request) throws ResourceNotFoundException {
+  public Employee add(EmployeeRequest request) throws EntityNotFoundException {
     return employeeRepository.save(convertFromRequestToEntity(request));
   }
 }

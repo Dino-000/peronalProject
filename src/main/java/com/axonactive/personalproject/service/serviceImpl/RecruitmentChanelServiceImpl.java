@@ -1,7 +1,7 @@
 package com.axonactive.personalproject.service.serviceImpl;
 
 import com.axonactive.personalproject.entity.RecruitmentChanel;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.repository.RecruitmentChanelRepository;
 import com.axonactive.personalproject.service.RecruitmentChanelService;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +21,11 @@ public class RecruitmentChanelServiceImpl implements RecruitmentChanelService {
   }
 
   @Override
-  public RecruitmentChanel findById(Integer id) throws ResourceNotFoundException {
+  public RecruitmentChanel findById(Integer id) throws EntityNotFoundException {
     return recruitmentChanelRepository
         .findById(id)
         .orElseThrow(
-                ResourceNotFoundException::recruitmentChannelNotFound);
+                EntityNotFoundException::recruitmentChannelNotFound);
   }
 
   @Override
@@ -42,7 +42,7 @@ public class RecruitmentChanelServiceImpl implements RecruitmentChanelService {
 
   @Override
   public RecruitmentChanel update(RecruitmentChanel request, Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     RecruitmentChanel updatingRecruitmentChannel = findById(id);
     updatingRecruitmentChannel.setAdminAccount(request.getAdminAccount());
     updatingRecruitmentChannel.setConversionRate(request.getConversionRate());
@@ -55,7 +55,7 @@ public class RecruitmentChanelServiceImpl implements RecruitmentChanelService {
   }
 
   @Override
-  public void deleteById(Integer id) throws ResourceNotFoundException {
+  public void deleteById(Integer id) throws EntityNotFoundException {
       findById(id);
     recruitmentChanelRepository.deleteById(id);
   }

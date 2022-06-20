@@ -2,7 +2,7 @@ package com.axonactive.personalproject.controller;
 
 import com.axonactive.personalproject.controller.request.WorkingHistoryRecordSkillSetRequest;
 import com.axonactive.personalproject.entity.WorkingHistoryRecordSkillSet;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.service.WorkingHistoryRecordSkillSetService;
 import com.axonactive.personalproject.service.dto.WorkingHistoryRecordSkillSetDto;
 import com.axonactive.personalproject.service.mapper.WorkingHistoryRecordSkillSetMapper;
@@ -28,14 +28,14 @@ public class WorkingHistoryRecordSkillSetResource {
 
   @GetMapping("/{id}")
   public ResponseEntity<WorkingHistoryRecordSkillSetDto> getById(@PathVariable("id") Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     return ResponseEntity.created(URI.create(PATH + "/" + id))
         .body(workingHistoryRecordSkillSetService.findById(id));
   }
 
   @PostMapping
   public ResponseEntity<WorkingHistoryRecordSkillSetDto> add(
-      @RequestBody WorkingHistoryRecordSkillSetRequest inputData) throws ResourceNotFoundException {
+      @RequestBody WorkingHistoryRecordSkillSetRequest inputData) throws EntityNotFoundException {
     WorkingHistoryRecordSkillSet newWorkingHistoryRecordSkillSet =
         workingHistoryRecordSkillSetService.add(inputData);
 
@@ -46,7 +46,7 @@ public class WorkingHistoryRecordSkillSetResource {
   @PutMapping("/{id}")
   public ResponseEntity<WorkingHistoryRecordSkillSetDto> update(
       @PathVariable("id") Integer id, @RequestBody WorkingHistoryRecordSkillSetRequest inputData)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
 
     return ResponseEntity.created(URI.create(PATH + "/" + id))
         .body(workingHistoryRecordSkillSetService.update(inputData, id));
@@ -54,7 +54,7 @@ public class WorkingHistoryRecordSkillSetResource {
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     workingHistoryRecordSkillSetService.deleteById(id);
     return ResponseEntity.noContent().build();
   }

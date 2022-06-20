@@ -3,7 +3,7 @@ package com.axonactive.personalproject.service.serviceImpl;
 import com.axonactive.personalproject.controller.request.HiringRequestRequest;
 import com.axonactive.personalproject.entity.HiringRequest;
 import com.axonactive.personalproject.exception.BusinessConstraintException;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.repository.DepartmentRepository;
 import com.axonactive.personalproject.repository.EmployeeRepository;
 import com.axonactive.personalproject.repository.HiringRequestRepository;
@@ -32,21 +32,21 @@ public class HiringRequestServiceImpl implements HiringRequestService {
   }
 
   @Override
-  public HiringRequestDto findById(Integer id) throws ResourceNotFoundException {
+  public HiringRequestDto findById(Integer id) throws EntityNotFoundException {
     return HiringRequestMapper.INSTANCE.toDto(
         hiringRequestRepository
             .findById(id)
-            .orElseThrow(ResourceNotFoundException::hiringRequestNotFound));
+            .orElseThrow(EntityNotFoundException::hiringRequestNotFound));
   }
 
   @Override
-  public void deleteById(Integer id) throws ResourceNotFoundException {
+  public void deleteById(Integer id) throws EntityNotFoundException {
     findById(id);
     hiringRequestRepository.deleteById(id);
   }
 
   @Override
-  public HiringRequest add(HiringRequestRequest request) throws ResourceNotFoundException {
+  public HiringRequest add(HiringRequestRequest request) throws EntityNotFoundException {
     HiringRequest hiringRequest = convertRequestToEntity(request);
     if (!isHiringManager(hiringRequest)) {
       log.info("The Hiring Manger's Department: " + hiringRequest.getDepartment().getName());
@@ -69,7 +69,7 @@ public class HiringRequestServiceImpl implements HiringRequestService {
 
   @Override
   public HiringRequest convertRequestToEntity(HiringRequestRequest request)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     return new HiringRequest(
         null,
         request.getOnBoardingDate(),
@@ -79,10 +79,10 @@ public class HiringRequestServiceImpl implements HiringRequestService {
         request.getBudget(),
         departmentRepository
             .findById(request.getDepartmentId())
-            .orElseThrow(ResourceNotFoundException::departmentNotFound),
+            .orElseThrow(EntityNotFoundException::departmentNotFound),
         employeeRepository
             .findById(request.getHiringManagerId())
-            .orElseThrow(ResourceNotFoundException::employeeNotFound));
+            .orElseThrow(EntityNotFoundException::employeeNotFound));
   }
 
   @Override
@@ -118,11 +118,11 @@ public class HiringRequestServiceImpl implements HiringRequestService {
 
   @Override
   public HiringRequestDto update(HiringRequestRequest request, Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     HiringRequest updatingHiringRequest =
         hiringRequestRepository
             .findById(id)
-            .orElseThrow(ResourceNotFoundException::hiringRequestNotFound);
+            .orElseThrow(EntityNotFoundException::hiringRequestNotFound);
     updatingHiringRequest.setOnBoardingDate(request.getOnBoardingDate());
     updatingHiringRequest.setPosition(request.getPosition());
     updatingHiringRequest.setLevel(request.getLevel());
@@ -130,11 +130,11 @@ public class HiringRequestServiceImpl implements HiringRequestService {
     updatingHiringRequest.setDepartment(
         departmentRepository
             .findById(request.getDepartmentId())
-            .orElseThrow(ResourceNotFoundException::departmentNotFound));
+            .orElseThrow(EntityNotFoundException::departmentNotFound));
     updatingHiringRequest.setHiringManager(
         employeeRepository
             .findById(request.getHiringManagerId())
-            .orElseThrow(ResourceNotFoundException::employeeNotFound));
+            .orElseThrow(EntityNotFoundException::employeeNotFound));
 
     if (!isHiringManager(updatingHiringRequest)) {
       log.info(

@@ -1,7 +1,7 @@
 package com.axonactive.personalproject.service.serviceImpl;
 
 import com.axonactive.personalproject.entity.Department;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.repository.DepartmentRepository;
 import com.axonactive.personalproject.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
@@ -21,15 +21,15 @@ public class DepartmentServiceImpl implements DepartmentService {
   }
 
   @Override
-  public Department findById(Integer id) throws ResourceNotFoundException {
+  public Department findById(Integer id) throws EntityNotFoundException {
     return departmentRepository
         .findById(id)
         .orElseThrow(
-                ResourceNotFoundException::departmentNotFound);
+                EntityNotFoundException::departmentNotFound);
   }
 
   @Override
-  public void deleteById(Integer id) throws ResourceNotFoundException {
+  public void deleteById(Integer id) throws EntityNotFoundException {
     findById(id);
     departmentRepository.deleteById(id);
   }
@@ -46,12 +46,12 @@ public class DepartmentServiceImpl implements DepartmentService {
   }
 
   @Override
-  public Department update(Department input, Integer id) throws ResourceNotFoundException {
+  public Department update(Department input, Integer id) throws EntityNotFoundException {
     Department updatingDepartment =
         departmentRepository
             .findById(id)
             .orElseThrow(
-                    ResourceNotFoundException::departmentNotFound);
+                    EntityNotFoundException::departmentNotFound);
     updatingDepartment.setName(input.getName());
     updatingDepartment.setHeadcount(input.getHeadcount());
     updatingDepartment.setQuantityOfHiringManager(input.getQuantityOfHiringManager());

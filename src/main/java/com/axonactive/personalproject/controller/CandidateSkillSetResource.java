@@ -2,7 +2,7 @@ package com.axonactive.personalproject.controller;
 
 import com.axonactive.personalproject.controller.request.CandidateSkillSetRequest;
 import com.axonactive.personalproject.entity.CandidateSkillSet;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.service.CandidateSkillSetService;
 import com.axonactive.personalproject.service.dto.CandidateSkillSetDto;
 import com.axonactive.personalproject.service.mapper.CandidateSkillSetMapper;
@@ -29,25 +29,25 @@ public class CandidateSkillSetResource {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CandidateSkillSetDto> getById (@PathVariable("id") Integer id) throws ResourceNotFoundException {
+    public ResponseEntity<CandidateSkillSetDto> getById (@PathVariable("id") Integer id) throws EntityNotFoundException {
         return ResponseEntity.created(URI.create(PATH+"/"+id)).body(candidateSkillSetService.findById(id));
     }
 
     @PostMapping
     public ResponseEntity<CandidateSkillSetDto> add(
-            @RequestBody CandidateSkillSetRequest inputData) throws ResourceNotFoundException {
+            @RequestBody CandidateSkillSetRequest inputData) throws EntityNotFoundException {
         CandidateSkillSet newCandidateSkillSet = candidateSkillSetService.add(inputData);
 
         return ResponseEntity.created(URI.create(PATH + "/" + newCandidateSkillSet.getId())).body(CandidateSkillSetMapper.INSTANCE.toDto(newCandidateSkillSet));
     }
 
     @PutMapping("/{id}")
-    public  ResponseEntity<CandidateSkillSetDto> update(@PathVariable("id") Integer id, @RequestBody CandidateSkillSetRequest inputData) throws ResourceNotFoundException {
+    public  ResponseEntity<CandidateSkillSetDto> update(@PathVariable("id") Integer id, @RequestBody CandidateSkillSetRequest inputData) throws EntityNotFoundException {
         return  ResponseEntity.created(URI.create(PATH+"/"+id)).body(candidateSkillSetService.update(inputData,id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws ResourceNotFoundException {
+    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws EntityNotFoundException {
         candidateSkillSetService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

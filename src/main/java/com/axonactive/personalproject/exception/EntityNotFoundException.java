@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public class ResourceNotFoundException extends  Exception{
+public class EntityNotFoundException extends  Exception{
 
     private static final String APPLICATION_FORM_NOT_FOUND_MSG_KEY = "ApplicationFormNotExisted";
     private static final String APPLICATION_FORM_NOT_FOUND_MSG = "Can't not find Application Form with that id.";

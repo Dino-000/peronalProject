@@ -2,7 +2,7 @@ package com.axonactive.personalproject.controller;
 
 import com.axonactive.personalproject.controller.request.CandidateEducationRequest;
 import com.axonactive.personalproject.entity.CandidateEducation;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.service.CandidateEducationService;
 import com.axonactive.personalproject.service.dto.CandidateEducationDto;
 import com.axonactive.personalproject.service.mapper.CandidateEducationMapper;
@@ -30,14 +30,14 @@ public class CandidateEducationResource {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CandidateEducationDto> getById(@PathVariable("id") Integer id) throws ResourceNotFoundException {
+    public ResponseEntity<CandidateEducationDto> getById(@PathVariable("id") Integer id) throws EntityNotFoundException {
 
         return ResponseEntity.created(URI.create(PATH + "/" + id)).body(candidateEducationService.findById(id));
     }
 
     @PostMapping
     public ResponseEntity<CandidateEducationDto> add(
-            @RequestBody CandidateEducationRequest inputData) throws ResourceNotFoundException {
+            @RequestBody CandidateEducationRequest inputData) throws EntityNotFoundException {
         CandidateEducation newCandidateEducation =
                 candidateEducationService.add(inputData);
 
@@ -48,7 +48,7 @@ public class CandidateEducationResource {
     @PutMapping("/{id}")
     public ResponseEntity<CandidateEducationDto> update(
             @PathVariable("id") Integer id, @RequestBody CandidateEducationRequest inputData)
-            throws ResourceNotFoundException {
+            throws EntityNotFoundException {
 
 
         return ResponseEntity.created(URI.create(PATH + "/" + id))
@@ -57,7 +57,7 @@ public class CandidateEducationResource {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
-            throws ResourceNotFoundException {
+            throws EntityNotFoundException {
 
         candidateEducationService.deleteById(id);
         return ResponseEntity.noContent().build();

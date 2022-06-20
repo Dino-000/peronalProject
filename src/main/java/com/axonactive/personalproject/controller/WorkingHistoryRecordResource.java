@@ -2,7 +2,7 @@ package com.axonactive.personalproject.controller;
 
 import com.axonactive.personalproject.controller.request.WorkingHistoryRecordRequest;
 import com.axonactive.personalproject.entity.WorkingHistoryRecord;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.service.WorkingHistoryRecordService;
 import com.axonactive.personalproject.service.dto.WorkingHistoryRecordDto;
 import com.axonactive.personalproject.service.mapper.WorkingHistoryRecordMapper;
@@ -28,14 +28,14 @@ public class WorkingHistoryRecordResource {
 
   @GetMapping("/{id}")
   public ResponseEntity<WorkingHistoryRecordDto> getById(@PathVariable("id") Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     return ResponseEntity.created(URI.create(PATH + "/" + id))
         .body(workingHistoryRecordService.findById(id));
   }
 
   @PostMapping
   public ResponseEntity<WorkingHistoryRecordDto> add(
-      @RequestBody WorkingHistoryRecordRequest inputData) throws ResourceNotFoundException {
+      @RequestBody WorkingHistoryRecordRequest inputData) throws EntityNotFoundException {
     WorkingHistoryRecord newWorkingHistoryRecord = workingHistoryRecordService.add(inputData);
 
     return ResponseEntity.created(URI.create(PATH + "/" + newWorkingHistoryRecord.getId()))
@@ -45,14 +45,14 @@ public class WorkingHistoryRecordResource {
   @PutMapping("/{id}")
   public ResponseEntity<WorkingHistoryRecordDto> update(
       @PathVariable("id") Integer id, @RequestBody WorkingHistoryRecordRequest inputData)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     return ResponseEntity.created(URI.create(PATH + "/" + id))
         .body(workingHistoryRecordService.update(inputData, id));
   }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     workingHistoryRecordService.deleteById(id);
     return ResponseEntity.noContent().build();
   }

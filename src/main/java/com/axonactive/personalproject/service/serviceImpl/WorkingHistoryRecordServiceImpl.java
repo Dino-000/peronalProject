@@ -3,7 +3,7 @@ package com.axonactive.personalproject.service.serviceImpl;
 import com.axonactive.personalproject.controller.request.WorkingHistoryRecordRequest;
 import com.axonactive.personalproject.entity.WorkingHistoryRecord;
 import com.axonactive.personalproject.exception.BusinessConstraintException;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.repository.CandidateRepository;
 import com.axonactive.personalproject.repository.WorkingHistoryRecordRepository;
 import com.axonactive.personalproject.service.WorkingHistoryRecordService;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -29,23 +30,22 @@ public class WorkingHistoryRecordServiceImpl implements WorkingHistoryRecordServ
   }
 
   @Override
-  public WorkingHistoryRecordDto findById(Integer id) throws ResourceNotFoundException {
+  public WorkingHistoryRecordDto findById(Integer id) throws EntityNotFoundException {
     return WorkingHistoryRecordMapper.INSTANCE.toDto(
         workingHistoryRecordRepository
             .findById(id)
-            .orElseThrow(
-                    ResourceNotFoundException::workingHistoryRecordNotFound));
+            .orElseThrow(EntityNotFoundException::workingHistoryRecordNotFound));
   }
 
   @Override
-  public void deleteById(Integer id) throws ResourceNotFoundException {
+  public void deleteById(Integer id) throws EntityNotFoundException {
     findById(id);
     workingHistoryRecordRepository.deleteById(id);
   }
 
   @Override
   public WorkingHistoryRecord add(WorkingHistoryRecordRequest request)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
 
     return workingHistoryRecordRepository.save(convertFromRequestToEntity(request));
   }
@@ -58,20 +58,20 @@ public class WorkingHistoryRecordServiceImpl implements WorkingHistoryRecordServ
 
   @Override
   public WorkingHistoryRecordDto update(WorkingHistoryRecordRequest request, Integer id)
-      throws ResourceNotFoundException {
-    if (!isValidJoinedDate(request.getJoinedDate())){
-      log.info("Joined Date: "+request.getJoinedDate());
+      throws EntityNotFoundException {
+    if (!isValidJoinedDate(request.getJoinedDate())) {
+      log.info("Joined Date: " + request.getJoinedDate());
       throw BusinessConstraintException.invalidJoinedDate();
     }
-    if (!isValidResignedDate(request.getResignationDate())){
-      log.info("Joined Date: "+request.getResignationDate());
+    if (!isValidResignedDate(request.getJoinedDate(), request.getResignationDate())) {
+      log.info("Joined Date: " + request.getJoinedDate());
+      log.info("Resigned Date: " + request.getResignationDate());
       throw BusinessConstraintException.invalidResignedDate();
     }
     WorkingHistoryRecord updatingWorkingHistoryRecord =
         workingHistoryRecordRepository
             .findById(id)
-            .orElseThrow(
-                    ResourceNotFoundException::workingHistoryRecordNotFound);
+            .orElseThrow(EntityNotFoundException::workingHistoryRecordNotFound);
     updatingWorkingHistoryRecord.setCompanyName(request.getCompanyName());
     updatingWorkingHistoryRecord.setJoinedDate(request.getJoinedDate());
     updatingWorkingHistoryRecord.setResignationDate(request.getResignationDate());
@@ -84,47 +84,46 @@ public class WorkingHistoryRecordServiceImpl implements WorkingHistoryRecordServ
     updatingWorkingHistoryRecord.setCandidate(
         candidateRepository
             .findById(request.getCandidateId())
-            .orElseThrow(
-                    ResourceNotFoundException::candidateNotFound));
+            .orElseThrow(EntityNotFoundException::candidateNotFound));
     return WorkingHistoryRecordMapper.INSTANCE.toDto(updatingWorkingHistoryRecord);
   }
 
   @Override
   public WorkingHistoryRecord convertFromRequestToEntity(WorkingHistoryRecordRequest request)
-      throws ResourceNotFoundException {
-    if (!isValidJoinedDate(request.getJoinedDate())){
-      log.info("Joined Date: "+request.getJoinedDate());
+      throws EntityNotFoundException {
+    if (!isValidJoinedDate(request.getJoinedDate())) {
+      log.info("Joined Date: " + request.getJoinedDate());
       throw BusinessConstraintException.invalidJoinedDate();
     }
-    if (!isValidResignedDate(request.getResignationDate())){
-      log.info("Joined Date: "+request.getResignationDate());
+    if (!isValidResignedDate(request.getJoinedDate(), request.getResignationDate())) {
+      log.info("Resigned Date: " + request.getResignationDate());
       throw BusinessConstraintException.invalidResignedDate();
     }
 
-      return new WorkingHistoryRecord(
-          null,
-          request.getCompanyName(),
-          request.getJoinedDate(),
-          request.getResignationDate(),
-          request.getPosition(),
-          request.getProjectName(),
-          request.getResponsibility(),
-          request.getClient(),
-          request.getTeamSize(),
-          request.getJobType(),
-          request.getReferencesPeoplePhone(),
-          candidateRepository
-              .findById(request.getCandidateId())
-              .orElseThrow(ResourceNotFoundException::candidateNotFound));
+    return new WorkingHistoryRecord(
+        null,
+        request.getCompanyName(),
+        request.getJoinedDate(),
+        request.getResignationDate(),
+        request.getPosition(),
+        request.getProjectName(),
+        request.getResponsibility(),
+        request.getClient(),
+        request.getTeamSize(),
+        request.getJobType(),
+        request.getReferencesPeoplePhone(),
+        candidateRepository
+            .findById(request.getCandidateId())
+            .orElseThrow(EntityNotFoundException::candidateNotFound));
   }
 
   @Override
   public Boolean isValidJoinedDate(LocalDate joinDate) {
-    return null;
+    return !LocalDate.now().isBefore(joinDate);
   }
 
   @Override
-  public Boolean isValidResignedDate(LocalDate joinDate) {
-    return null;
+  public Boolean isValidResignedDate(LocalDate joinDate, LocalDate resignedDate) {
+    return !resignedDate.isBefore(joinDate);
   }
 }

@@ -1,6 +1,6 @@
 package com.axonactive.personalproject.controller;
 
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.exception.UnauthorizedAccessException;
 import com.axonactive.personalproject.service.UserAccountService;
 import com.axonactive.personalproject.service.security.JwtAuthenticationService;
@@ -27,7 +27,7 @@ public class UserAccountResource {
 
   @GetMapping("/{userName}")
   public ResponseEntity<UserAccount> findByUserName(@PathVariable("userName") String userName)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     UserAccount userAccount = userAccountService.findByUserName(userName);
     return ResponseEntity.created(URI.create(PATH + "/" + userAccount.getUserName()))
         .body(userAccount);
@@ -44,7 +44,7 @@ public class UserAccountResource {
   @PutMapping("/{userName}")
   public ResponseEntity<UserAccount> update(
       @PathVariable("userName") String userName, @RequestParam("password") String password)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
 
     return ResponseEntity.created(URI.create(PATH + "/" + userName))
         .body(userAccountService.update(userName, password));
@@ -52,14 +52,14 @@ public class UserAccountResource {
 
   @DeleteMapping("/{userName}")
   public ResponseEntity<Void> delete(@PathVariable("userName") String userName)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     userAccountService.deleteByUsername(userName);
     return ResponseEntity.noContent().build();
   }
 
   @PostMapping("/GetToken")
   public Token getAuthenticationToken(@RequestBody UserAccount userAccount)
-          throws UnauthorizedAccessException, ResourceNotFoundException {
+          throws UnauthorizedAccessException, EntityNotFoundException {
     return jwtAuthenticationService.createToKen(userAccount);
   }
 }

@@ -1,7 +1,7 @@
 package com.axonactive.personalproject.controller;
 
 import com.axonactive.personalproject.entity.RecruitmentChanel;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.service.RecruitmentChanelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class RecruitmentChanelResource {
 
   @GetMapping("/{id}")
   public ResponseEntity<RecruitmentChanel> getById(@PathVariable("id") Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     return ResponseEntity.created(URI.create(PATH + "/" + id))
         .body(recruitmentChanelService.findById(id));
   }
@@ -41,7 +41,7 @@ public class RecruitmentChanelResource {
   @PutMapping("/{id}")
   public ResponseEntity<RecruitmentChanel> update(
       @PathVariable("id") Integer id, @RequestBody RecruitmentChanel inputData)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
 
     return ResponseEntity.created(URI.create(PATH + "/" + id))
         .body(recruitmentChanelService.update(inputData, id));
@@ -49,7 +49,7 @@ public class RecruitmentChanelResource {
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
 
     recruitmentChanelService.deleteById(id);
     return ResponseEntity.noContent().build();

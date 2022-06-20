@@ -1,6 +1,6 @@
 package com.axonactive.personalproject.service.serviceImpl;
 
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.repository.UserAccountRepository;
 import com.axonactive.personalproject.service.UserAccountService;
 import com.axonactive.personalproject.service.security.UserAccount;
@@ -21,11 +21,11 @@ public class UserAccountServiceImpl implements UserAccountService {
   }
 
   @Override
-  public UserAccount findByUserName(String userName) throws ResourceNotFoundException {
+  public UserAccount findByUserName(String userName) throws EntityNotFoundException {
     return userAccountRepository
         .findById(userName)
         .orElseThrow(
-                ResourceNotFoundException::userAccountNotFound);
+                EntityNotFoundException::userAccountNotFound);
   }
 
   @Override
@@ -39,7 +39,7 @@ public class UserAccountServiceImpl implements UserAccountService {
   }
 
   @Override
-  public UserAccount update(String userName, String password) throws ResourceNotFoundException {
+  public UserAccount update(String userName, String password) throws EntityNotFoundException {
     UserAccount updatingUserAccount = findByUserName(userName);
     updatingUserAccount.setPassWord(password);
 

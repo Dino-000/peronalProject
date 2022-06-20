@@ -1,7 +1,7 @@
 package com.axonactive.personalproject.controller;
 
 import com.axonactive.personalproject.entity.Candidate;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.service.CandidateService;
 import com.axonactive.personalproject.service.dto.CandidatePortfolioDto;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ public class CandidateResource {
 
   @GetMapping("/{id}")
   public ResponseEntity<Candidate> getById(@PathVariable("id") Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     return ResponseEntity.created(URI.create(PATH + "/" + id)).body(candidateService.findById(id));
   }
 
@@ -101,7 +101,7 @@ public class CandidateResource {
 
   @GetMapping("/{id}/portfolio")
   public ResponseEntity<CandidatePortfolioDto> findPortfolio(@PathVariable("id") Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     return ResponseEntity.ok().body(candidateService.findPortfolio(id));
   }
 
@@ -115,7 +115,7 @@ public class CandidateResource {
   @PutMapping("/{id}")
   public ResponseEntity<Candidate> update(
       @PathVariable("id") Integer id, @RequestBody Candidate updateDetail)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
 
     return ResponseEntity.created(URI.create(PATH + "/" + id))
         .body(candidateService.update(updateDetail, id));
@@ -123,7 +123,7 @@ public class CandidateResource {
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     candidateService.delete(id);
     return ResponseEntity.noContent().build();
   }

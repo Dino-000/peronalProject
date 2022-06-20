@@ -2,7 +2,7 @@ package com.axonactive.personalproject.service.serviceImpl;
 
 import com.axonactive.personalproject.controller.request.HiringRequestSkillSetRequest;
 import com.axonactive.personalproject.entity.HiringRequestSkillSet;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.repository.HiringRequestRepository;
 import com.axonactive.personalproject.repository.HiringRequestSkillSetRepository;
 import com.axonactive.personalproject.repository.SkillSetRepository;
@@ -28,23 +28,23 @@ public class HiringRequestSkillSetServiceImpl implements HiringRequestSkillSetSe
   }
 
   @Override
-  public HiringRequestSkillSetDto findById(Integer id) throws ResourceNotFoundException {
+  public HiringRequestSkillSetDto findById(Integer id) throws EntityNotFoundException {
     return HiringRequestSkillSetMapper.INSTANCE.toDto(
         hiringRequestSkillSetRepository
             .findById(id)
             .orElseThrow(
-                    ResourceNotFoundException::hiringRequestSkillSetNotFound));
+                    EntityNotFoundException::hiringRequestSkillSetNotFound));
   }
 
   @Override
-  public void deleteById(Integer id) throws ResourceNotFoundException {
+  public void deleteById(Integer id) throws EntityNotFoundException {
     findById(id);
     hiringRequestSkillSetRepository.deleteById(id);
   }
 
   @Override
   public HiringRequestSkillSet add(HiringRequestSkillSetRequest request)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     {
       return hiringRequestSkillSetRepository.save(convertRequestToEntity(request));
     }
@@ -52,38 +52,38 @@ public class HiringRequestSkillSetServiceImpl implements HiringRequestSkillSetSe
 
   @Override
   public HiringRequestSkillSetDto update(HiringRequestSkillSetRequest request, Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     HiringRequestSkillSet updatingHiringRequestSkillSet =
         hiringRequestSkillSetRepository
             .findById(id)
             .orElseThrow(
-                    ResourceNotFoundException::hiringRequestSkillSetNotFound);
+                    EntityNotFoundException::hiringRequestSkillSetNotFound);
     updatingHiringRequestSkillSet.setHiringRequest(
         hiringRequestRepository
             .findById(request.getHiringRequestId())
             .orElseThrow(
-                    ResourceNotFoundException::hiringRequestNotFound));
+                    EntityNotFoundException::hiringRequestNotFound));
     updatingHiringRequestSkillSet.setSkillSet(
         skillSetRepository
             .findById(request.getSkillSetId())
             .orElseThrow(
-                    ResourceNotFoundException::skillSetNotFound));
+                    EntityNotFoundException::skillSetNotFound));
     return HiringRequestSkillSetMapper.INSTANCE.toDto(
         hiringRequestSkillSetRepository.save(updatingHiringRequestSkillSet));
   }
 
   @Override
   public HiringRequestSkillSet convertRequestToEntity(HiringRequestSkillSetRequest request)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     return new HiringRequestSkillSet(
         null,
         hiringRequestRepository
             .findById(request.getHiringRequestId())
             .orElseThrow(
-                    ResourceNotFoundException::hiringRequestNotFound),
+                    EntityNotFoundException::hiringRequestNotFound),
         skillSetRepository
             .findById(request.getSkillSetId())
             .orElseThrow(
-                    ResourceNotFoundException::hiringRequestNotFound));
+                    EntityNotFoundException::hiringRequestNotFound));
   }
 }

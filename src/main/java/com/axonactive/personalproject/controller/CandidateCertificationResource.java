@@ -2,7 +2,7 @@ package com.axonactive.personalproject.controller;
 
 import com.axonactive.personalproject.controller.request.CandidateCertificationRequest;
 import com.axonactive.personalproject.entity.CandidateCertification;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.service.CandidateCertificationService;
 import com.axonactive.personalproject.service.dto.CandidateCertificationDto;
 import com.axonactive.personalproject.service.mapper.CandidateCertificationMapper;
@@ -33,7 +33,7 @@ public class CandidateCertificationResource {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CandidateCertificationDto> getById(@PathVariable("id") Integer id) throws ResourceNotFoundException {
+    public ResponseEntity<CandidateCertificationDto> getById(@PathVariable("id") Integer id) throws EntityNotFoundException {
 
         return ResponseEntity.created(URI.create(PATH + "/" + id))
                 .body(candidateCertificationService.findById(id));
@@ -41,7 +41,7 @@ public class CandidateCertificationResource {
 
     @PostMapping
     public ResponseEntity<CandidateCertificationDto> add(
-            @RequestBody CandidateCertificationRequest inputData) throws ResourceNotFoundException {
+            @RequestBody CandidateCertificationRequest inputData) throws EntityNotFoundException {
         CandidateCertification newCandidateCertification = candidateCertificationService.add(inputData);
 
         return ResponseEntity.created(URI.create(PATH + "/" + newCandidateCertification.getId()))
@@ -51,7 +51,7 @@ public class CandidateCertificationResource {
     @PutMapping("/{id}")
     public ResponseEntity<CandidateCertificationDto> update(
             @PathVariable("id") Integer id, @RequestBody CandidateCertificationRequest updateDetail)
-            throws ResourceNotFoundException {
+            throws EntityNotFoundException {
 
         return ResponseEntity.created(URI.create(PATH + "/" + id))
                 .body(candidateCertificationService.update(updateDetail, id));
@@ -59,7 +59,7 @@ public class CandidateCertificationResource {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
-            throws ResourceNotFoundException {
+            throws EntityNotFoundException {
 
         candidateCertificationService.deleteById(id);
         return ResponseEntity.noContent().build();

@@ -5,7 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.exception.UnauthorizedAccessException;
 import com.axonactive.personalproject.service.UserAccountService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class JwtAuthenticationService {
 
   // check password from database
   private UserAccount checkValidUserAccount(UserAccount user)
-      throws UnauthorizedAccessException, ResourceNotFoundException {
+      throws UnauthorizedAccessException, EntityNotFoundException {
     //    if (!("superAdmin".equalsIgnoreCase(user.getUserName()) &&
     // user.getPassWord().equals("1234"))) {
     if (userAccountService.findByUserName(user.getUserName()) == null
@@ -38,7 +38,7 @@ public class JwtAuthenticationService {
   }
 
   public Token createToKen(UserAccount user)
-      throws UnauthorizedAccessException, ResourceNotFoundException {
+      throws UnauthorizedAccessException, EntityNotFoundException {
     this.checkValidUserAccount(user);
     String token = null;
     String secretKey = "this is secret";

@@ -1,7 +1,7 @@
 package com.axonactive.personalproject.service;
 
 import com.axonactive.personalproject.entity.Candidate;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.service.dto.CandidatePortfolioDto;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.Set;
 
 public interface CandidateService {
     List<Candidate> findAll();
-    Candidate findById(Integer id) throws ResourceNotFoundException;
+    Candidate findById(Integer id) throws EntityNotFoundException;
 
 
 
@@ -26,8 +26,8 @@ public interface CandidateService {
     CandidatePortfolioDto findBCandidatePortfolioById (Integer id);
     Set<Candidate> findByCertification (String nameOfCertification);
 
-    CandidatePortfolioDto findPortfolio (Integer id) throws ResourceNotFoundException;
+    CandidatePortfolioDto findPortfolio (Integer id) throws EntityNotFoundException;
     Candidate add(Candidate candidate);
-    Candidate update (Candidate candidate,Integer id) throws ResourceNotFoundException;
-    void delete(Integer id) throws ResourceNotFoundException;
+    Candidate update (Candidate candidate,Integer id) throws EntityNotFoundException;
+    void delete(Integer id) throws EntityNotFoundException;
 }

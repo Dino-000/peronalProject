@@ -1,7 +1,7 @@
 package com.axonactive.personalproject.service.serviceImpl;
 
 import com.axonactive.personalproject.entity.Certification;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.repository.CertificationRepository;
 import com.axonactive.personalproject.service.CertificationService;
 import lombok.RequiredArgsConstructor;
@@ -21,15 +21,15 @@ public class CertificationServiceImpl implements CertificationService {
   }
 
   @Override
-  public Certification findById(Integer id) throws ResourceNotFoundException {
+  public Certification findById(Integer id) throws EntityNotFoundException {
     return certificationRepository
         .findById(id)
         .orElseThrow(
-                ResourceNotFoundException::certificationNotFound);
+                EntityNotFoundException::certificationNotFound);
   }
 
   @Override
-  public void deleteById(Integer id) throws ResourceNotFoundException {
+  public void deleteById(Integer id) throws EntityNotFoundException {
     findById(id);
     certificationRepository.deleteById(id);
   }
@@ -45,12 +45,12 @@ public class CertificationServiceImpl implements CertificationService {
   }
 
   @Override
-  public Certification update(Certification request, Integer id) throws ResourceNotFoundException {
+  public Certification update(Certification request, Integer id) throws EntityNotFoundException {
     Certification updatingCertification =
         certificationRepository
             .findById(id)
             .orElseThrow(
-                    ResourceNotFoundException::certificationNotFound);
+                    EntityNotFoundException::certificationNotFound);
     updatingCertification.setIssuerName(request.getIssuerName());
     updatingCertification.setNameOfCertification(request.getNameOfCertification());
     updatingCertification.setType(request.getType());

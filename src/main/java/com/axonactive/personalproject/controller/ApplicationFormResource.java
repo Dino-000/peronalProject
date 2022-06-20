@@ -2,7 +2,7 @@ package com.axonactive.personalproject.controller;
 
 import com.axonactive.personalproject.controller.request.ApplicationFormRequest;
 import com.axonactive.personalproject.entity.ApplicationForm;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.service.ApplicationFormService;
 import com.axonactive.personalproject.service.dto.ApplicationFormDto;
 import com.axonactive.personalproject.service.mapper.ApplicationFormMapper;
@@ -35,14 +35,14 @@ public class ApplicationFormResource {
   @PreAuthorize("hasAnyRole('HR','HIRINGMANAGER')")
   @GetMapping
   public ResponseEntity<List<ApplicationFormDto>> getAll(
-      @RequestHeader("Authorization") String authentication) {
+      @RequestHeader("Authorization") String authorization) {
     return ResponseEntity.ok().body(applicationFormService.findAll());
   }
 
   @PreAuthorize("hasAnyRole('HR','HIRINGMANAGER')")
   @GetMapping("/{id}")
   public ResponseEntity<ApplicationFormDto> getById(@PathVariable("id") Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     return ResponseEntity.created(URI.create(PATH + "/" + id))
         .body(applicationFormService.findById(id));
   }
@@ -51,7 +51,7 @@ public class ApplicationFormResource {
   @GetMapping("/{id}/salary-expectation")
   public ResponseEntity<Double> getSalary(
       //      @RequestHeader("Authentication") String authentication,
-      @PathVariable("id") Integer id) throws ResourceNotFoundException {
+      @PathVariable("id") Integer id) throws EntityNotFoundException {
     return ResponseEntity.ok().body(applicationFormService.getSalary(id));
   }
 
@@ -71,7 +71,7 @@ public class ApplicationFormResource {
   }
 
   //    @GetMapping("/CV")
-  //    public void getById (@RequestParam("path") String path) throws ResourceNotFoundException {
+  //    public void getById (@RequestParam("path") String path) throws EntityNotFoundException {
   //        InputStream in =
   // servletContext.getResourceAsStream("/WEB-INF/images/image-example.jpg");
   //        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
@@ -80,7 +80,7 @@ public class ApplicationFormResource {
   @PreAuthorize("hasRole('HR')")
   @PostMapping
   public ResponseEntity<ApplicationFormDto> add(@RequestBody ApplicationFormRequest formRequest)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     ApplicationForm newForm = applicationFormService.add(formRequest);
     return ResponseEntity.created(URI.create(PATH + "/" + newForm.getId()))
         .body(ApplicationFormMapper.INSTANCE.toDto(newForm));
@@ -90,7 +90,7 @@ public class ApplicationFormResource {
   @PutMapping("/{id}")
   public ResponseEntity<ApplicationFormDto> update(
       @PathVariable("id") Integer id, @RequestBody ApplicationFormRequest updatingRequest)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
 
     return ResponseEntity.created(URI.create(PATH + "/" + id))
         .body(applicationFormService.update(id, updatingRequest));
@@ -118,7 +118,7 @@ public class ApplicationFormResource {
   @PreAuthorize("hasRole('ADMIN')")
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     applicationFormService.deleteById(id);
     return ResponseEntity.noContent().build();
   }

@@ -1,7 +1,7 @@
 package com.axonactive.personalproject.controller;
 
 import com.axonactive.personalproject.entity.Education;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.service.EducationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class EducationResource {
 
   @GetMapping("/{id}")
   public ResponseEntity<Education> getById(@PathVariable("id") Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     return ResponseEntity.created(URI.create(PATH + "/" + id)).body(educationService.findById(id));
   }
 
@@ -39,7 +39,7 @@ public class EducationResource {
   @PutMapping("/{id}")
   public ResponseEntity<Education> update(
       @PathVariable("id") Integer id, @RequestBody Education inputData)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
 
     return ResponseEntity.created(URI.create(PATH + "/" + id))
         .body(educationService.update(inputData, id));
@@ -47,7 +47,7 @@ public class EducationResource {
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
-      throws ResourceNotFoundException {
+      throws EntityNotFoundException {
     educationService.deleteById(id);
     return ResponseEntity.noContent().build();
   }

@@ -1,7 +1,7 @@
 package com.axonactive.personalproject.service.serviceImpl;
 
 import com.axonactive.personalproject.entity.Education;
-import com.axonactive.personalproject.exception.ResourceNotFoundException;
+import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.repository.EducationRepository;
 import com.axonactive.personalproject.service.EducationService;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +21,14 @@ public class EducationServiceImpl implements EducationService {
   }
 
   @Override
-  public Education findById(Integer id) throws ResourceNotFoundException {
+  public Education findById(Integer id) throws EntityNotFoundException {
     return educationRepository
         .findById(id)
-        .orElseThrow(ResourceNotFoundException::educationNotFound);
+        .orElseThrow(EntityNotFoundException::educationNotFound);
   }
 
   @Override
-  public void deleteById(Integer id) throws ResourceNotFoundException {
+  public void deleteById(Integer id) throws EntityNotFoundException {
     findById(id);
     educationRepository.deleteById(id);
   }
@@ -50,12 +50,12 @@ public class EducationServiceImpl implements EducationService {
   }
 
   @Override
-  public Education update(Education inputData, Integer id) throws ResourceNotFoundException {
+  public Education update(Education inputData, Integer id) throws EntityNotFoundException {
     Education updatingEducation =
         educationRepository
             .findById(id)
             .orElseThrow(
-                    ResourceNotFoundException::educationNotFound);
+                    EntityNotFoundException::educationNotFound);
     updatingEducation.setSchoolName(inputData.getSchoolName());
     updatingEducation.setDegree(inputData.getDegree());
     updatingEducation.setMajor(inputData.getMajor());
