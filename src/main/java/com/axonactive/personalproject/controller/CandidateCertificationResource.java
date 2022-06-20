@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.yaml.snakeyaml.emitter.EmitterException;
 
 import java.net.URI;
 import java.util.List;
@@ -42,10 +43,15 @@ public class CandidateCertificationResource {
     @PostMapping
     public ResponseEntity<CandidateCertificationDto> add(
             @RequestBody CandidateCertificationRequest inputData) throws EntityNotFoundException {
+        try{
         CandidateCertification newCandidateCertification = candidateCertificationService.add(inputData);
-
         return ResponseEntity.created(URI.create(PATH + "/" + newCandidateCertification.getId()))
                 .body(CandidateCertificationMapper.INSTANCE.toDto(newCandidateCertification));
+
+        } catch (EntityNotFoundException e){
+            throw new EntityNotFoundException();
+        }
+
     }
 
     @PutMapping("/{id}")

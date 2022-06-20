@@ -149,7 +149,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
   }
 
   @Override
-  public Double getSalary(Integer id) throws EntityNotFoundException {
+  public Double getSalary(Integer id) {
     return applicationFormRepository
         .findById(id)
         .orElseThrow(EntityNotFoundException::applicationFormNotFound)

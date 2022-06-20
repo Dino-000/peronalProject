@@ -42,14 +42,12 @@ public class CandidateEducationServiceImpl implements CandidateEducationService 
   }
 
   @Override
-  public CandidateEducation add(CandidateEducationRequest request)
-      throws EntityNotFoundException {
+  public CandidateEducation add(CandidateEducationRequest request) throws EntityNotFoundException {
     return candidateEducationRepository.save(convertFromRequestToEntity(request));
   }
 
   @Override
-  public CandidateEducationDto update(CandidateEducationRequest request, Integer id)
-      throws EntityNotFoundException {
+  public CandidateEducationDto update(CandidateEducationRequest request, Integer id) {
     CandidateEducation updatingCandidateEducation =
         candidateEducationRepository
             .findById(id)
@@ -71,8 +69,7 @@ public class CandidateEducationServiceImpl implements CandidateEducationService 
   }
 
   @Override
-  public CandidateEducation convertFromRequestToEntity(CandidateEducationRequest request)
-      throws EntityNotFoundException {
+  public CandidateEducation convertFromRequestToEntity(CandidateEducationRequest request) {
     return new CandidateEducation(
         null,
         candidateRepository
