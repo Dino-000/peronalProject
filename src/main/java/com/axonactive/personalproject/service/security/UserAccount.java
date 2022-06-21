@@ -12,7 +12,6 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserAccount {
-    @Id
-    private String userName;
-    private String passWord;
+  @Id private String userName;
+  private String passWord;
 }

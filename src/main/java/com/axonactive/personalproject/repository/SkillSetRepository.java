@@ -8,10 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-
-public interface SkillSetRepository extends JpaRepository<SkillSet,Integer> {
-@Query(value = "SELECT c.skillSet " +
-        "FROM CandidateSkillSet c " +
-        "WHERE c.candidate.id = ?1")
-    List<SkillSet> findByCandidateId(Integer id);
+public interface SkillSetRepository extends JpaRepository<SkillSet, Integer> {
+  @Query(value = "SELECT c.skillSet " + "FROM CandidateSkillSet c " + "WHERE c.candidate.id = ?1")
+  List<SkillSet> findByCandidateId(Integer id);
 }

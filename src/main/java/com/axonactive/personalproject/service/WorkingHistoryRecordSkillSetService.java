@@ -9,21 +9,24 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface WorkingHistoryRecordSkillSetService {
-    List<WorkingHistoryRecordSkillSetDto> findAll();
-    WorkingHistoryRecordSkillSetDto findById(Integer id) throws EntityNotFoundException;
+  List<WorkingHistoryRecordSkillSetDto> findAll();
 
-    void deleteById(Integer id) throws EntityNotFoundException;
+  WorkingHistoryRecordSkillSetDto findById(Integer id) throws EntityNotFoundException;
 
-    WorkingHistoryRecordSkillSet add (WorkingHistoryRecordSkillSetRequest request) throws EntityNotFoundException;
+  void deleteById(Integer id) throws EntityNotFoundException;
 
-    WorkingHistoryRecordSkillSetDto update(WorkingHistoryRecordSkillSetRequest request ,Integer id) throws EntityNotFoundException;
+  WorkingHistoryRecordSkillSet add(WorkingHistoryRecordSkillSetRequest request)
+      throws EntityNotFoundException;
 
-    List<WorkingHistoryRecordSkillSetDto> findByWorkingHistoryRecordCandidateId(Integer id);
+  WorkingHistoryRecordSkillSetDto update(WorkingHistoryRecordSkillSetRequest request, Integer id)
+      throws EntityNotFoundException;
 
-    WorkingHistoryRecordSkillSet convertRequestToEntity (WorkingHistoryRecordSkillSetRequest request) throws EntityNotFoundException;
-    boolean isValidJoinedDate (LocalDate date);
+  List<WorkingHistoryRecordSkillSetDto> findByWorkingHistoryRecordCandidateId(Integer id);
 
-    boolean isResignedDate(LocalDate joinedDate,LocalDate resignDate);
+  WorkingHistoryRecordSkillSet convertRequestToEntity(WorkingHistoryRecordSkillSetRequest request)
+      throws EntityNotFoundException;
 
+  boolean isValidJoinedDate(LocalDate date);
 
+  boolean isResignedDate(LocalDate joinedDate, LocalDate resignDate);
 }

@@ -9,14 +9,13 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class ApplicationFormRequest {
-    private LocalDate submittedDate;
-    private Integer noticePeriods;
-    private String urlCV;
-    private double salaryExpectation;
-    private Integer candidateId;
-    private Integer hiringRequestId;
-    private Integer recruitmentChanelId;
-    private Integer hrOfficerId;
+  private LocalDate submittedDate;
+  private Integer noticePeriods;
+  private String urlCV;
+  private double salaryExpectation;
+  private Integer candidateId;
+  private Integer hiringRequestId;
+  private Integer recruitmentChanelId;
+  private Integer hrOfficerId;
 }

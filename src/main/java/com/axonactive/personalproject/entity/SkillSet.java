@@ -14,11 +14,12 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Entity
 public class SkillSet {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String industryCategory;
-    private String name;
-    private String type;
-    private String level;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
+
+  private String industryCategory;
+  private String name;
+  private String type;
+  private String level;
 }

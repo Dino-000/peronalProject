@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HiringRequestSkillSetDto {
-    private String position;
-    private String level;
-    private String departmentName;
-    private String skillSetIndustryCategory;
-    private String skillSetName;
-    private String skillSetType;
-    private String skillSetLevel;
+  private String position;
+  private String level;
+  private String departmentName;
+  private String skillSetIndustryCategory;
+  private String skillSetName;
+  private String skillSetType;
+  private String skillSetLevel;
 }

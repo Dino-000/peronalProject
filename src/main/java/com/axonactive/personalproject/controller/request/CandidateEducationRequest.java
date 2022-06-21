@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CandidateEducationRequest {
-    private Integer candidateId;
-    private Integer educationId;
-    private Integer graduationYear;
+  private Integer candidateId;
+  private Integer educationId;
+  private Integer graduationYear;
 }

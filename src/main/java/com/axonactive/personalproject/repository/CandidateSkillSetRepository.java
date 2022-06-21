@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CandidateSkillSetRepository extends JpaRepository<CandidateSkillSet,Integer> {
-List<CandidateSkillSet> findByCandidateId(Integer id);
+public interface CandidateSkillSetRepository extends JpaRepository<CandidateSkillSet, Integer> {
+  List<CandidateSkillSet> findByCandidateId(Integer id);
 }

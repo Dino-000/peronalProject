@@ -82,5 +82,4 @@ public class BusinessConstraintException extends Exception {
   public static ResponseException invalidExpiredDate() {
     return badRequest(INVALID_EXPIRED_DATE_MSG_KEY, INVALID_EXPIRED_DATE_MSG);
   }
-
 }

@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CandidateSkillSetDto {
-    private String candidateName;
-    private String skillSetIndustryCategory;
-    private String skillSetName;
-    private String skillSetType;
-    private String skillSetLevel;
+  private String candidateName;
+  private String skillSetIndustryCategory;
+  private String skillSetName;
+  private String skillSetType;
+  private String skillSetLevel;
 }

@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
@@ -31,46 +32,61 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   private final AuthEntryPointJwt unauthorizedHandler;
 
   @Bean
-    public  AuthTokenFilter authenticationJwtTokenFilter(){return  new AuthTokenFilter();}
+  public AuthTokenFilter authenticationJwtTokenFilter() {
+    return new AuthTokenFilter();
+  }
 
-    @Override
-    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-    }
+  @Override
+  public void configure(AuthenticationManagerBuilder authenticationManagerBuilder)
+      throws Exception {
+    authenticationManagerBuilder
+        .userDetailsService(userDetailsService)
+        .passwordEncoder(passwordEncoder());
+  }
 
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
+  @Bean
+  @Override
+  public AuthenticationManager authenticationManagerBean() throws Exception {
+    return super.authenticationManagerBean();
+  }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.cors(withDefaults())
-                .csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-                .antMatchers("/auth/**").permitAll()
-                .antMatchers("/test/**").permitAll()
-                .anyRequest().permitAll();
-//                .authenticated();
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.cors(withDefaults())
+        .csrf()
+        .disable()
+        .exceptionHandling()
+        .authenticationEntryPoint(unauthorizedHandler)
+        .and()
+        .sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        .authorizeRequests()
+        .antMatchers("/auth/**")
+        .permitAll()
+        .antMatchers("/test/**")
+        .permitAll()
+        .anyRequest()
+        .permitAll();
+    //                .authenticated();
 
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-    }
+    http.addFilterBefore(
+        authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+  }
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*"));
-        configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT", "DELETE", "OPTIONS"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+  @Bean
+  CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(List.of("*"));
+    configuration.setAllowedHeaders(List.of("*"));
+    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
+  }
 }

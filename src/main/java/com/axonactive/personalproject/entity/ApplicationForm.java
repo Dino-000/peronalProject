@@ -13,24 +13,18 @@ import java.time.LocalDate;
 @Entity
 public class ApplicationForm {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private LocalDate submittedDate;
-    private Integer noticePeriods;
-    private String urlCV;
-//    private MultipartFile cvFile;
-    private double salaryExpectation;
-    @ManyToOne
-    private Candidate candidate;
-    @ManyToOne
-    private HiringRequest hiringRequest;
-    @ManyToOne
-    private RecruitmentChanel recruitmentChanel;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
+  private LocalDate submittedDate;
+  private Integer noticePeriods;
+  private String urlCV;
+  //    private MultipartFile cvFile;
+  private double salaryExpectation;
+  @ManyToOne private Candidate candidate;
+  @ManyToOne private HiringRequest hiringRequest;
+  @ManyToOne private RecruitmentChanel recruitmentChanel;
 
-    @ManyToOne
-    private  Employee hrOfficer;
-
-
+  @ManyToOne private Employee hrOfficer;
 }

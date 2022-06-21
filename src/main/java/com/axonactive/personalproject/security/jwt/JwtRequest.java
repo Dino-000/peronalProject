@@ -9,9 +9,9 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@NoArgsConstructor    //need default constructor for JSON Parsing
+@NoArgsConstructor // need default constructor for JSON Parsing
 @AllArgsConstructor
 public class JwtRequest implements Serializable {
-    private String username;
-    private String password;
+  private String username;
+  private String password;
 }

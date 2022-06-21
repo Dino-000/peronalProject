@@ -8,11 +8,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Repository
-public interface ApplicationFormRepository extends JpaRepository<ApplicationForm,Integer> {
-     List<ApplicationForm> findBySubmittedDateBetween(LocalDate fromDate, LocalDate untilDate);
+public interface ApplicationFormRepository extends JpaRepository<ApplicationForm, Integer> {
+  List<ApplicationForm> findBySubmittedDateBetween(LocalDate fromDate, LocalDate untilDate);
 
+  List<ApplicationForm> findByHiringRequestHiringManagerId(Integer Id);
 
-     List<ApplicationForm> findByHiringRequestHiringManagerId(Integer Id);
-     List<ApplicationForm> findFirstByCandidateIdOrderBySubmittedDateDesc(Integer Id);
-
+  List<ApplicationForm> findFirstByCandidateIdOrderBySubmittedDateDesc(Integer Id);
 }

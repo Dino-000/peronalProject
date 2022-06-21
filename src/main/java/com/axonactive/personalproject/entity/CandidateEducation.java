@@ -11,12 +11,11 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 public class CandidateEducation {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @ManyToOne
-    private Candidate candidate;
-    @ManyToOne
-    private Education education;
-    private Integer graduationYear;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
+
+  @ManyToOne private Candidate candidate;
+  @ManyToOne private Education education;
+  private Integer graduationYear;
 }

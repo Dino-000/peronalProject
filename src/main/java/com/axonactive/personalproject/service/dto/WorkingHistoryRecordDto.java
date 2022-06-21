@@ -10,16 +10,16 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WorkingHistoryRecordDto {
-    private String companyName;
-    private LocalDate joinedDate;
-    private LocalDate resignationDate;
-    private String position;
-    private String projectName;
-    private String responsibility;
-    private String client;
-    private Integer teamSize;
-    private String jobType;
+  private String companyName;
+  private LocalDate joinedDate;
+  private LocalDate resignationDate;
+  private String position;
+  private String projectName;
+  private String responsibility;
+  private String client;
+  private Integer teamSize;
+  private String jobType;
 
-    private String referencesPeoplePhone;
-    private String candidateName;
+  private String referencesPeoplePhone;
+  private String candidateName;
 }

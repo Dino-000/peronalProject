@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Token {
-    private  String token;
-    private Integer tokenDuration;
+  private String token;
+  private Integer tokenDuration;
 }

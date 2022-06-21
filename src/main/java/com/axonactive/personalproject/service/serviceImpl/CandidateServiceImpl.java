@@ -32,9 +32,7 @@ public class CandidateServiceImpl implements CandidateService {
 
   @Override
   public Candidate findById(Integer id) throws EntityNotFoundException {
-    return candidateRepository
-        .findById(id)
-        .orElseThrow(EntityNotFoundException::candidateNotFound);
+    return candidateRepository.findById(id).orElseThrow(EntityNotFoundException::candidateNotFound);
   }
 
   @Override

@@ -10,13 +10,14 @@ import java.util.List;
 
 @Mapper
 public interface CandidateEducationMapper {
-    CandidateEducationMapper INSTANCE = Mappers.getMapper(CandidateEducationMapper.class);
-    @Mapping(source = "candidate.name",target = "employeeName")
-    @Mapping(source = "education.schoolName",target = "schoolName")
-    @Mapping(source = "education.degree",target = "degree")
-    @Mapping(source = "education.major",target = "major")
-    @Mapping(source = "education.prestigeRate",target = "prestigeRate")
-    CandidateEducationDto toDto (CandidateEducation candidateEducation);
-    List<CandidateEducationDto> toDtos (List<CandidateEducation> candidateEducation);
+  CandidateEducationMapper INSTANCE = Mappers.getMapper(CandidateEducationMapper.class);
 
+  @Mapping(source = "candidate.name", target = "employeeName")
+  @Mapping(source = "education.schoolName", target = "schoolName")
+  @Mapping(source = "education.degree", target = "degree")
+  @Mapping(source = "education.major", target = "major")
+  @Mapping(source = "education.prestigeRate", target = "prestigeRate")
+  CandidateEducationDto toDto(CandidateEducation candidateEducation);
+
+  List<CandidateEducationDto> toDtos(List<CandidateEducation> candidateEducation);
 }

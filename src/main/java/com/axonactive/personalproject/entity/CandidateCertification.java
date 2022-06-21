@@ -12,13 +12,12 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 public class CandidateCertification {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @ManyToOne
-    private Candidate candidate;
-    @ManyToOne
-    private Certification certification;
-    private LocalDate issuedDate;
-    private LocalDate expiredDate;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
+
+  @ManyToOne private Candidate candidate;
+  @ManyToOne private Certification certification;
+  private LocalDate issuedDate;
+  private LocalDate expiredDate;
 }

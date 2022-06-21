@@ -13,22 +13,22 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class UserRoleAssignment {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+  @Enumerated(EnumType.STRING)
+  private Role role;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  private User user;
 
-    @CreationTimestamp
-    @Column(name = "assigned_date")
-    private LocalDateTime assignedDate;
+  @CreationTimestamp
+  @Column(name = "assigned_date")
+  private LocalDateTime assignedDate;
 
-    @UpdateTimestamp
-    @Column(name = "modified_date")
-    private LocalDateTime updatedDate;
+  @UpdateTimestamp
+  @Column(name = "modified_date")
+  private LocalDateTime updatedDate;
 }

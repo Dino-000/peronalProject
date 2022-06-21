@@ -6,13 +6,15 @@ import com.axonactive.personalproject.exception.EntityNotFoundException;
 import java.util.List;
 
 public interface EducationService {
-    List<Education> findAll();
-    Education findById(Integer id) throws EntityNotFoundException;
+  List<Education> findAll();
 
-    void deleteById(Integer id) throws EntityNotFoundException;
+  Education findById(Integer id) throws EntityNotFoundException;
 
-    Education saveEducation(Education inputData);
+  void deleteById(Integer id) throws EntityNotFoundException;
 
-    List<Education> findByCandidateId(Integer id);
-    Education update(Education inputData, Integer id) throws EntityNotFoundException;
+  Education saveEducation(Education inputData);
+
+  List<Education> findByCandidateId(Integer id);
+
+  Education update(Education inputData, Integer id) throws EntityNotFoundException;
 }

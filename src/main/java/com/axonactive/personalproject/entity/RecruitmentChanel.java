@@ -9,19 +9,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 public class RecruitmentChanel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
-    private String name;
-    private String adminAccount;
-    private Double annualMembershipFee;
-    private double conversionRate;
-    private Integer numberOfSuccessfulPlacement;
+  private String name;
+  private String adminAccount;
+  private Double annualMembershipFee;
+  private double conversionRate;
+  private Integer numberOfSuccessfulPlacement;
 }

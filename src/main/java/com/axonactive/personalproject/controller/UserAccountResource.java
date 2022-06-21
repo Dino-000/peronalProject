@@ -59,7 +59,7 @@ public class UserAccountResource {
 
   @PostMapping("/GetToken")
   public Token getAuthenticationToken(@RequestBody UserAccount userAccount)
-          throws UnauthorizedAccessException, EntityNotFoundException {
+      throws UnauthorizedAccessException, EntityNotFoundException {
     return jwtAuthenticationService.createToKen(userAccount);
   }
 }

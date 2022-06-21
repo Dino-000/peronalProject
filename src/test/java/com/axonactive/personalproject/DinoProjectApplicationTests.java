@@ -11,8 +11,9 @@ class DinoProjectApplicationTests {
 @Autowired
 	ApplicationFormService applicationFormService;
 	@Test
-	void testFindBySubmittedDateBetween_shouldReturnLargerThan0_WhenInputDayForm() {
+	void testFindBySubmittedDateBetween_shouldReturnLargerThan0_WhenInputDayForm2000To2022() {
 		Assertions.assertNotEquals(0,applicationFormService.findBySubmittedDateBetween("2000-01-02","2022-12-12"));
 	}
+
 
 }

@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+
 @RestController
 @RequestMapping(path = HiringRequestResource.PATH)
 @RequiredArgsConstructor
 public class HiringRequestResource {
   public static final String PATH = "api/hiringrequests";
-  @Autowired
-  HiringRequestService hiringRequestService;
+  @Autowired HiringRequestService hiringRequestService;
 
   @GetMapping
   public ResponseEntity<List<HiringRequestDto>> getAll() {

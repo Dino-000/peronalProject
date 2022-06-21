@@ -11,11 +11,10 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 public class WorkingHistoryRecordSkillSet {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @ManyToOne
-    private WorkingHistoryRecord workingHistoryRecord;
-    @ManyToOne
-    private SkillSet skillSet;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
+
+  @ManyToOne private WorkingHistoryRecord workingHistoryRecord;
+  @ManyToOne private SkillSet skillSet;
 }

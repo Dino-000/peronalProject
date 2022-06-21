@@ -11,9 +11,10 @@ import java.util.List;
 @Mapper
 public interface WorkingHistoryRecordMapper {
 
-    WorkingHistoryRecordMapper INSTANCE = Mappers.getMapper(WorkingHistoryRecordMapper.class);
+  WorkingHistoryRecordMapper INSTANCE = Mappers.getMapper(WorkingHistoryRecordMapper.class);
 
-    @Mapping(source = "candidate.name",target = "candidateName")
-    WorkingHistoryRecordDto toDto (WorkingHistoryRecord workingHistoryRecord);
-     List<WorkingHistoryRecordDto> toDtos(List<WorkingHistoryRecord> workingHistoryRecords);
+  @Mapping(source = "candidate.name", target = "candidateName")
+  WorkingHistoryRecordDto toDto(WorkingHistoryRecord workingHistoryRecord);
+
+  List<WorkingHistoryRecordDto> toDtos(List<WorkingHistoryRecord> workingHistoryRecords);
 }

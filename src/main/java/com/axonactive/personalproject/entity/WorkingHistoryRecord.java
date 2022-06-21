@@ -12,21 +12,19 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 public class WorkingHistoryRecord {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
-    private String companyName;
-    private LocalDate joinedDate;
-    private LocalDate resignationDate;
-    private String position;
-    private String projectName;
-    private String responsibility;
-    private String client;
-    private Integer teamSize;
-    private String jobType;
-    private String referencesPeoplePhone;
-    @ManyToOne
-    private Candidate candidate;
-
+  private String companyName;
+  private LocalDate joinedDate;
+  private LocalDate resignationDate;
+  private String position;
+  private String projectName;
+  private String responsibility;
+  private String client;
+  private Integer teamSize;
+  private String jobType;
+  private String referencesPeoplePhone;
+  @ManyToOne private Candidate candidate;
 }

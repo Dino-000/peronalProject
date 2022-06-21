@@ -10,12 +10,19 @@ import java.util.List;
 
 @Repository
 public interface CandidateSkillSetService {
-    List<CandidateSkillSetDto> findAll();
-    CandidateSkillSetDto findById(Integer id) throws EntityNotFoundException;
-    List<CandidateSkillSetDto> findByCandidateId(Integer id);
+  List<CandidateSkillSetDto> findAll();
 
-    CandidateSkillSet convertRequestToEntity (CandidateSkillSetRequest request) throws EntityNotFoundException;
-    void deleteById(Integer id) throws EntityNotFoundException;
-    CandidateSkillSetDto update (CandidateSkillSetRequest request, Integer id) throws EntityNotFoundException;
-    CandidateSkillSet add(CandidateSkillSetRequest request) throws EntityNotFoundException;
+  CandidateSkillSetDto findById(Integer id) throws EntityNotFoundException;
+
+  List<CandidateSkillSetDto> findByCandidateId(Integer id);
+
+  CandidateSkillSet convertRequestToEntity(CandidateSkillSetRequest request)
+      throws EntityNotFoundException;
+
+  void deleteById(Integer id) throws EntityNotFoundException;
+
+  CandidateSkillSetDto update(CandidateSkillSetRequest request, Integer id)
+      throws EntityNotFoundException;
+
+  CandidateSkillSet add(CandidateSkillSetRequest request) throws EntityNotFoundException;
 }

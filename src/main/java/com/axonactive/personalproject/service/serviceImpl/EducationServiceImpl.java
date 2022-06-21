@@ -22,9 +22,7 @@ public class EducationServiceImpl implements EducationService {
 
   @Override
   public Education findById(Integer id) throws EntityNotFoundException {
-    return educationRepository
-        .findById(id)
-        .orElseThrow(EntityNotFoundException::educationNotFound);
+    return educationRepository.findById(id).orElseThrow(EntityNotFoundException::educationNotFound);
   }
 
   @Override
@@ -52,10 +50,7 @@ public class EducationServiceImpl implements EducationService {
   @Override
   public Education update(Education inputData, Integer id) throws EntityNotFoundException {
     Education updatingEducation =
-        educationRepository
-            .findById(id)
-            .orElseThrow(
-                    EntityNotFoundException::educationNotFound);
+        educationRepository.findById(id).orElseThrow(EntityNotFoundException::educationNotFound);
     updatingEducation.setSchoolName(inputData.getSchoolName());
     updatingEducation.setDegree(inputData.getDegree());
     updatingEducation.setMajor(inputData.getMajor());

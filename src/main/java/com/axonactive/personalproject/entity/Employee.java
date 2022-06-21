@@ -13,18 +13,16 @@ import java.time.LocalDate;
 @Entity
 public class Employee {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @Column(unique = true)
-    private String EmployeeId;
-    private String name;
-    private LocalDate dateOfBirth;
-    private String team;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
+  @Column(unique = true)
+  private String EmployeeId;
 
-    @ManyToOne
-    private Department department;
+  private String name;
+  private LocalDate dateOfBirth;
+  private String team;
 
-
+  @ManyToOne private Department department;
 }

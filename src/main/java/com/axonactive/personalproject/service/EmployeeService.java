@@ -8,12 +8,15 @@ import com.axonactive.personalproject.service.dto.EmployeeDto;
 import java.util.List;
 
 public interface EmployeeService {
-    List<EmployeeDto> findAll();
-    EmployeeDto findById(Integer id) throws EntityNotFoundException;
+  List<EmployeeDto> findAll();
 
-    void deleteById(Integer id) throws EntityNotFoundException;
-    EmployeeDto update (EmployeeRequest request, Integer id) throws EntityNotFoundException;
+  EmployeeDto findById(Integer id) throws EntityNotFoundException;
 
-    Employee convertFromRequestToEntity (EmployeeRequest request) throws EntityNotFoundException;
-    Employee add(EmployeeRequest request) throws EntityNotFoundException;
+  void deleteById(Integer id) throws EntityNotFoundException;
+
+  EmployeeDto update(EmployeeRequest request, Integer id) throws EntityNotFoundException;
+
+  Employee convertFromRequestToEntity(EmployeeRequest request) throws EntityNotFoundException;
+
+  Employee add(EmployeeRequest request) throws EntityNotFoundException;
 }

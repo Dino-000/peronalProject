@@ -9,24 +9,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 @NoArgsConstructor
 @Data
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
-    @Column(unique = true,nullable = false)
-    private String userName;
+  @Column(unique = true, nullable = false)
+  private String userName;
 
-    @JsonIgnore
-    private String password;
+  @JsonIgnore private String password;
 
-    private boolean active;
+  private boolean active;
 
-    @OneToMany(mappedBy = "user")
-    private List<UserRoleAssignment> roles = new ArrayList<>();
-
-
+  @OneToMany(mappedBy = "user")
+  private List<UserRoleAssignment> roles = new ArrayList<>();
 }

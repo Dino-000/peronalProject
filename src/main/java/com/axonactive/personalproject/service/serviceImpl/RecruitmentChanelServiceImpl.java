@@ -24,8 +24,7 @@ public class RecruitmentChanelServiceImpl implements RecruitmentChanelService {
   public RecruitmentChanel findById(Integer id) throws EntityNotFoundException {
     return recruitmentChanelRepository
         .findById(id)
-        .orElseThrow(
-                EntityNotFoundException::recruitmentChannelNotFound);
+        .orElseThrow(EntityNotFoundException::recruitmentChannelNotFound);
   }
 
   @Override
@@ -56,7 +55,7 @@ public class RecruitmentChanelServiceImpl implements RecruitmentChanelService {
 
   @Override
   public void deleteById(Integer id) throws EntityNotFoundException {
-      findById(id);
+    findById(id);
     recruitmentChanelRepository.deleteById(id);
   }
 

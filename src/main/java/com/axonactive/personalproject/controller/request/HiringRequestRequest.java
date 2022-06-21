@@ -10,12 +10,12 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HiringRequestRequest {
-    private LocalDate onBoardingDate;
-    private String position;
-    private String level;
-    private String specificBenefit;
-    private Double budget;
+  private LocalDate onBoardingDate;
+  private String position;
+  private String level;
+  private String specificBenefit;
+  private Double budget;
 
-    private Integer departmentId;
-    private Integer hiringManagerId;
+  private Integer departmentId;
+  private Integer hiringManagerId;
 }

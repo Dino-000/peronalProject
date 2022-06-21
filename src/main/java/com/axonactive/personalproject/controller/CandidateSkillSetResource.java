@@ -18,39 +18,42 @@ import java.util.List;
 @RequestMapping(path = CandidateSkillSetResource.PATH)
 @RequiredArgsConstructor
 public class CandidateSkillSetResource {
-    public static final String PATH ="api/candidate-skillsets";
-    @Autowired
-    CandidateSkillSetService candidateSkillSetService;
+  public static final String PATH = "api/candidate-skillsets";
+  @Autowired CandidateSkillSetService candidateSkillSetService;
 
+  @GetMapping
+  public ResponseEntity<List<CandidateSkillSetDto>> getAll() {
+    return ResponseEntity.ok().body(candidateSkillSetService.findAll());
+  }
 
-    @GetMapping
-    public ResponseEntity<List<CandidateSkillSetDto>> getAll() {
-        return ResponseEntity.ok().body(candidateSkillSetService.findAll());
-    }
+  @GetMapping("/{id}")
+  public ResponseEntity<CandidateSkillSetDto> getById(@PathVariable("id") Integer id)
+      throws EntityNotFoundException {
+    return ResponseEntity.created(URI.create(PATH + "/" + id))
+        .body(candidateSkillSetService.findById(id));
+  }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CandidateSkillSetDto> getById (@PathVariable("id") Integer id) throws EntityNotFoundException {
-        return ResponseEntity.created(URI.create(PATH+"/"+id)).body(candidateSkillSetService.findById(id));
-    }
+  @PostMapping
+  public ResponseEntity<CandidateSkillSetDto> add(@RequestBody CandidateSkillSetRequest inputData)
+      throws EntityNotFoundException {
+    CandidateSkillSet newCandidateSkillSet = candidateSkillSetService.add(inputData);
 
-    @PostMapping
-    public ResponseEntity<CandidateSkillSetDto> add(
-            @RequestBody CandidateSkillSetRequest inputData) throws EntityNotFoundException {
-        CandidateSkillSet newCandidateSkillSet = candidateSkillSetService.add(inputData);
+    return ResponseEntity.created(URI.create(PATH + "/" + newCandidateSkillSet.getId()))
+        .body(CandidateSkillSetMapper.INSTANCE.toDto(newCandidateSkillSet));
+  }
 
-        return ResponseEntity.created(URI.create(PATH + "/" + newCandidateSkillSet.getId())).body(CandidateSkillSetMapper.INSTANCE.toDto(newCandidateSkillSet));
-    }
+  @PutMapping("/{id}")
+  public ResponseEntity<CandidateSkillSetDto> update(
+      @PathVariable("id") Integer id, @RequestBody CandidateSkillSetRequest inputData)
+      throws EntityNotFoundException {
+    return ResponseEntity.created(URI.create(PATH + "/" + id))
+        .body(candidateSkillSetService.update(inputData, id));
+  }
 
-    @PutMapping("/{id}")
-    public  ResponseEntity<CandidateSkillSetDto> update(@PathVariable("id") Integer id, @RequestBody CandidateSkillSetRequest inputData) throws EntityNotFoundException {
-        return  ResponseEntity.created(URI.create(PATH+"/"+id)).body(candidateSkillSetService.update(inputData,id));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws EntityNotFoundException {
-        candidateSkillSetService.deleteById(id);
-        return ResponseEntity.noContent().build();
-    }
-
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
+      throws EntityNotFoundException {
+    candidateSkillSetService.deleteById(id);
+    return ResponseEntity.noContent().build();
+  }
 }
-

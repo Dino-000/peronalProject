@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface WorkingHistoryRecordSkillSetRepository extends JpaRepository<WorkingHistoryRecordSkillSet,Integer> {
-List<WorkingHistoryRecordSkillSet> findByWorkingHistoryRecordCandidateId(Integer id);
+public interface WorkingHistoryRecordSkillSetRepository
+    extends JpaRepository<WorkingHistoryRecordSkillSet, Integer> {
+  List<WorkingHistoryRecordSkillSet> findByWorkingHistoryRecordCandidateId(Integer id);
 }

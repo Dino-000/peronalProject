@@ -9,20 +9,23 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface CandidateCertificationService {
-    List<CandidateCertificationDto> findAll();
-    CandidateCertificationDto findById(Integer id) throws EntityNotFoundException;
-    List<CandidateCertificationDto> findByCandidateId (Integer Id);
+  List<CandidateCertificationDto> findAll();
 
-    CandidateCertification add (CandidateCertificationRequest request) throws EntityNotFoundException;
+  CandidateCertificationDto findById(Integer id) throws EntityNotFoundException;
 
+  List<CandidateCertificationDto> findByCandidateId(Integer Id);
 
-    void deleteById(Integer id) throws EntityNotFoundException;
+  CandidateCertification add(CandidateCertificationRequest request) throws EntityNotFoundException;
 
-    CandidateCertificationDto update(CandidateCertificationRequest request,Integer id) throws EntityNotFoundException;
+  void deleteById(Integer id) throws EntityNotFoundException;
 
+  CandidateCertificationDto update(CandidateCertificationRequest request, Integer id)
+      throws EntityNotFoundException;
 
-    CandidateCertification convertRequestToEntity(CandidateCertificationRequest request) throws EntityNotFoundException;
+  CandidateCertification convertRequestToEntity(CandidateCertificationRequest request)
+      throws EntityNotFoundException;
 
-    Boolean isValidIssuedDate (LocalDate issuedDate);
-    Boolean isValidExpiredDate (LocalDate issuedDate,LocalDate expiredDate);
+  Boolean isValidIssuedDate(LocalDate issuedDate);
+
+  Boolean isValidExpiredDate(LocalDate issuedDate, LocalDate expiredDate);
 }

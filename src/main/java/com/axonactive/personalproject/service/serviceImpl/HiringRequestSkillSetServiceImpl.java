@@ -32,8 +32,7 @@ public class HiringRequestSkillSetServiceImpl implements HiringRequestSkillSetSe
     return HiringRequestSkillSetMapper.INSTANCE.toDto(
         hiringRequestSkillSetRepository
             .findById(id)
-            .orElseThrow(
-                    EntityNotFoundException::hiringRequestSkillSetNotFound));
+            .orElseThrow(EntityNotFoundException::hiringRequestSkillSetNotFound));
   }
 
   @Override
@@ -56,18 +55,15 @@ public class HiringRequestSkillSetServiceImpl implements HiringRequestSkillSetSe
     HiringRequestSkillSet updatingHiringRequestSkillSet =
         hiringRequestSkillSetRepository
             .findById(id)
-            .orElseThrow(
-                    EntityNotFoundException::hiringRequestSkillSetNotFound);
+            .orElseThrow(EntityNotFoundException::hiringRequestSkillSetNotFound);
     updatingHiringRequestSkillSet.setHiringRequest(
         hiringRequestRepository
             .findById(request.getHiringRequestId())
-            .orElseThrow(
-                    EntityNotFoundException::hiringRequestNotFound));
+            .orElseThrow(EntityNotFoundException::hiringRequestNotFound));
     updatingHiringRequestSkillSet.setSkillSet(
         skillSetRepository
             .findById(request.getSkillSetId())
-            .orElseThrow(
-                    EntityNotFoundException::skillSetNotFound));
+            .orElseThrow(EntityNotFoundException::skillSetNotFound));
     return HiringRequestSkillSetMapper.INSTANCE.toDto(
         hiringRequestSkillSetRepository.save(updatingHiringRequestSkillSet));
   }
@@ -79,11 +75,9 @@ public class HiringRequestSkillSetServiceImpl implements HiringRequestSkillSetSe
         null,
         hiringRequestRepository
             .findById(request.getHiringRequestId())
-            .orElseThrow(
-                    EntityNotFoundException::hiringRequestNotFound),
+            .orElseThrow(EntityNotFoundException::hiringRequestNotFound),
         skillSetRepository
             .findById(request.getSkillSetId())
-            .orElseThrow(
-                    EntityNotFoundException::hiringRequestNotFound));
+            .orElseThrow(EntityNotFoundException::hiringRequestNotFound));
   }
 }

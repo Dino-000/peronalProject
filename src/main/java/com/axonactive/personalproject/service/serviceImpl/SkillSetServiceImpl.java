@@ -22,9 +22,7 @@ public class SkillSetServiceImpl implements SkillSetService {
 
   @Override
   public SkillSet findById(Integer id) throws EntityNotFoundException {
-    return skillSetRepository
-        .findById(id)
-        .orElseThrow(EntityNotFoundException::skillSetNotFound);
+    return skillSetRepository.findById(id).orElseThrow(EntityNotFoundException::skillSetNotFound);
   }
 
   @Override

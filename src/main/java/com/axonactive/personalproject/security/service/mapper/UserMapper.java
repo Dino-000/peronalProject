@@ -10,9 +10,9 @@ import java.util.List;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+  UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    UserDTO mapToDto(User user);
+  UserDTO mapToDto(User user);
 
-    List<UserDTO> mapToDtos(List<User> users);
+  List<UserDTO> mapToDtos(List<User> users);
 }

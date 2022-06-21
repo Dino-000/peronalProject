@@ -28,10 +28,7 @@ public class EmployeeImpl implements EmployeeService {
   @Override
   public EmployeeDto findById(Integer id) throws EntityNotFoundException {
     return EmployeeMapper.INSTANCE.toDto(
-        employeeRepository
-            .findById(id)
-            .orElseThrow(
-                    EntityNotFoundException::employeeNotFound));
+        employeeRepository.findById(id).orElseThrow(EntityNotFoundException::employeeNotFound));
   }
 
   @Override
@@ -43,10 +40,7 @@ public class EmployeeImpl implements EmployeeService {
   @Override
   public EmployeeDto update(EmployeeRequest request, Integer id) throws EntityNotFoundException {
     Employee updatingEmployee =
-        employeeRepository
-            .findById(id)
-            .orElseThrow(
-                    EntityNotFoundException::employeeNotFound);
+        employeeRepository.findById(id).orElseThrow(EntityNotFoundException::employeeNotFound);
     updatingEmployee.setEmployeeId(request.getEmployeeId());
     updatingEmployee.setName(request.getName());
     updatingEmployee.setDateOfBirth(request.getDateOfBirth());
@@ -54,8 +48,7 @@ public class EmployeeImpl implements EmployeeService {
     updatingEmployee.setDepartment(
         departmentRepository
             .findById(request.getDepartmentId())
-            .orElseThrow(
-                    EntityNotFoundException::employeeNotFound));
+            .orElseThrow(EntityNotFoundException::employeeNotFound));
     return EmployeeMapper.INSTANCE.toDto(employeeRepository.save(updatingEmployee));
   }
 
@@ -70,8 +63,7 @@ public class EmployeeImpl implements EmployeeService {
         request.getTeam(),
         departmentRepository
             .findById(request.getDepartmentId())
-            .orElseThrow(
-                    EntityNotFoundException::employeeNotFound));
+            .orElseThrow(EntityNotFoundException::employeeNotFound));
   }
 
   @Override

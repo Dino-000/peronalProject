@@ -10,8 +10,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CandidateCertificationRequest {
-    private Integer candidateId;
-    private Integer certificationId;
-    private LocalDate issuedDate;
-    private LocalDate expiredDate;
+  private Integer candidateId;
+  private Integer certificationId;
+  private LocalDate issuedDate;
+  private LocalDate expiredDate;
 }

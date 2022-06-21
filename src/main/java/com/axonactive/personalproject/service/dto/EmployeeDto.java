@@ -10,9 +10,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmployeeDto {
-    private String EmployeeId;
-    private String name;
-    private LocalDate dateOfBirth;
-    private String team;
-    private String departmentName;
+  private String EmployeeId;
+  private String name;
+  private LocalDate dateOfBirth;
+  private String team;
+  private String departmentName;
 }

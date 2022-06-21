@@ -24,8 +24,7 @@ public class CertificationServiceImpl implements CertificationService {
   public Certification findById(Integer id) throws EntityNotFoundException {
     return certificationRepository
         .findById(id)
-        .orElseThrow(
-                EntityNotFoundException::certificationNotFound);
+        .orElseThrow(EntityNotFoundException::certificationNotFound);
   }
 
   @Override
@@ -49,8 +48,7 @@ public class CertificationServiceImpl implements CertificationService {
     Certification updatingCertification =
         certificationRepository
             .findById(id)
-            .orElseThrow(
-                    EntityNotFoundException::certificationNotFound);
+            .orElseThrow(EntityNotFoundException::certificationNotFound);
     updatingCertification.setIssuerName(request.getIssuerName());
     updatingCertification.setNameOfCertification(request.getNameOfCertification());
     updatingCertification.setType(request.getType());

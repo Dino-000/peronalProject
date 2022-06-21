@@ -24,8 +24,7 @@ public class DepartmentServiceImpl implements DepartmentService {
   public Department findById(Integer id) throws EntityNotFoundException {
     return departmentRepository
         .findById(id)
-        .orElseThrow(
-                EntityNotFoundException::departmentNotFound);
+        .orElseThrow(EntityNotFoundException::departmentNotFound);
   }
 
   @Override
@@ -48,10 +47,7 @@ public class DepartmentServiceImpl implements DepartmentService {
   @Override
   public Department update(Department input, Integer id) throws EntityNotFoundException {
     Department updatingDepartment =
-        departmentRepository
-            .findById(id)
-            .orElseThrow(
-                    EntityNotFoundException::departmentNotFound);
+        departmentRepository.findById(id).orElseThrow(EntityNotFoundException::departmentNotFound);
     updatingDepartment.setName(input.getName());
     updatingDepartment.setHeadcount(input.getHeadcount());
     updatingDepartment.setQuantityOfHiringManager(input.getQuantityOfHiringManager());

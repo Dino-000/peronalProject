@@ -10,17 +10,19 @@ import java.util.List;
 
 @Repository
 public interface CandidateEducationService {
-    List<CandidateEducationDto> findAll();
-    CandidateEducationDto findById(Integer id) throws EntityNotFoundException;
-    List<CandidateEducationDto> findByCandidateId (Integer Id);
+  List<CandidateEducationDto> findAll();
 
-    CandidateEducation add(CandidateEducationRequest request) throws EntityNotFoundException;
+  CandidateEducationDto findById(Integer id) throws EntityNotFoundException;
 
-    CandidateEducationDto update (CandidateEducationRequest request, Integer id) throws EntityNotFoundException;
+  List<CandidateEducationDto> findByCandidateId(Integer Id);
 
-    void deleteById(Integer id) throws EntityNotFoundException;
+  CandidateEducation add(CandidateEducationRequest request) throws EntityNotFoundException;
 
-    CandidateEducation convertFromRequestToEntity(CandidateEducationRequest request) throws EntityNotFoundException;
+  CandidateEducationDto update(CandidateEducationRequest request, Integer id)
+      throws EntityNotFoundException;
 
+  void deleteById(Integer id) throws EntityNotFoundException;
 
+  CandidateEducation convertFromRequestToEntity(CandidateEducationRequest request)
+      throws EntityNotFoundException;
 }

@@ -24,8 +24,7 @@ public class UserAccountServiceImpl implements UserAccountService {
   public UserAccount findByUserName(String userName) throws EntityNotFoundException {
     return userAccountRepository
         .findById(userName)
-        .orElseThrow(
-                EntityNotFoundException::userAccountNotFound);
+        .orElseThrow(EntityNotFoundException::userAccountNotFound);
   }
 
   @Override

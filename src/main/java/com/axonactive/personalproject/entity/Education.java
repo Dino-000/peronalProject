@@ -14,12 +14,13 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Entity
 public class Education {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String schoolName;
-    private String degree;
-    private String major;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
-    private Double prestigeRate;
+  private String schoolName;
+  private String degree;
+  private String major;
+
+  private Double prestigeRate;
 }

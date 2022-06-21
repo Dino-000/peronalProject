@@ -11,10 +11,11 @@ import java.util.List;
 @Mapper
 public interface HiringRequestMapper {
 
-    HiringRequestMapper INSTANCE = Mappers.getMapper(HiringRequestMapper.class);
+  HiringRequestMapper INSTANCE = Mappers.getMapper(HiringRequestMapper.class);
 
-    @Mapping(source = "department.name",target = "departmentName")
-    @Mapping(source = "hiringManager.name",target = "hiringManagerName")
-    HiringRequestDto toDto (HiringRequest hiringRequest);
-    List<HiringRequestDto> toDtos(List<HiringRequest> hiringRequests);
+  @Mapping(source = "department.name", target = "departmentName")
+  @Mapping(source = "hiringManager.name", target = "hiringManagerName")
+  HiringRequestDto toDto(HiringRequest hiringRequest);
+
+  List<HiringRequestDto> toDtos(List<HiringRequest> hiringRequests);
 }

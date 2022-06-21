@@ -10,10 +10,10 @@ import java.util.List;
 
 @Mapper
 public interface EmployeeMapper {
-    EmployeeMapper INSTANCE = Mappers.getMapper(EmployeeMapper.class);
+  EmployeeMapper INSTANCE = Mappers.getMapper(EmployeeMapper.class);
 
-    @Mapping(source = "department.name",target ="departmentName" )
-    EmployeeDto toDto (Employee employee);
-    List<EmployeeDto> toDtos (List<Employee> employees);
+  @Mapping(source = "department.name", target = "departmentName")
+  EmployeeDto toDto(Employee employee);
 
+  List<EmployeeDto> toDtos(List<Employee> employees);
 }

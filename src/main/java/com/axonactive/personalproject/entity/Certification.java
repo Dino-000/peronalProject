@@ -14,11 +14,11 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Entity
 public class Certification {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String issuerName;
-    private String nameOfCertification;
-    private String type;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
+  private String issuerName;
+  private String nameOfCertification;
+  private String type;
 }

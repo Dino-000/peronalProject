@@ -9,17 +9,23 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface HiringRequestService {
-    List<HiringRequestDto> findAll();
-    HiringRequestDto findById(Integer id) throws EntityNotFoundException;
+  List<HiringRequestDto> findAll();
 
-    List<HiringRequestDto> findByHiringManagerId(Integer Id);
+  HiringRequestDto findById(Integer id) throws EntityNotFoundException;
 
-    HiringRequest add(HiringRequestRequest request) throws EntityNotFoundException;
-    HiringRequestDto update (HiringRequestRequest request, Integer id) throws EntityNotFoundException;
-    void deleteById(Integer id) throws EntityNotFoundException;
-    HiringRequest convertRequestToEntity (HiringRequestRequest request) throws EntityNotFoundException;
+  List<HiringRequestDto> findByHiringManagerId(Integer Id);
 
-    boolean isValidHiringManager(HiringRequest request) ;
-    boolean isHiringManager(HiringRequest request) ;
-    boolean isValidOnboardDate(LocalDate date);
+  HiringRequest add(HiringRequestRequest request) throws EntityNotFoundException;
+
+  HiringRequestDto update(HiringRequestRequest request, Integer id) throws EntityNotFoundException;
+
+  void deleteById(Integer id) throws EntityNotFoundException;
+
+  HiringRequest convertRequestToEntity(HiringRequestRequest request) throws EntityNotFoundException;
+
+  boolean isValidHiringManager(HiringRequest request);
+
+  boolean isHiringManager(HiringRequest request);
+
+  boolean isValidOnboardDate(LocalDate date);
 }

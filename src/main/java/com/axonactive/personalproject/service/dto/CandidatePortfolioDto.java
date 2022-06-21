@@ -18,7 +18,4 @@ public class CandidatePortfolioDto {
   private List<CandidateEducationDto> educationList;
   private List<CandidateSkillSetDto> skillSetList;
   private List<WorkingHistoryRecordSkillSetDto> workingHistoryRecordSkillSetDtoList;
-
-
-
 }

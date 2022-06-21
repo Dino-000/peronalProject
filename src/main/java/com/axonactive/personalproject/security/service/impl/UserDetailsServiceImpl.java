@@ -14,18 +14,26 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private final UserRepository userRepository;
+  private final UserRepository userRepository;
 
-    @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user=userRepository.findByUserName(username).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
-        return UserDetailsImpl.build(user);
-    }
+  @Override
+  @Transactional
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    User user =
+        userRepository
+            .findByUserName(username)
+            .orElseThrow(
+                () -> new UsernameNotFoundException("User Not Found with username: " + username));
+    return UserDetailsImpl.build(user);
+  }
 
-    @Transactional
-    public UserDetails validateUser (String username){
-        User user=userRepository.findByUserName(username).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
-        return UserDetailsImpl.build(user);
-    }
+  @Transactional
+  public UserDetails validateUser(String username) {
+    User user =
+        userRepository
+            .findByUserName(username)
+            .orElseThrow(
+                () -> new UsernameNotFoundException("User Not Found with username: " + username));
+    return UserDetailsImpl.build(user);
+  }
 }

@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HiringRequestSkillSetRequest {
-    private Integer hiringRequestId;
-    private Integer skillSetId;
+  private Integer hiringRequestId;
+  private Integer skillSetId;
 }

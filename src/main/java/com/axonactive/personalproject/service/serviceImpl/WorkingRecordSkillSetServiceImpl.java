@@ -34,8 +34,7 @@ public class WorkingRecordSkillSetServiceImpl implements WorkingHistoryRecordSki
     return WorkingHistoryRecordSkillSetMapper.INSTANCE.toDto(
         workingHistoryRecordSkillSetRepository
             .findById(id)
-            .orElseThrow(
-                    EntityNotFoundException::workingHistoryRecordSkillSetNotFound));
+            .orElseThrow(EntityNotFoundException::workingHistoryRecordSkillSetNotFound));
   }
 
   @Override
@@ -56,18 +55,15 @@ public class WorkingRecordSkillSetServiceImpl implements WorkingHistoryRecordSki
     WorkingHistoryRecordSkillSet updatingWorkingHistoryRecordSkillSet =
         workingHistoryRecordSkillSetRepository
             .findById(id)
-            .orElseThrow(
-                    EntityNotFoundException::workingHistoryRecordSkillSetNotFound);
+            .orElseThrow(EntityNotFoundException::workingHistoryRecordSkillSetNotFound);
     updatingWorkingHistoryRecordSkillSet.setSkillSet(
         skillSetRepository
             .findById(request.getSkillSetId())
-            .orElseThrow(
-                    EntityNotFoundException::skillSetNotFound));
+            .orElseThrow(EntityNotFoundException::skillSetNotFound));
     updatingWorkingHistoryRecordSkillSet.setWorkingHistoryRecord(
         workingHistoryRecordRepository
             .findById(request.getWorkingHistoryRecordId())
-            .orElseThrow(
-                    EntityNotFoundException::workingHistoryRecordNotFound));
+            .orElseThrow(EntityNotFoundException::workingHistoryRecordNotFound));
     return WorkingHistoryRecordSkillSetMapper.INSTANCE.toDto(
         workingHistoryRecordSkillSetRepository.save(updatingWorkingHistoryRecordSkillSet));
   }
@@ -85,12 +81,10 @@ public class WorkingRecordSkillSetServiceImpl implements WorkingHistoryRecordSki
         null,
         workingHistoryRecordRepository
             .findById(request.getWorkingHistoryRecordId())
-            .orElseThrow(
-                    EntityNotFoundException::workingHistoryRecordNotFound),
+            .orElseThrow(EntityNotFoundException::workingHistoryRecordNotFound),
         skillSetRepository
             .findById(request.getSkillSetId())
-            .orElseThrow(
-                    EntityNotFoundException::skillSetNotFound));
+            .orElseThrow(EntityNotFoundException::skillSetNotFound));
   }
 
   @Override
@@ -99,7 +93,7 @@ public class WorkingRecordSkillSetServiceImpl implements WorkingHistoryRecordSki
   }
 
   @Override
-  public boolean isResignedDate(LocalDate joinedDate,LocalDate resignDate) {
+  public boolean isResignedDate(LocalDate joinedDate, LocalDate resignDate) {
     return !resignDate.isBefore(joinedDate);
   }
 }
