@@ -38,15 +38,13 @@ public class ApplicationFormResource {
   @GetMapping("/{id}")
   public ResponseEntity<ApplicationFormDto> getById(@PathVariable("id") Integer id)
       throws EntityNotFoundException {
-    ApplicationFormDto applicationFormDto = null;
     try {
-      applicationFormDto = applicationFormService.findById(id);
-
+      return ResponseEntity.created(URI.create(PATH + "/" + id))
+          .body(applicationFormService.findById(id));
     } catch (EntityNotFoundException e) {
-      log.error("Can not find the Application Form with input id",e);
-      throw EntityNotFoundException.badRequest(String.valueOf(e.getCause()),e.getMessage());
+      log.error("Can not find the Application Form with input id", e);
+      throw EntityNotFoundException.badRequest(String.valueOf(e.getCause()), e.getMessage());
     }
-    return ResponseEntity.created(URI.create(PATH + "/" + id)).body(applicationFormDto);
   }
 
   @PreAuthorize("hasRole('HR')")
@@ -58,10 +56,10 @@ public class ApplicationFormResource {
     try {
       salary = applicationFormService.getSalary(id);
     } catch (EntityNotFoundException e) {
-      log.error("Can not find the Application Form with input id",e);
-      throw EntityNotFoundException.badRequest(String.valueOf(e.getCause()),e.getMessage());
+      log.error("Can not find the Application Form with input id", e);
+      throw EntityNotFoundException.badRequest(String.valueOf(e.getCause()), e.getMessage());
     }
-      return ResponseEntity.ok().body(salary);
+    return ResponseEntity.ok().body(salary);
   }
 
   @PreAuthorize("hasRole('HR')")
@@ -82,17 +80,14 @@ public class ApplicationFormResource {
   @GetMapping(value = "/{id}/cv", produces = MediaType.IMAGE_PNG_VALUE)
   public ResponseEntity<byte[]> getCv(@PathVariable("id") Integer id) throws IOException {
     byte[] cv = null;
-    try{
+    try {
       cv = applicationFormService.getCv(id);
-    } catch (IOException e){
-      log.error("Can not find the path",e);
-      throw EntityNotFoundException.badRequest(String.valueOf(e.getCause()),e.getMessage());
+    } catch (IOException e) {
+      log.error("Can not find the path", e);
+      throw EntityNotFoundException.badRequest(String.valueOf(e.getCause()), e.getMessage());
     }
 
-
-    return ResponseEntity.ok()
-        .contentType(MediaType.IMAGE_PNG)
-        .body(cv);
+    return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(cv);
   }
 
   @PostMapping("/{id}/cv")
@@ -109,8 +104,6 @@ public class ApplicationFormResource {
     return ResponseEntity.created(URI.create(PATH + "/" + newForm.getId()))
         .body(ApplicationFormMapper.INSTANCE.toDto(newForm));
   }
-
-
 
   @PreAuthorize("hasRole('HR')")
   @PutMapping("/{id}")

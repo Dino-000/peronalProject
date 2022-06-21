@@ -36,14 +36,14 @@ public class CandidateResource {
   @GetMapping("/{id}")
   public ResponseEntity<Candidate> getById(@PathVariable("id") Integer id)
       throws EntityNotFoundException {
-    Candidate foundCandidate = null;
-    try {
-      foundCandidate = candidateService.findById(id);
-    } catch (EntityNotFoundException e) {
-      log.error("Can not find the candidate with given id.", e);
-      throw EntityNotFoundException.notFound(String.valueOf(e.getCause()), e.getMessage());
-    }
-    return ResponseEntity.created(URI.create(PATH + "/" + id)).body(foundCandidate);
+
+//    try {
+      return ResponseEntity.created(URI.create(PATH + "/" + id))
+          .body(candidateService.findById(id));
+//    } catch (EntityNotFoundException e) {
+//      log.error("Can not find the candidate with given id.");
+//      throw e;
+//    }
   }
 
   @GetMapping("/gpa-edu-skill-seniority")

@@ -15,6 +15,6 @@ public interface ApplicationFormRepository extends JpaRepository<ApplicationForm
   List<ApplicationForm> findByHiringRequestHiringManagerId(Integer Id);
 
 
-  @Query(value = "")
-  List<ApplicationForm> findByCandidateSkillSetNotMatchWithHiringRequestSpecificSkill(String SkillSetName);
+//  @Query(value = "")
+//  List<ApplicationForm> findByCandidateSkillSetNotMatchWithHiringRequestSpecificSkill(String SkillSetName);
 }
