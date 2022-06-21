@@ -11,6 +11,7 @@ import com.axonactive.personalproject.service.mapper.ApplicationFormMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,8 +34,8 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
   @Autowired RecruitmentChanelRepository recruitmentChanelRepository;
   @Autowired EmployeeRepository employeeRepository;
 
-  //  @Value("${cv.storage}")
-  //  private final String resourcePath;
+    @Value("${cv.storage}")
+    private  String resourcePath;
 
   @Override
   public List<ApplicationFormDto> findAll() {
@@ -165,7 +166,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
     String filePath =
         pathDirectory
             + File.separator
-            + "src\\main\\resources\\cv"
+            + resourcePath
             + File.separator
             + file.getOriginalFilename();
     Files.copy(file.getInputStream(), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);

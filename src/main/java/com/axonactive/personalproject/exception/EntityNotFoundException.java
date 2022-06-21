@@ -54,95 +54,89 @@ public class EntityNotFoundException extends Exception {
       "Can Not Find Working History Record Skill Set With That Id";
 
   public static ResponseException applicationFormNotFound() {
-    return new ResponseException(
-        APPLICATION_FORM_NOT_FOUND_MSG_KEY, APPLICATION_FORM_NOT_FOUND_MSG, HttpStatus.NOT_FOUND);
+    return notFound(
+        APPLICATION_FORM_NOT_FOUND_MSG_KEY, APPLICATION_FORM_NOT_FOUND_MSG);
   }
 
   public static ResponseException candidateNotFound() {
-    return new ResponseException(
-        CANDIDATE_NOT_FOUND_MSG_KEY, CANDIDATE_NOT_FOUND_MSG, HttpStatus.NOT_FOUND);
+    return notFound(
+        CANDIDATE_NOT_FOUND_MSG_KEY, CANDIDATE_NOT_FOUND_MSG);
   }
 
   public static ResponseException candidateEducationNotFound() {
-    return new ResponseException(
+    return notFound(
         CANDIDATE_EDUCATION_NOT_FOUND_MSG_KEY,
-        CANDIDATE_EDUCATION_NOT_FOUND_MSG,
-        HttpStatus.NOT_FOUND);
+        CANDIDATE_EDUCATION_NOT_FOUND_MSG);
   }
 
   public static ResponseException candidateCertificationNotFound() {
-    return new ResponseException(
+    return notFound(
         CANDIDATE_CERTIFICATION_NOT_FOUND_MSG_KEY,
-        CANDIDATE_CERTIFICATION_NOT_FOUND_MSG,
-        HttpStatus.NOT_FOUND);
+        CANDIDATE_CERTIFICATION_NOT_FOUND_MSG);
   }
 
   public static ResponseException candidateSkillSetNotFound() {
-    return new ResponseException(
+    return notFound(
         CANDIDATE_SKILL_SET_NOT_FOUND_MSG_KEY,
-        CANDIDATE_SKILL_SET_NOT_FOUND_MSG,
-        HttpStatus.NOT_FOUND);
+        CANDIDATE_SKILL_SET_NOT_FOUND_MSG);
   }
 
   public static ResponseException certificationNotFound() {
-    return new ResponseException(
-        CERTIFICATION__NOT_FOUND_MSG_KEY, CERTIFICATION_NOT_FOUND_MSG, HttpStatus.NOT_FOUND);
+    return notFound(
+        CERTIFICATION__NOT_FOUND_MSG_KEY, CERTIFICATION_NOT_FOUND_MSG);
   }
 
   public static ResponseException departmentNotFound() {
-    return new ResponseException(
-        DEPARTMENT_NOT_FOUND_MSG_KEY, DEPARTMENT_NOT_FOUND_MSG, HttpStatus.NOT_FOUND);
+    return notFound(
+        DEPARTMENT_NOT_FOUND_MSG_KEY, DEPARTMENT_NOT_FOUND_MSG);
   }
 
   public static ResponseException educationNotFound() {
-    return new ResponseException(
-        EDUCATION_NOT_FOUND_MSG_KEY, EDUCATION_NOT_FOUND_MSG, HttpStatus.NOT_FOUND);
+    return notFound(
+        EDUCATION_NOT_FOUND_MSG_KEY, EDUCATION_NOT_FOUND_MSG);
   }
 
   public static ResponseException employeeNotFound() {
-    return new ResponseException(
-        EMPLOYEE_NOT_FOUND_MSG_KEY, EMPLOYEE_NOT_FOUND_MSG, HttpStatus.NOT_FOUND);
+    return notFound(
+        EMPLOYEE_NOT_FOUND_MSG_KEY, EMPLOYEE_NOT_FOUND_MSG);
   }
 
   public static ResponseException hiringRequestNotFound() {
-    return new ResponseException(
-        HIRING_REQUEST_NOT_FOUND_MSG_KEY, HIRING_REQUEST_NOT_FOUND_MSG, HttpStatus.NOT_FOUND);
+    return notFound(
+        HIRING_REQUEST_NOT_FOUND_MSG_KEY, HIRING_REQUEST_NOT_FOUND_MSG);
   }
 
   public static ResponseException hiringRequestSkillSetNotFound() {
-    return new ResponseException(
+    return notFound(
         HIRING_REQUEST_SKILL_SET_NOT_FOUND_MSG_KEY,
-        HIRING_REQUEST_SKILL_SET_NOT_FOUND_MSG,
-        HttpStatus.NOT_FOUND);
+        HIRING_REQUEST_SKILL_SET_NOT_FOUND_MSG);
   }
 
   public static ResponseException recruitmentChannelNotFound() {
-    return new ResponseException(
+    return notFound(
         RECRUITMENT_CHANEL_NOT_FOUND_MSG_KEY,
-        RECRUITMENT_CHANEL_NOT_FOUND_MSG,
-        HttpStatus.NOT_FOUND);
+        RECRUITMENT_CHANEL_NOT_FOUND_MSG);
   }
 
   public static ResponseException skillSetNotFound() {
-    return new ResponseException(
-        SKILL_SET_NOT_FOUND_MSG_KEY, SKILL_SET_NOT_FOUND_MSG, HttpStatus.NOT_FOUND);
+    return notFound(
+        SKILL_SET_NOT_FOUND_MSG_KEY, SKILL_SET_NOT_FOUND_MSG);
   }
 
   public static ResponseException userAccountNotFound() {
-    return new ResponseException(
-        USER_ACCOUNT_NOT_FOUND_MSG_KEY, USER_ACCOUNT_NOT_FOUND_MSG, HttpStatus.NOT_FOUND);
+    return notFound(
+        USER_ACCOUNT_NOT_FOUND_MSG_KEY, USER_ACCOUNT_NOT_FOUND_MSG);
   }
 
   public static ResponseException workingHistoryRecordNotFound() {
-    return new ResponseException(
-        WORKING_RECORD_NOT_FOUND_MSG_KEY, WORKING_RECORD_NOT_FOUND_MSG, HttpStatus.NOT_FOUND);
+    return notFound(
+        WORKING_RECORD_NOT_FOUND_MSG_KEY, WORKING_RECORD_NOT_FOUND_MSG);
   }
 
   public static ResponseException workingHistoryRecordSkillSetNotFound() {
-    return new ResponseException(
+    return  notFound(
         WORKING_RECORD_SKILL_SET_NOT_FOUND_MSG_KEY,
-        WORKING_RECORD_SKILL_SET_NOT_FOUND_MSG,
-        HttpStatus.NOT_FOUND);
+        WORKING_RECORD_SKILL_SET_NOT_FOUND_MSG);
   }
 
   public static ResponseException notFound(String messageKey, String message) {

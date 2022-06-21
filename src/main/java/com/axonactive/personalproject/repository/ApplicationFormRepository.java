@@ -2,6 +2,7 @@ package com.axonactive.personalproject.repository;
 
 import com.axonactive.personalproject.entity.ApplicationForm;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -13,5 +14,7 @@ public interface ApplicationFormRepository extends JpaRepository<ApplicationForm
 
   List<ApplicationForm> findByHiringRequestHiringManagerId(Integer Id);
 
-  List<ApplicationForm> findFirstByCandidateIdOrderBySubmittedDateDesc(Integer Id);
+
+  @Query(value = "")
+  List<ApplicationForm> findByCandidateSkillSetNotMatchWithHiringRequestSpecificSkill(String SkillSetName);
 }

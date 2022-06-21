@@ -7,6 +7,7 @@ import com.axonactive.personalproject.service.ApplicationFormService;
 import com.axonactive.personalproject.service.dto.ApplicationFormDto;
 import com.axonactive.personalproject.service.mapper.ApplicationFormMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping(path = ApplicationFormResource.PATH)
 @RequiredArgsConstructor
@@ -36,8 +38,15 @@ public class ApplicationFormResource {
   @GetMapping("/{id}")
   public ResponseEntity<ApplicationFormDto> getById(@PathVariable("id") Integer id)
       throws EntityNotFoundException {
-    return ResponseEntity.created(URI.create(PATH + "/" + id))
-        .body(applicationFormService.findById(id));
+    ApplicationFormDto applicationFormDto = null;
+    try {
+      applicationFormDto = applicationFormService.findById(id);
+
+    } catch (EntityNotFoundException e) {
+      log.error("Can not find the Application Form with input id",e);
+      throw EntityNotFoundException.badRequest(String.valueOf(e.getCause()),e.getMessage());
+    }
+    return ResponseEntity.created(URI.create(PATH + "/" + id)).body(applicationFormDto);
   }
 
   @PreAuthorize("hasRole('HR')")
@@ -45,7 +54,14 @@ public class ApplicationFormResource {
   public ResponseEntity<Double> getSalary(
       //      @RequestHeader("Authentication") String authentication,
       @PathVariable("id") Integer id) throws EntityNotFoundException {
-    return ResponseEntity.ok().body(applicationFormService.getSalary(id));
+    Double salary = null;
+    try {
+      salary = applicationFormService.getSalary(id);
+    } catch (EntityNotFoundException e) {
+      log.error("Can not find the Application Form with input id",e);
+      throw EntityNotFoundException.badRequest(String.valueOf(e.getCause()),e.getMessage());
+    }
+      return ResponseEntity.ok().body(salary);
   }
 
   @PreAuthorize("hasRole('HR')")
@@ -65,14 +81,18 @@ public class ApplicationFormResource {
 
   @GetMapping(value = "/{id}/cv", produces = MediaType.IMAGE_PNG_VALUE)
   public ResponseEntity<byte[]> getCv(@PathVariable("id") Integer id) throws IOException {
-    //    String cvPath =
-    //    File imgFile = new File(new
-    // File("").getAbsolutePath()+File.separator+"src/main/resources/cv/"+fileName);
-    //    byte[] bytes = StreamUtils.copyToByteArray(new FileInputStream(imgFile));
+    byte[] cv = null;
+    try{
+      cv = applicationFormService.getCv(id);
+    } catch (IOException e){
+      log.error("Can not find the path",e);
+      throw EntityNotFoundException.badRequest(String.valueOf(e.getCause()),e.getMessage());
+    }
+
 
     return ResponseEntity.ok()
         .contentType(MediaType.IMAGE_PNG)
-        .body(applicationFormService.getCv(id));
+        .body(cv);
   }
 
   @PostMapping("/{id}/cv")
@@ -89,12 +109,8 @@ public class ApplicationFormResource {
     return ResponseEntity.created(URI.create(PATH + "/" + newForm.getId()))
         .body(ApplicationFormMapper.INSTANCE.toDto(newForm));
   }
-  //  @GetMapping(produces = MediaType.IMAGE_JPEG_VALUE)
-  //  public @ResponseBody byte[] getImageWithMediaType(@RequestParam("code") String code)
-  //      throws IOException {
-  //    InputStream in = getClass().getResourceAsStream(code);
-  //    return IOUtils.toByteArray(in);
-  //  }
+
+
 
   @PreAuthorize("hasRole('HR')")
   @PutMapping("/{id}")

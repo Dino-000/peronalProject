@@ -5,6 +5,7 @@ import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.service.CandidateService;
 import com.axonactive.personalproject.service.dto.CandidatePortfolioDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Set;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(CandidateResource.PATH)
@@ -34,7 +36,14 @@ public class CandidateResource {
   @GetMapping("/{id}")
   public ResponseEntity<Candidate> getById(@PathVariable("id") Integer id)
       throws EntityNotFoundException {
-    return ResponseEntity.created(URI.create(PATH + "/" + id)).body(candidateService.findById(id));
+    Candidate foundCandidate = null;
+    try {
+      foundCandidate = candidateService.findById(id);
+    } catch (EntityNotFoundException e) {
+      log.error("Can not find the candidate with given id.", e);
+      throw EntityNotFoundException.notFound(String.valueOf(e.getCause()), e.getMessage());
+    }
+    return ResponseEntity.created(URI.create(PATH + "/" + id)).body(foundCandidate);
   }
 
   @GetMapping("/gpa-edu-skill-seniority")
@@ -116,9 +125,14 @@ public class CandidateResource {
   public ResponseEntity<Candidate> update(
       @PathVariable("id") Integer id, @RequestBody Candidate updateDetail)
       throws EntityNotFoundException {
-
-    return ResponseEntity.created(URI.create(PATH + "/" + id))
-        .body(candidateService.update(updateDetail, id));
+    Candidate foundCandidate = null;
+    try {
+      foundCandidate = candidateService.update(updateDetail, id);
+    } catch (EntityNotFoundException e) {
+      log.error("Can not find the candidate with given id.", e);
+      throw EntityNotFoundException.notFound(String.valueOf(e.getCause()), e.getMessage());
+    }
+    return ResponseEntity.created(URI.create(PATH + "/" + id)).body(foundCandidate);
   }
 
   @DeleteMapping("/{id}")
