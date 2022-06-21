@@ -14,7 +14,6 @@ public class ApplicationFormDto {
   private LocalDate submittedDate;
   private Integer noticePeriods;
   private String urlCV;
-  private double salaryExpectation;
   private String candidateName;
   private String position;
   private String level;

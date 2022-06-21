@@ -54,12 +54,11 @@ public class ApplicationFormResource {
       @PathVariable("id") Integer id) throws EntityNotFoundException {
     Double salary = null;
     try {
-      salary = applicationFormService.getSalary(id);
+      return ResponseEntity.ok().body(applicationFormService.getSalary(id));
     } catch (EntityNotFoundException e) {
-      log.error("Can not find the Application Form with input id", e);
+      log.info("Can not find the Application Form with input id: " + id);
       throw EntityNotFoundException.badRequest(String.valueOf(e.getCause()), e.getMessage());
     }
-    return ResponseEntity.ok().body(salary);
   }
 
   @PreAuthorize("hasRole('HR')")
@@ -79,15 +78,14 @@ public class ApplicationFormResource {
 
   @GetMapping(value = "/{id}/cv", produces = MediaType.IMAGE_PNG_VALUE)
   public ResponseEntity<byte[]> getCv(@PathVariable("id") Integer id) throws IOException {
-    byte[] cv = null;
     try {
-      cv = applicationFormService.getCv(id);
+      return ResponseEntity.ok()
+          .contentType(MediaType.IMAGE_PNG)
+          .body(applicationFormService.getCv(id));
     } catch (IOException e) {
       log.error("Can not find the path", e);
       throw EntityNotFoundException.badRequest(String.valueOf(e.getCause()), e.getMessage());
     }
-
-    return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(cv);
   }
 
   @PostMapping("/{id}/cv")
