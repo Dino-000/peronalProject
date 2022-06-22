@@ -25,7 +25,7 @@ public interface CandidateService {
   Set<Candidate> findByLocationAndSkillSetAndSeniority(
       String location, String skillSetName, String Seniority);
 
-  Set<Candidate> findBySalaryExpectationGreaterThanHiringRequestBudget();
+  Set<Candidate> findBySalaryExpectationGreaterThanHiringRequestBudget(Integer id);
 
   Set<Candidate> findByExperiencesInSpecificCompany(String companyName);
 

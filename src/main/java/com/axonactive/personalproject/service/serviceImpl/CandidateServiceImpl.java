@@ -78,8 +78,8 @@ public class CandidateServiceImpl implements CandidateService {
   }
 
   @Override
-  public Set<Candidate> findBySalaryExpectationGreaterThanHiringRequestBudget() {
-    return candidateRepository.findBySalaryExpectationGreaterThanHiringRequestBudget();
+  public Set<Candidate> findBySalaryExpectationGreaterThanHiringRequestBudget(Integer id) {
+    return candidateRepository.findBySalaryExpectationGreaterThanHiringRequestBudget(id);
   }
 
   @Override

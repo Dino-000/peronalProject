@@ -47,8 +47,9 @@ public interface CandidateRepository extends JpaRepository<Candidate, Integer> {
       value =
           "SELECT a.candidate "
               + "FROM ApplicationForm a "
-              + "WHERE a.salaryExpectation > a.hiringRequest.budget")
-  Set<Candidate> findBySalaryExpectationGreaterThanHiringRequestBudget();
+              + "WHERE a.salaryExpectation > a.hiringRequest.budget " +
+                  "AND a.id = ?1")
+  Set<Candidate> findBySalaryExpectationGreaterThanHiringRequestBudget(Integer id);
 
   @Query(value = "SELECT w.candidate " + "FROM WorkingHistoryRecord w " + "WHERE w.companyName =?1")
   Set<Candidate> findByExperiencesInSpecificCompany(String companyName);

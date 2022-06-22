@@ -37,13 +37,12 @@ public class CandidateResource {
   public ResponseEntity<Candidate> getById(@PathVariable("id") Integer id)
       throws EntityNotFoundException {
 
-//    try {
-      return ResponseEntity.created(URI.create(PATH + "/" + id))
-          .body(candidateService.findById(id));
-//    } catch (EntityNotFoundException e) {
-//      log.error("Can not find the candidate with given id.");
-//      throw e;
-//    }
+    //    try {
+    return ResponseEntity.created(URI.create(PATH + "/" + id)).body(candidateService.findById(id));
+    //    } catch (EntityNotFoundException e) {
+    //      log.error("Can not find the candidate with given id.");
+    //      throw e;
+    //    }
   }
 
   @GetMapping("/gpa-edu-skill-seniority")
@@ -85,10 +84,11 @@ public class CandidateResource {
                 location, skillSetName, Seniority));
   }
 
-  @GetMapping("/salary-expectation-over-budget")
-  public ResponseEntity<Set<Candidate>> findBySalaryExpectationGreaterThanHiringRequestBudget() {
+  @GetMapping("/application-form/{id}/salary-expectation-over-budget")
+  public ResponseEntity<Set<Candidate>> findBySalaryExpectationGreaterThanHiringRequestBudget(
+      @PathVariable("id") Integer id) {
     return ResponseEntity.ok()
-        .body(candidateService.findBySalaryExpectationGreaterThanHiringRequestBudget());
+        .body(candidateService.findBySalaryExpectationGreaterThanHiringRequestBudget(id));
   }
 
   @GetMapping("/company")
