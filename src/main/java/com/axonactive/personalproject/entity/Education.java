@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
 
 @Data
 @NoArgsConstructor
@@ -21,6 +22,6 @@ public class Education {
   private String schoolName;
   private String degree;
   private String major;
-
+@Min(value = 0,message = "The prestigeRate can not less than 0")
   private Double prestigeRate;
 }

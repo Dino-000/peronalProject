@@ -7,12 +7,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 import java.net.URI;
 import java.util.List;
 import java.util.Set;
-
+@Validated
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -33,7 +36,7 @@ public class CandidateResource {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Candidate> getById(@PathVariable("id") Integer id)
+  public ResponseEntity<Candidate> getById(@Valid @PathVariable("id") Integer id)
       throws EntityNotFoundException {
 
     //    try {
@@ -46,10 +49,10 @@ public class CandidateResource {
 
   @GetMapping("/gpa-edu-skill-seniority")
   public ResponseEntity<Set<Candidate>> findByGPAAndSkillSetAndEducationAndSeniority(
-      @RequestParam("gpa") Double gpa,
-      @RequestParam("skill") String skillSetName,
-      @RequestParam("school") String schoolName,
-      @RequestParam("seniority") String Seniority) {
+     @Valid @RequestParam("gpa") Double gpa,
+     @Valid @RequestParam("skill") String skillSetName,
+     @Valid @RequestParam("school") String schoolName,
+     @Valid @RequestParam("seniority") String Seniority) {
     return ResponseEntity.ok()
         .body(
             candidateService.findByGPAAndSkillSetAndEducationAndSeniority(
@@ -58,14 +61,14 @@ public class CandidateResource {
 
   @GetMapping("/job-type")
   public ResponseEntity<Set<Candidate>> findByExperiencedWithJobType(
-      @RequestParam("type") String jobType) {
+     @Valid @RequestParam("type") String jobType) {
     return ResponseEntity.ok().body(candidateService.findByExperiencedWithJobType(jobType));
   }
 
   @GetMapping("/skill-salary")
   public ResponseEntity<Set<Candidate>> findBySalaryAndSkillSet(
-      @RequestParam("salary") Double maxSalaryExpectation,
-      @RequestParam("skill") String SkillSetName) {
+      @Valid @RequestParam("salary") Double maxSalaryExpectation,
+      @Valid @RequestParam("skill") @Pattern(regexp = "[a-z]{3}]") String SkillSetName) {
     return ResponseEntity.ok()
         .body(
             candidateService.findBySalaryExpectationLessThanAndCandidateSkillSet(
@@ -74,9 +77,9 @@ public class CandidateResource {
 
   @GetMapping("/location-skill-seniority")
   public ResponseEntity<Set<Candidate>> findByLocationAndSkillSetAndSeniority(
-      @RequestParam("location") String location,
-      @RequestParam("skill") String skillSetName,
-      @RequestParam("seniority") String Seniority) {
+     @Valid @RequestParam("location") String location,
+     @Valid @RequestParam("skill") String skillSetName,
+     @Valid @RequestParam("seniority") String Seniority) {
     return ResponseEntity.ok()
         .body(
             candidateService.findByLocationAndSkillSetAndSeniority(
@@ -85,30 +88,30 @@ public class CandidateResource {
 
   @GetMapping("/application-form/{id}/salary-expectation-over-budget")
   public ResponseEntity<Set<Candidate>> findBySalaryExpectationGreaterThanHiringRequestBudget(
-      @PathVariable("id") Integer id) {
+    @Valid @PathVariable("id") Integer id) {
     return ResponseEntity.ok()
         .body(candidateService.findBySalaryExpectationGreaterThanHiringRequestBudget(id));
   }
 
   @GetMapping("/company")
   public ResponseEntity<Set<Candidate>> findByExperiencedACompany(
-      @RequestParam("company") String companyName) {
+    @Valid @RequestParam("company") String companyName) {
     return ResponseEntity.ok()
         .body(candidateService.findByExperiencesInSpecificCompany(companyName));
   }
 
   @GetMapping("/education")
-  public ResponseEntity<Set<Candidate>> findByEducation(@RequestParam("school") String schoolName) {
+  public ResponseEntity<Set<Candidate>> findByEducation(@Valid @RequestParam("school") String schoolName) {
     return ResponseEntity.ok().body(candidateService.findByEducation(schoolName));
   }
 
   @GetMapping("/certification")
-  public ResponseEntity<Set<Candidate>> findByCertification(@RequestParam("name") String name) {
+  public ResponseEntity<Set<Candidate>> findByCertification(@Valid @RequestParam("name") String name) {
     return ResponseEntity.ok().body(candidateService.findByCertification(name));
   }
 
   @PostMapping
-  public ResponseEntity<Candidate> add(@RequestBody Candidate inputData) {
+  public ResponseEntity<Candidate> add(@Valid @RequestBody Candidate inputData) {
     Candidate newCandidate = candidateService.add(inputData);
 
     return ResponseEntity.created(URI.create(PATH + "/" + newCandidate.getId())).body(newCandidate);
@@ -116,7 +119,7 @@ public class CandidateResource {
 
   @PutMapping("/{id}")
   public ResponseEntity<Candidate> update(
-      @PathVariable("id") Integer id, @RequestBody Candidate updateDetail)
+     @Valid @PathVariable("id") Integer id,@Valid @RequestBody Candidate updateDetail)
       throws EntityNotFoundException {
     Candidate foundCandidate = null;
     foundCandidate = candidateService.update(updateDetail, id);
@@ -124,7 +127,7 @@ public class CandidateResource {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
+  public ResponseEntity<Void> delete(@Valid @PathVariable("id") Integer id)
       throws EntityNotFoundException {
     candidateService.delete(id);
     return ResponseEntity.noContent().build();

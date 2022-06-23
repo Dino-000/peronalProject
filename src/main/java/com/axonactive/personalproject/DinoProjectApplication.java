@@ -16,8 +16,6 @@ public class DinoProjectApplication extends SpringServletContainerInitializer {
 
   public static void main(String[] args) {
     SpringApplication.run(DinoProjectApplication.class, args);
-    //		String encryptedPassWord = new BCryptPasswordEncoder().encode("1234");
-    //		System.out.println(encryptedPassWord);
-    //		System.out.println(new File("").getAbsolutePath());
+
   }
 }

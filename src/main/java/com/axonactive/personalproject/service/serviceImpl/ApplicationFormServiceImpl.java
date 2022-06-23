@@ -75,6 +75,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 
   @Override
   public ApplicationFormDto save(ApplicationFormRequest request) {
+    request.setSubmittedDate(returnValidSubmittedDate(request.getSubmittedDate()));
     return ApplicationFormMapper.INSTANCE.toDto(
         applicationFormRepository.save(convertRequestToEntity(request)));
   }
@@ -101,7 +102,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
     }
     return new ApplicationForm(
         null,
-        request.getSubmittedDate(),
+        returnValidSubmittedDate(request.getSubmittedDate()),
         request.getNoticePeriods(),
         request.getUrlCV(),
         request.getSalaryExpectation(),
@@ -112,11 +113,10 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
   }
 
   @Override
-  public List<ApplicationFormDto> findBySubmittedDateBetween(String fromDate, String toDate) {
-    LocalDate beginDay = LocalDate.parse(fromDate);
-    LocalDate untilDay = LocalDate.parse(toDate);
+  public List<ApplicationFormDto> findBySubmittedDateBetween(LocalDate fromDate, LocalDate toDate) {
+
     return ApplicationFormMapper.INSTANCE.toDtos(
-        applicationFormRepository.findBySubmittedDateBetween(beginDay, untilDay));
+        applicationFormRepository.findBySubmittedDateBetween(fromDate, toDate));
   }
 
   @Override
@@ -134,7 +134,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
         applicationFormRepository
             .findById(id)
             .orElseThrow(EntityNotFoundException::applicationFormNotFound);
-    updatingForm.setSubmittedDate(updateForm.getSubmittedDate());
+    updatingForm.setSubmittedDate(returnValidSubmittedDate(updateForm.getSubmittedDate()));
     updatingForm.setNoticePeriods(updateForm.getNoticePeriods());
     updatingForm.setUrlCV(updateForm.getUrlCV());
     updatingForm.setSalaryExpectation(updateForm.getSalaryExpectation());

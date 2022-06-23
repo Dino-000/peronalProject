@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
@@ -20,7 +22,10 @@ public class Department {
   private Integer id;
 
   private String name;
+  @Min(value = 0, message = "The headcount can not less than 0")
   private int headcount;
+  @Min(value = 0, message = "The quantity of hiring manager can not less than 0")
   private int quantityOfHiringManager;
+  @NotNull
   private String managerID;
 }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
 @Data
@@ -19,7 +20,7 @@ public class WorkingHistoryRecordRequest {
   private String client;
   private Integer teamSize;
   private String jobType;
-
+  @Pattern(regexp = "\\d{10}",message = "the phone number should be 10 number from 0-9")
   private String referencesPeoplePhone;
   private Integer candidateId;
 }

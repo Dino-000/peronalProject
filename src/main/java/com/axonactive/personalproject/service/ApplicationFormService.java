@@ -25,7 +25,7 @@ public interface ApplicationFormService {
 
   ApplicationFormDto save(ApplicationFormRequest request);
 
-  List<ApplicationFormDto> findBySubmittedDateBetween(String fromDate, String toDate);
+  List<ApplicationFormDto> findBySubmittedDateBetween(LocalDate fromDate, LocalDate toDate);
 
   List<ApplicationFormDto> findByHiringRequestHiringManagerId(Integer Id);
 

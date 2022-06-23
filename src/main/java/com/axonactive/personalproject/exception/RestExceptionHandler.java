@@ -22,6 +22,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
   @ExceptionHandler(ConstraintViolationException.class)
   protected ResponseEntity<Object> handleConstraintViolation(
       ConstraintViolationException e, WebRequest request) {
+    return
     return handleExceptionInternal(
         e, e.getConstraintViolations(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }

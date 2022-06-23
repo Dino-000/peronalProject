@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class WorkingHistoryRecordResource {
   }
 
   @PostMapping
-  public ResponseEntity<WorkingHistoryRecordDto> add(
+  public ResponseEntity<WorkingHistoryRecordDto> add( @Valid
       @RequestBody WorkingHistoryRecordRequest inputData) throws EntityNotFoundException {
     WorkingHistoryRecord newWorkingHistoryRecord = workingHistoryRecordService.add(inputData);
 
@@ -44,7 +45,7 @@ public class WorkingHistoryRecordResource {
 
   @PutMapping("/{id}")
   public ResponseEntity<WorkingHistoryRecordDto> update(
-      @PathVariable("id") Integer id, @RequestBody WorkingHistoryRecordRequest inputData)
+      @PathVariable("id") Integer id,@Valid @RequestBody WorkingHistoryRecordRequest inputData)
       throws EntityNotFoundException {
     return ResponseEntity.created(URI.create(PATH + "/" + id))
         .body(workingHistoryRecordService.update(inputData, id));

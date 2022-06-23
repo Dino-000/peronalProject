@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 
 @Data
 @NoArgsConstructor
@@ -17,5 +18,6 @@ public class CandidateEducation {
 
   @ManyToOne private Candidate candidate;
   @ManyToOne private Education education;
+  @Min(value = 1900, message = "the graduation year can be lower than 1900")
   private Integer graduationYear;
 }

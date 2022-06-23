@@ -11,8 +11,8 @@
 	<groupId>com.axonactive</groupId>
 	<artifactId>personalproject</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Dino project</name>
-	<description>Demo project for Spring Boot</description>
+	<name>BoBo Application</name>
+	<description>Capstone Personal Project</description>
 	<properties>
 		<java.version>11</java.version>
 		<org.mapstruct.version>1.5.1.Final</org.mapstruct.version>

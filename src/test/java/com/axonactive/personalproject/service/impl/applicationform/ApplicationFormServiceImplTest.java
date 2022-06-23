@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -21,7 +24,7 @@ public class ApplicationFormServiceImplTest {
 
     @Test
     void testFindBySubmittedDateBetween_shouldReturnListSizeLargerThan0_WhenInputDayForm2000To2022() {
-        assertEquals(5,applicationFormService.findBySubmittedDateBetween("2000-01-02","2022-12-12").size());
+        assertEquals(5,applicationFormService.findBySubmittedDateBetween(LocalDate.parse("2000-01-02"),LocalDate.parse("2022-12-12")).size());
     }
 
     @Test

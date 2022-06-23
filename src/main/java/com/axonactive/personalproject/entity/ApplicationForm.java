@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
@@ -18,13 +20,20 @@ public class ApplicationForm {
   private Integer id;
 
   private LocalDate submittedDate;
+  @Min(value = 0,message = "notice Periods should not less than 0")
   private Integer noticePeriods;
   private String urlCV;
-  //    private MultipartFile cvFile;
   private double salaryExpectation;
-  @ManyToOne private Candidate candidate;
-  @ManyToOne private HiringRequest hiringRequest;
-  @ManyToOne private RecruitmentChanel recruitmentChanel;
-
-  @ManyToOne private Employee hrOfficer;
+  @ManyToOne
+  @NotNull
+  private Candidate candidate;
+  @ManyToOne
+  @NotNull
+  private HiringRequest hiringRequest;
+  @ManyToOne
+  @NotNull
+  private RecruitmentChanel recruitmentChanel;
+  @ManyToOne
+  @NotNull
+  private Employee hrOfficer;
 }

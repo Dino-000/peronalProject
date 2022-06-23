@@ -10,14 +10,17 @@ import com.axonactive.personalproject.service.mapper.ApplicationFormMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -55,7 +58,7 @@ public class ApplicationFormResource {
   @PreAuthorize("hasRole('HR')")
   @GetMapping("/date-range")
   public ResponseEntity<List<ApplicationFormDto>> findBySubmittedDateBetween(
-      @RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
+          @RequestParam("fromDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @Valid LocalDate fromDate, @RequestParam("toDate")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @Valid LocalDate toDate) {
     return ResponseEntity.ok()
         .body(applicationFormService.findBySubmittedDateBetween(fromDate, toDate));
   }
