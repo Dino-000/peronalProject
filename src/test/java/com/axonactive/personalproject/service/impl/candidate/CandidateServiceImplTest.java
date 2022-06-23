@@ -57,10 +57,7 @@ public class CandidateServiceImplTest {
     void testFindByCertification_shouldReturn2_WhenInputISTQBFoundationLevelAndCheckSize() throws EntityNotFoundException {
         assertEquals(2,candidateService.findByCertification("ISTQB Foundation Level").size());
     }
-    @Test
-    void testFindPortfolio_shouldReturnHoThanhSon_WhenInputId1AndCheckCandidateName() throws EntityNotFoundException {
-        assertEquals("Ho Thanh Son",candidateService.findPortfolio(1).getCandidate().getName());
-    }
+
 
 
 }

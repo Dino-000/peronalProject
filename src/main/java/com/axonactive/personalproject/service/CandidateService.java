@@ -1,8 +1,6 @@
 package com.axonactive.personalproject.service;
 
 import com.axonactive.personalproject.entity.Candidate;
-import com.axonactive.personalproject.exception.EntityNotFoundException;
-import com.axonactive.personalproject.service.dto.CandidatePortfolioDto;
 
 import java.util.List;
 import java.util.Set;
@@ -10,7 +8,7 @@ import java.util.Set;
 public interface CandidateService {
   List<Candidate> findAll();
 
-  Candidate findById(Integer id) throws EntityNotFoundException;
+  Candidate findById(Integer id);
 
   Set<Candidate> findBySalaryExpectationLessThanAndCandidateSkillSet(
       Double salaryExpectation, String SkillSetName);
@@ -31,15 +29,11 @@ public interface CandidateService {
 
   Set<Candidate> findByEducation(String schoolName);
 
-  CandidatePortfolioDto findBCandidatePortfolioById(Integer id);
-
   Set<Candidate> findByCertification(String nameOfCertification);
-
-  CandidatePortfolioDto findPortfolio(Integer id) throws EntityNotFoundException;
 
   Candidate add(Candidate candidate);
 
-  Candidate update(Candidate candidate, Integer id) throws EntityNotFoundException;
+  Candidate update(Candidate candidate, Integer id);
 
-  void delete(Integer id) throws EntityNotFoundException;
+  void delete(Integer id);
 }

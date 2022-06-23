@@ -4,8 +4,8 @@ import com.axonactive.personalproject.controller.request.WorkingHistoryRecordReq
 import com.axonactive.personalproject.entity.WorkingHistoryRecord;
 import com.axonactive.personalproject.exception.BusinessConstraintException;
 import com.axonactive.personalproject.exception.EntityNotFoundException;
-import com.axonactive.personalproject.repository.CandidateRepository;
 import com.axonactive.personalproject.repository.WorkingHistoryRecordRepository;
+import com.axonactive.personalproject.service.CandidateService;
 import com.axonactive.personalproject.service.WorkingHistoryRecordService;
 import com.axonactive.personalproject.service.dto.WorkingHistoryRecordDto;
 import com.axonactive.personalproject.service.mapper.WorkingHistoryRecordMapper;
@@ -22,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WorkingHistoryRecordServiceImpl implements WorkingHistoryRecordService {
   @Autowired WorkingHistoryRecordRepository workingHistoryRecordRepository;
-  @Autowired CandidateRepository candidateRepository;
+  @Autowired CandidateService candidateService;
 
   @Override
   public List<WorkingHistoryRecordDto> findAll() {
@@ -30,7 +30,7 @@ public class WorkingHistoryRecordServiceImpl implements WorkingHistoryRecordServ
   }
 
   @Override
-  public WorkingHistoryRecordDto findById(Integer id) throws EntityNotFoundException {
+  public WorkingHistoryRecordDto findById(Integer id) {
     return WorkingHistoryRecordMapper.INSTANCE.toDto(
         workingHistoryRecordRepository
             .findById(id)
@@ -38,14 +38,13 @@ public class WorkingHistoryRecordServiceImpl implements WorkingHistoryRecordServ
   }
 
   @Override
-  public void deleteById(Integer id) throws EntityNotFoundException {
+  public void deleteById(Integer id) {
     findById(id);
     workingHistoryRecordRepository.deleteById(id);
   }
 
   @Override
-  public WorkingHistoryRecord add(WorkingHistoryRecordRequest request)
-      throws EntityNotFoundException {
+  public WorkingHistoryRecord add(WorkingHistoryRecordRequest request) {
 
     return workingHistoryRecordRepository.save(convertFromRequestToEntity(request));
   }
@@ -57,8 +56,7 @@ public class WorkingHistoryRecordServiceImpl implements WorkingHistoryRecordServ
   }
 
   @Override
-  public WorkingHistoryRecordDto update(WorkingHistoryRecordRequest request, Integer id)
-      throws EntityNotFoundException {
+  public WorkingHistoryRecordDto update(WorkingHistoryRecordRequest request, Integer id) {
     if (!isValidJoinedDate(request.getJoinedDate())) {
       log.info("Joined Date: " + request.getJoinedDate());
       throw BusinessConstraintException.invalidJoinedDate();
@@ -73,38 +71,27 @@ public class WorkingHistoryRecordServiceImpl implements WorkingHistoryRecordServ
             .findById(id)
             .orElseThrow(EntityNotFoundException::workingHistoryRecordNotFound);
     updatingWorkingHistoryRecord.setCompanyName(request.getCompanyName());
-    updatingWorkingHistoryRecord.setJoinedDate(request.getJoinedDate());
-    updatingWorkingHistoryRecord.setResignationDate(request.getResignationDate());
+    updatingWorkingHistoryRecord.setJoinedDate(checkValidJoinedDate(request.getJoinedDate()));
+    updatingWorkingHistoryRecord.setResignationDate(
+        checkValidResignedDate(request.getJoinedDate(), request.getResignationDate()));
     updatingWorkingHistoryRecord.setPosition(request.getPosition());
     updatingWorkingHistoryRecord.setProjectName(request.getProjectName());
     updatingWorkingHistoryRecord.setResponsibility(request.getResponsibility());
     updatingWorkingHistoryRecord.setClient(request.getClient());
     updatingWorkingHistoryRecord.setTeamSize(request.getTeamSize());
     updatingWorkingHistoryRecord.setReferencesPeoplePhone(request.getReferencesPeoplePhone());
-    updatingWorkingHistoryRecord.setCandidate(
-        candidateRepository
-            .findById(request.getCandidateId())
-            .orElseThrow(EntityNotFoundException::candidateNotFound));
+    updatingWorkingHistoryRecord.setCandidate(candidateService.findById(request.getCandidateId()));
     return WorkingHistoryRecordMapper.INSTANCE.toDto(updatingWorkingHistoryRecord);
   }
 
   @Override
-  public WorkingHistoryRecord convertFromRequestToEntity(WorkingHistoryRecordRequest request)
-      throws EntityNotFoundException {
-    if (!isValidJoinedDate(request.getJoinedDate())) {
-      log.info("Joined Date: " + request.getJoinedDate());
-      throw BusinessConstraintException.invalidJoinedDate();
-    }
-    if (!isValidResignedDate(request.getJoinedDate(), request.getResignationDate())) {
-      log.info("Resigned Date: " + request.getResignationDate());
-      throw BusinessConstraintException.invalidResignedDate();
-    }
+  public WorkingHistoryRecord convertFromRequestToEntity(WorkingHistoryRecordRequest request) {
 
     return new WorkingHistoryRecord(
         null,
         request.getCompanyName(),
-        request.getJoinedDate(),
-        request.getResignationDate(),
+        checkValidJoinedDate(request.getJoinedDate()),
+        checkValidResignedDate(request.getJoinedDate(), request.getResignationDate()),
         request.getPosition(),
         request.getProjectName(),
         request.getResponsibility(),
@@ -112,9 +99,7 @@ public class WorkingHistoryRecordServiceImpl implements WorkingHistoryRecordServ
         request.getTeamSize(),
         request.getJobType(),
         request.getReferencesPeoplePhone(),
-        candidateRepository
-            .findById(request.getCandidateId())
-            .orElseThrow(EntityNotFoundException::candidateNotFound));
+        candidateService.findById(request.getCandidateId()));
   }
 
   @Override
@@ -125,5 +110,28 @@ public class WorkingHistoryRecordServiceImpl implements WorkingHistoryRecordServ
   @Override
   public Boolean isValidResignedDate(LocalDate joinDate, LocalDate resignedDate) {
     return !resignedDate.isBefore(joinDate);
+  }
+
+  @Override
+  public WorkingHistoryRecord checkWorkingHistoryRecordId(Integer id) {
+    return workingHistoryRecordRepository
+        .findById(id)
+        .orElseThrow(EntityNotFoundException::workingHistoryRecordNotFound);
+  }
+
+  public LocalDate checkValidJoinedDate(LocalDate joinDate) {
+    if (isValidJoinedDate(joinDate)) {
+      return joinDate;
+    } else {
+      throw BusinessConstraintException.invalidJoinedDate();
+    }
+  }
+
+  public LocalDate checkValidResignedDate(LocalDate joinDate, LocalDate resignDate) {
+    if (isValidResignedDate(joinDate, resignDate)) {
+      return resignDate;
+    } else {
+      throw BusinessConstraintException.invalidResignedDate();
+    }
   }
 }

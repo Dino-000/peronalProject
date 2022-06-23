@@ -21,12 +21,12 @@ public class SkillSetServiceImpl implements SkillSetService {
   }
 
   @Override
-  public SkillSet findById(Integer id) throws EntityNotFoundException {
+  public SkillSet findById(Integer id) {
     return skillSetRepository.findById(id).orElseThrow(EntityNotFoundException::skillSetNotFound);
   }
 
   @Override
-  public void deleteById(Integer id) throws EntityNotFoundException {
+  public void deleteById(Integer id) {
     findById(id);
     skillSetRepository.deleteById(id);
   }
@@ -42,7 +42,7 @@ public class SkillSetServiceImpl implements SkillSetService {
   }
 
   @Override
-  public SkillSet update(SkillSet skillSet, Integer id) throws EntityNotFoundException {
+  public SkillSet update(SkillSet skillSet, Integer id) {
     SkillSet updatingSkillSet = findById(id);
     updatingSkillSet.setIndustryCategory(skillSet.getIndustryCategory());
     updatingSkillSet.setName(skillSet.getName());

@@ -4,9 +4,9 @@ import com.axonactive.personalproject.controller.request.CandidateEducationReque
 import com.axonactive.personalproject.entity.CandidateEducation;
 import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.repository.CandidateEducationRepository;
-import com.axonactive.personalproject.repository.CandidateRepository;
-import com.axonactive.personalproject.repository.EducationRepository;
 import com.axonactive.personalproject.service.CandidateEducationService;
+import com.axonactive.personalproject.service.CandidateService;
+import com.axonactive.personalproject.service.EducationService;
 import com.axonactive.personalproject.service.dto.CandidateEducationDto;
 import com.axonactive.personalproject.service.mapper.CandidateEducationMapper;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CandidateEducationServiceImpl implements CandidateEducationService {
   @Autowired CandidateEducationRepository candidateEducationRepository;
-  @Autowired CandidateRepository candidateRepository;
-  @Autowired EducationRepository educationRepository;
+  @Autowired CandidateService candidateService;
+  @Autowired EducationService educationService;
 
   @Override
   public List<CandidateEducationDto> findAll() {
@@ -28,7 +28,7 @@ public class CandidateEducationServiceImpl implements CandidateEducationService 
   }
 
   @Override
-  public CandidateEducationDto findById(Integer id) throws EntityNotFoundException {
+  public CandidateEducationDto findById(Integer id) {
     return CandidateEducationMapper.INSTANCE.toDto(
         candidateEducationRepository
             .findById(id)
@@ -42,7 +42,7 @@ public class CandidateEducationServiceImpl implements CandidateEducationService 
   }
 
   @Override
-  public CandidateEducation add(CandidateEducationRequest request) throws EntityNotFoundException {
+  public CandidateEducation add(CandidateEducationRequest request) {
     return candidateEducationRepository.save(convertFromRequestToEntity(request));
   }
 
@@ -52,10 +52,8 @@ public class CandidateEducationServiceImpl implements CandidateEducationService 
         candidateEducationRepository
             .findById(id)
             .orElseThrow(EntityNotFoundException::candidateEducationNotFound);
-    updatingCandidateEducation.setCandidate(
-        candidateRepository.findById(request.getCandidateId()).get());
-    updatingCandidateEducation.setEducation(
-        educationRepository.findById(request.getEducationId()).get());
+    updatingCandidateEducation.setCandidate(candidateService.findById(request.getCandidateId()));
+    updatingCandidateEducation.setEducation(educationService.findById(request.getEducationId()));
     updatingCandidateEducation.setGraduationYear(request.getGraduationYear());
 
     return CandidateEducationMapper.INSTANCE.toDto(
@@ -63,8 +61,8 @@ public class CandidateEducationServiceImpl implements CandidateEducationService 
   }
 
   @Override
-  public void deleteById(Integer id) throws EntityNotFoundException {
-    CandidateEducationDto foundCandidateEducation = findById(id);
+  public void deleteById(Integer id) {
+    findById(id);
     candidateEducationRepository.deleteById(id);
   }
 
@@ -72,12 +70,8 @@ public class CandidateEducationServiceImpl implements CandidateEducationService 
   public CandidateEducation convertFromRequestToEntity(CandidateEducationRequest request) {
     return new CandidateEducation(
         null,
-        candidateRepository
-            .findById(request.getCandidateId())
-            .orElseThrow(EntityNotFoundException::candidateNotFound),
-        educationRepository
-            .findById(request.getEducationId())
-            .orElseThrow(EntityNotFoundException::candidateEducationNotFound),
+        candidateService.findById(request.getCandidateId()),
+        educationService.findById(request.getEducationId()),
         request.getGraduationYear());
   }
 }

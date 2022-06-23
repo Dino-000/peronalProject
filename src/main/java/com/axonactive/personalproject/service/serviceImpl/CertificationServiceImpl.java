@@ -21,20 +21,20 @@ public class CertificationServiceImpl implements CertificationService {
   }
 
   @Override
-  public Certification findById(Integer id) throws EntityNotFoundException {
+  public Certification findById(Integer id) {
     return certificationRepository
         .findById(id)
         .orElseThrow(EntityNotFoundException::certificationNotFound);
   }
 
   @Override
-  public void deleteById(Integer id) throws EntityNotFoundException {
+  public void deleteById(Integer id) {
     findById(id);
     certificationRepository.deleteById(id);
   }
 
   @Override
-  public Certification saveCertification(Certification certification) {
+  public Certification add(Certification certification) {
     return certificationRepository.save(certification);
   }
 
@@ -44,7 +44,7 @@ public class CertificationServiceImpl implements CertificationService {
   }
 
   @Override
-  public Certification update(Certification request, Integer id) throws EntityNotFoundException {
+  public Certification update(Certification request, Integer id) {
     Certification updatingCertification =
         certificationRepository
             .findById(id)
@@ -52,13 +52,6 @@ public class CertificationServiceImpl implements CertificationService {
     updatingCertification.setIssuerName(request.getIssuerName());
     updatingCertification.setNameOfCertification(request.getNameOfCertification());
     updatingCertification.setType(request.getType());
-    return saveCertification(updatingCertification);
-  }
-
-  @Override
-  public Certification add(Certification request) {
-    return saveCertification(
-        new Certification(
-            null, request.getIssuerName(), request.getNameOfCertification(), request.getType()));
+    return add(updatingCertification);
   }
 }

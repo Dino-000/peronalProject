@@ -40,15 +40,9 @@ public class CandidateCertificationResource {
   @PostMapping
   public ResponseEntity<CandidateCertificationDto> add(
       @RequestBody CandidateCertificationRequest inputData) throws EntityNotFoundException {
-    try {
-      CandidateCertification newCandidateCertification =
-          candidateCertificationService.add(inputData);
-      return ResponseEntity.created(URI.create(PATH + "/" + newCandidateCertification.getId()))
-          .body(CandidateCertificationMapper.INSTANCE.toDto(newCandidateCertification));
-
-    } catch (EntityNotFoundException e) {
-      throw new EntityNotFoundException();
-    }
+    CandidateCertification newCandidateCertification = candidateCertificationService.add(inputData);
+    return ResponseEntity.created(URI.create(PATH + "/" + newCandidateCertification.getId()))
+        .body(CandidateCertificationMapper.INSTANCE.toDto(newCandidateCertification));
   }
 
   @PutMapping("/{id}")

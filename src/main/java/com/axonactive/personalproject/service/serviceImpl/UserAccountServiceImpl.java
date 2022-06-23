@@ -21,7 +21,7 @@ public class UserAccountServiceImpl implements UserAccountService {
   }
 
   @Override
-  public UserAccount findByUserName(String userName) throws EntityNotFoundException {
+  public UserAccount findByUserName(String userName) {
     return userAccountRepository
         .findById(userName)
         .orElseThrow(EntityNotFoundException::userAccountNotFound);
@@ -38,7 +38,7 @@ public class UserAccountServiceImpl implements UserAccountService {
   }
 
   @Override
-  public UserAccount update(String userName, String password) throws EntityNotFoundException {
+  public UserAccount update(String userName, String password) {
     UserAccount updatingUserAccount = findByUserName(userName);
     updatingUserAccount.setPassWord(password);
 

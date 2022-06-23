@@ -3,10 +3,10 @@ package com.axonactive.personalproject.service.serviceImpl;
 import com.axonactive.personalproject.controller.request.CandidateSkillSetRequest;
 import com.axonactive.personalproject.entity.CandidateSkillSet;
 import com.axonactive.personalproject.exception.EntityNotFoundException;
-import com.axonactive.personalproject.repository.CandidateRepository;
 import com.axonactive.personalproject.repository.CandidateSkillSetRepository;
-import com.axonactive.personalproject.repository.SkillSetRepository;
+import com.axonactive.personalproject.service.CandidateService;
 import com.axonactive.personalproject.service.CandidateSkillSetService;
+import com.axonactive.personalproject.service.SkillSetService;
 import com.axonactive.personalproject.service.dto.CandidateSkillSetDto;
 import com.axonactive.personalproject.service.mapper.CandidateSkillSetMapper;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +20,8 @@ import java.util.List;
 public class CandidateSkillSetServiceImpl implements CandidateSkillSetService {
 
   @Autowired CandidateSkillSetRepository candidateSkillSetRepository;
-  @Autowired CandidateRepository candidateRepository;
-  @Autowired SkillSetRepository skillSetRepository;
+  @Autowired CandidateService candidateService;
+  @Autowired SkillSetService skillSetService;
 
   @Override
   public List<CandidateSkillSetDto> findAll() {
@@ -29,7 +29,7 @@ public class CandidateSkillSetServiceImpl implements CandidateSkillSetService {
   }
 
   @Override
-  public CandidateSkillSetDto findById(Integer id) throws EntityNotFoundException {
+  public CandidateSkillSetDto findById(Integer id) {
     return CandidateSkillSetMapper.INSTANCE.toDto(
         candidateSkillSetRepository
             .findById(id)
@@ -38,55 +38,38 @@ public class CandidateSkillSetServiceImpl implements CandidateSkillSetService {
 
   @Override
   public List<CandidateSkillSetDto> findByCandidateId(Integer id) {
-
     return CandidateSkillSetMapper.INSTANCE.toDtos(
         candidateSkillSetRepository.findByCandidateId(id));
   }
 
   @Override
-  public CandidateSkillSet add(CandidateSkillSetRequest request) throws EntityNotFoundException {
+  public CandidateSkillSet add(CandidateSkillSetRequest request) {
     return candidateSkillSetRepository.save(convertRequestToEntity(request));
   }
 
   @Override
-  public CandidateSkillSet convertRequestToEntity(CandidateSkillSetRequest request)
-      throws EntityNotFoundException {
+  public CandidateSkillSet convertRequestToEntity(CandidateSkillSetRequest request) {
     return new CandidateSkillSet(
         null,
-        candidateRepository
-            .findById(request.getCandidateId())
-            .orElseThrow(EntityNotFoundException::candidateNotFound),
-        skillSetRepository
-            .findById(request.getSkillSetId())
-            .orElseThrow(EntityNotFoundException::skillSetNotFound));
+        candidateService.findById(request.getCandidateId()),
+        skillSetService.findById(request.getSkillSetId()));
   }
 
   @Override
-  public CandidateSkillSetDto update(CandidateSkillSetRequest request, Integer id)
-      throws EntityNotFoundException {
+  public CandidateSkillSetDto update(CandidateSkillSetRequest request, Integer id) {
     CandidateSkillSet updatingCandidateSkillSet =
         candidateSkillSetRepository
             .findById(id)
             .orElseThrow(EntityNotFoundException::candidateSkillSetNotFound);
-    updatingCandidateSkillSet.setCandidate(
-        candidateRepository
-            .findById(request.getCandidateId())
-            .orElseThrow(EntityNotFoundException::candidateNotFound));
-    updatingCandidateSkillSet.setSkillSet(
-        skillSetRepository
-            .findById(request.getSkillSetId())
-            .orElseThrow(EntityNotFoundException::skillSetNotFound));
+    updatingCandidateSkillSet.setCandidate(candidateService.findById(request.getCandidateId()));
+    updatingCandidateSkillSet.setSkillSet(skillSetService.findById(request.getSkillSetId()));
     return CandidateSkillSetMapper.INSTANCE.toDto(
         candidateSkillSetRepository.save(updatingCandidateSkillSet));
   }
 
   @Override
-  public void deleteById(Integer id) throws EntityNotFoundException {
-    CandidateSkillSet deletingCandidateSkillSet =
-        candidateSkillSetRepository
-            .findById(id)
-            .orElseThrow(EntityNotFoundException::applicationFormNotFound);
-
+  public void deleteById(Integer id) {
+    findById(id);
     candidateSkillSetRepository.deleteById(id);
   }
 }

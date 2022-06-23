@@ -31,7 +31,7 @@ public class DepartmentResource {
 
   @PostMapping
   public ResponseEntity<Department> add(@RequestBody Department inputData) {
-    Department newDepartment = departmentService.saveDepartment(inputData);
+    Department newDepartment = departmentService.add(inputData);
 
     return ResponseEntity.created(URI.create(PATH + "/" + newDepartment.getId()))
         .body(newDepartment);

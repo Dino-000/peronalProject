@@ -5,12 +5,11 @@ import com.axonactive.personalproject.entity.CandidateCertification;
 import com.axonactive.personalproject.exception.BusinessConstraintException;
 import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.repository.CandidateCertificationRepository;
-import com.axonactive.personalproject.repository.CandidateRepository;
-import com.axonactive.personalproject.repository.CertificationRepository;
 import com.axonactive.personalproject.service.CandidateCertificationService;
+import com.axonactive.personalproject.service.CandidateService;
+import com.axonactive.personalproject.service.CertificationService;
 import com.axonactive.personalproject.service.dto.CandidateCertificationDto;
 import com.axonactive.personalproject.service.mapper.CandidateCertificationMapper;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,11 +19,10 @@ import java.util.List;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class CandidateCertificationServiceImpl implements CandidateCertificationService {
   @Autowired CandidateCertificationRepository candidateCertificationRepository;
-  @Autowired CandidateRepository candidateRepository;
-  @Autowired CertificationRepository certificationRepository;
+  @Autowired CandidateService candidateService;
+  @Autowired CertificationService certificationService;
 
   @Override
   public List<CandidateCertificationDto> findAll() {
@@ -32,7 +30,7 @@ public class CandidateCertificationServiceImpl implements CandidateCertification
   }
 
   @Override
-  public CandidateCertificationDto findById(Integer id) throws EntityNotFoundException {
+  public CandidateCertificationDto findById(Integer id) {
     return CandidateCertificationMapper.INSTANCE.toDto(
         candidateCertificationRepository
             .findById(id)
@@ -46,68 +44,41 @@ public class CandidateCertificationServiceImpl implements CandidateCertification
   }
 
   @Override
-  public CandidateCertification add(CandidateCertificationRequest request)
-      throws EntityNotFoundException {
-    if (!isValidIssuedDate(request.getIssuedDate())) {
-      log.info("Issued Date: " + request.getIssuedDate());
-      throw BusinessConstraintException.invalidIssuedDate();
-    }
-    if (!isValidExpiredDate(request.getIssuedDate(), request.getExpiredDate())) {
-      log.info("Issued Date: " + request.getIssuedDate());
-      log.info("Expired Date: " + request.getExpiredDate());
-      throw BusinessConstraintException.invalidExpiredDate();
-    }
+  public CandidateCertification add(CandidateCertificationRequest request) {
+    checkValidIssuedDate(request.getIssuedDate());
+    checkValidExpiredDate(request.getIssuedDate(), request.getExpiredDate());
     return candidateCertificationRepository.save(convertRequestToEntity(request));
   }
 
   @Override
-  public void deleteById(Integer id) throws EntityNotFoundException {
-    CandidateCertificationDto deletingCandidateCertification = findById(id);
+  public void deleteById(Integer id) {
+    findById(id);
     candidateCertificationRepository.deleteById(id);
   }
 
   @Override
-  public CandidateCertificationDto update(CandidateCertificationRequest request, Integer id)
-      throws EntityNotFoundException {
+  public CandidateCertificationDto update(CandidateCertificationRequest request, Integer id) {
     CandidateCertification updatingCandidateCertification =
         candidateCertificationRepository
             .findById(id)
             .orElseThrow(EntityNotFoundException::candidateCertificationNotFound);
     updatingCandidateCertification.setCandidate(
-        candidateRepository
-            .findById(request.getCandidateId())
-            .orElseThrow(EntityNotFoundException::candidateNotFound));
+        candidateService.findById(request.getCandidateId()));
     updatingCandidateCertification.setCertification(
-        certificationRepository
-            .findById(request.getCertificationId())
-            .orElseThrow(EntityNotFoundException::certificationNotFound));
-
-    if (!isValidIssuedDate(request.getIssuedDate())) {
-      log.info("Issued Date: " + request.getIssuedDate());
-      throw BusinessConstraintException.invalidIssuedDate();
-    }
-    updatingCandidateCertification.setIssuedDate(request.getIssuedDate());
-    if (!isValidExpiredDate(request.getIssuedDate(), request.getExpiredDate())) {
-      log.info("Issued Date: " + request.getIssuedDate());
-      log.info("Expired Date: " + request.getExpiredDate());
-      throw BusinessConstraintException.invalidExpiredDate();
-    }
-    updatingCandidateCertification.setExpiredDate(request.getExpiredDate());
+        certificationService.findById(request.getCertificationId()));
+    updatingCandidateCertification.setIssuedDate(checkValidIssuedDate(request.getIssuedDate()));
+    updatingCandidateCertification.setExpiredDate(
+        checkValidExpiredDate(request.getIssuedDate(), request.getExpiredDate()));
     return CandidateCertificationMapper.INSTANCE.toDto(
         candidateCertificationRepository.save(updatingCandidateCertification));
   }
 
   @Override
-  public CandidateCertification convertRequestToEntity(CandidateCertificationRequest request)
-      throws EntityNotFoundException {
+  public CandidateCertification convertRequestToEntity(CandidateCertificationRequest request) {
     return new CandidateCertification(
         null,
-        candidateRepository
-            .findById(request.getCandidateId())
-            .orElseThrow(EntityNotFoundException::candidateNotFound),
-        certificationRepository
-            .findById(request.getCertificationId())
-            .orElseThrow(EntityNotFoundException::certificationNotFound),
+        candidateService.findById(request.getCandidateId()),
+        certificationService.findById(request.getCertificationId()),
         request.getIssuedDate(),
         request.getExpiredDate());
   }
@@ -120,5 +91,23 @@ public class CandidateCertificationServiceImpl implements CandidateCertification
   @Override
   public Boolean isValidExpiredDate(LocalDate issuedDate, LocalDate expiredDate) {
     return !expiredDate.isBefore(issuedDate);
+  }
+
+  @Override
+  public LocalDate checkValidIssuedDate(LocalDate issuedDate) {
+    if (isValidIssuedDate(issuedDate)) {
+      return issuedDate;
+    } else {
+      throw BusinessConstraintException.invalidIssuedDate();
+    }
+  }
+
+  @Override
+  public LocalDate checkValidExpiredDate(LocalDate issuedDate, LocalDate expiredDate) {
+    if (isValidExpiredDate(issuedDate, expiredDate)) {
+      return expiredDate;
+    } else {
+      throw BusinessConstraintException.invalidExpiredDate();
+    }
   }
 }

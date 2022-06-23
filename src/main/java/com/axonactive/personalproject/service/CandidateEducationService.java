@@ -2,7 +2,6 @@ package com.axonactive.personalproject.service;
 
 import com.axonactive.personalproject.controller.request.CandidateEducationRequest;
 import com.axonactive.personalproject.entity.CandidateEducation;
-import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.service.dto.CandidateEducationDto;
 import org.springframework.stereotype.Repository;
 
@@ -12,17 +11,15 @@ import java.util.List;
 public interface CandidateEducationService {
   List<CandidateEducationDto> findAll();
 
-  CandidateEducationDto findById(Integer id) throws EntityNotFoundException;
+  CandidateEducationDto findById(Integer id);
 
   List<CandidateEducationDto> findByCandidateId(Integer Id);
 
-  CandidateEducation add(CandidateEducationRequest request) throws EntityNotFoundException;
+  CandidateEducation add(CandidateEducationRequest request);
 
-  CandidateEducationDto update(CandidateEducationRequest request, Integer id)
-      throws EntityNotFoundException;
+  CandidateEducationDto update(CandidateEducationRequest request, Integer id);
 
-  void deleteById(Integer id) throws EntityNotFoundException;
+  void deleteById(Integer id);
 
-  CandidateEducation convertFromRequestToEntity(CandidateEducationRequest request)
-      throws EntityNotFoundException;
+  CandidateEducation convertFromRequestToEntity(CandidateEducationRequest request);
 }

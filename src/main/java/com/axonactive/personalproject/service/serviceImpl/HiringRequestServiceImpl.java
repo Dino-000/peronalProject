@@ -4,9 +4,9 @@ import com.axonactive.personalproject.controller.request.HiringRequestRequest;
 import com.axonactive.personalproject.entity.HiringRequest;
 import com.axonactive.personalproject.exception.BusinessConstraintException;
 import com.axonactive.personalproject.exception.EntityNotFoundException;
-import com.axonactive.personalproject.repository.DepartmentRepository;
-import com.axonactive.personalproject.repository.EmployeeRepository;
 import com.axonactive.personalproject.repository.HiringRequestRepository;
+import com.axonactive.personalproject.service.DepartmentService;
+import com.axonactive.personalproject.service.EmployeeService;
 import com.axonactive.personalproject.service.HiringRequestService;
 import com.axonactive.personalproject.service.dto.HiringRequestDto;
 import com.axonactive.personalproject.service.mapper.HiringRequestMapper;
@@ -23,8 +23,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HiringRequestServiceImpl implements HiringRequestService {
   @Autowired HiringRequestRepository hiringRequestRepository;
-  @Autowired DepartmentRepository departmentRepository;
-  @Autowired EmployeeRepository employeeRepository;
+  @Autowired DepartmentService departmentService;
+  @Autowired EmployeeService employeeService;
 
   @Override
   public List<HiringRequestDto> findAll() {
@@ -32,7 +32,7 @@ public class HiringRequestServiceImpl implements HiringRequestService {
   }
 
   @Override
-  public HiringRequestDto findById(Integer id) throws EntityNotFoundException {
+  public HiringRequestDto findById(Integer id) {
     return HiringRequestMapper.INSTANCE.toDto(
         hiringRequestRepository
             .findById(id)
@@ -40,36 +40,18 @@ public class HiringRequestServiceImpl implements HiringRequestService {
   }
 
   @Override
-  public void deleteById(Integer id) throws EntityNotFoundException {
+  public void deleteById(Integer id) {
     findById(id);
     hiringRequestRepository.deleteById(id);
   }
 
   @Override
-  public HiringRequest add(HiringRequestRequest request) throws EntityNotFoundException {
-    HiringRequest hiringRequest = convertRequestToEntity(request);
-    if (!isHiringManager(hiringRequest)) {
-      log.info("The Hiring Manger's Department: " + hiringRequest.getDepartment().getName());
-      log.info("The Hiring Manager Id: " + hiringRequest.getHiringManager().getEmployeeId());
-      log.info("This Department's Manager Id: " + hiringRequest.getDepartment().getManagerID());
-      throw BusinessConstraintException.invalidHiringManagerOfficer();
-    } else if (!isValidHiringManager(hiringRequest)) {
-      log.info(
-          "The Hiring Manger's Department: "
-              + hiringRequest.getHiringManager().getDepartment().getName());
-      log.info("This Hiring Request's Department: " + hiringRequest.getDepartment().getName());
-      throw BusinessConstraintException.hiringManagerDepartmentMissMatch();
-    }
-    if (!isValidOnboardDate(request.getOnBoardingDate())) {
-      log.info("The On-boarding Date is: " + hiringRequest.getOnBoardingDate());
-      throw BusinessConstraintException.invalidOnBoardDate();
-    }
+  public HiringRequest add(HiringRequestRequest request) {
     return hiringRequestRepository.save(convertRequestToEntity(request));
   }
 
   @Override
-  public HiringRequest convertRequestToEntity(HiringRequestRequest request)
-      throws EntityNotFoundException {
+  public HiringRequest convertRequestToEntity(HiringRequestRequest request) {
     return new HiringRequest(
         null,
         request.getOnBoardingDate(),
@@ -77,16 +59,12 @@ public class HiringRequestServiceImpl implements HiringRequestService {
         request.getLevel(),
         request.getSpecificBenefit(),
         request.getBudget(),
-        departmentRepository
-            .findById(request.getDepartmentId())
-            .orElseThrow(EntityNotFoundException::departmentNotFound),
-        employeeRepository
-            .findById(request.getHiringManagerId())
-            .orElseThrow(EntityNotFoundException::employeeNotFound));
+        departmentService.findById(request.getDepartmentId()),
+        employeeService.checkValidHiringManagerId(request.getHiringManagerId()));
   }
 
   @Override
-  public boolean isValidHiringManager(HiringRequest request) {
+  public Boolean isValidHiringRequest(HiringRequest request) {
     return request
         .getHiringManager()
         .getDepartment()
@@ -94,16 +72,12 @@ public class HiringRequestServiceImpl implements HiringRequestService {
         .equals(request.getDepartment().getName());
   }
 
-  @Override
-  public boolean isHiringManager(HiringRequest request) {
-
-    return !(request.getHiringManager().getDepartment().getName().equals("HR"))
-        || (request.getHiringManager().getDepartment().getName().equals("HR")
-            && request
-                .getHiringManager()
-                .getDepartment()
-                .getManagerID()
-                .equals(request.getHiringManager().getEmployeeId()));
+  public HiringRequest checkValidHiringRequest(HiringRequest request) {
+    if (isValidHiringRequest(request)) {
+      return request;
+    } else {
+      throw BusinessConstraintException.hiringManagerDepartmentMissMatch();
+    }
   }
 
   @Override
@@ -112,50 +86,36 @@ public class HiringRequestServiceImpl implements HiringRequestService {
   }
 
   @Override
+  public LocalDate checkValidOnboardDate(LocalDate onboardDate) {
+    if (isValidOnboardDate(onboardDate)) return onboardDate;
+    else throw BusinessConstraintException.invalidOnBoardDate();
+  }
+
+  @Override
+  public HiringRequest checkValidHiringRequestId(Integer id) {
+    return null;
+  }
+
+  @Override
   public List<HiringRequestDto> findByHiringManagerId(Integer Id) {
     return HiringRequestMapper.INSTANCE.toDtos(hiringRequestRepository.findByHiringManagerId(Id));
   }
 
   @Override
-  public HiringRequestDto update(HiringRequestRequest request, Integer id)
-      throws EntityNotFoundException {
+  public HiringRequestDto update(HiringRequestRequest request, Integer id) {
     HiringRequest updatingHiringRequest =
         hiringRequestRepository
             .findById(id)
             .orElseThrow(EntityNotFoundException::hiringRequestNotFound);
-    updatingHiringRequest.setOnBoardingDate(request.getOnBoardingDate());
+    updatingHiringRequest.setOnBoardingDate(checkValidOnboardDate(request.getOnBoardingDate()));
     updatingHiringRequest.setPosition(request.getPosition());
     updatingHiringRequest.setLevel(request.getLevel());
     updatingHiringRequest.setSpecificBenefit(request.getSpecificBenefit());
-    updatingHiringRequest.setDepartment(
-        departmentRepository
-            .findById(request.getDepartmentId())
-            .orElseThrow(EntityNotFoundException::departmentNotFound));
+    updatingHiringRequest.setDepartment(departmentService.findById(request.getDepartmentId()));
     updatingHiringRequest.setHiringManager(
-        employeeRepository
-            .findById(request.getHiringManagerId())
-            .orElseThrow(EntityNotFoundException::employeeNotFound));
+        employeeService.checkValidHiringManagerId(request.getHiringManagerId()));
 
-    if (!isHiringManager(updatingHiringRequest)) {
-      log.info(
-          "The Hiring Manger's Department: " + updatingHiringRequest.getDepartment().getName());
-      log.info(
-          "The Hiring Manager Id: " + updatingHiringRequest.getHiringManager().getEmployeeId());
-      log.info(
-          "This Department's Manager Id: " + updatingHiringRequest.getDepartment().getManagerID());
-      throw BusinessConstraintException.invalidHiringManagerOfficer();
-    } else if (!isValidHiringManager(updatingHiringRequest)) {
-      log.info(
-          "The Hiring Manger's Department: "
-              + updatingHiringRequest.getHiringManager().getDepartment().getName());
-      log.info(
-          "This Hiring Request's Department: " + updatingHiringRequest.getDepartment().getName());
-      throw BusinessConstraintException.hiringManagerDepartmentMissMatch();
-    }
-    if (!isValidOnboardDate(request.getOnBoardingDate())) {
-      log.info("The On-boarding Date is: " + updatingHiringRequest.getOnBoardingDate());
-      throw BusinessConstraintException.invalidOnBoardDate();
-    }
-    return HiringRequestMapper.INSTANCE.toDto(hiringRequestRepository.save(updatingHiringRequest));
+    return HiringRequestMapper.INSTANCE.toDto(
+        hiringRequestRepository.save(checkValidHiringRequest(updatingHiringRequest)));
   }
 }

@@ -2,7 +2,6 @@ package com.axonactive.personalproject.service;
 
 import com.axonactive.personalproject.controller.request.CandidateSkillSetRequest;
 import com.axonactive.personalproject.entity.CandidateSkillSet;
-import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.service.dto.CandidateSkillSetDto;
 import org.springframework.stereotype.Repository;
 
@@ -12,17 +11,15 @@ import java.util.List;
 public interface CandidateSkillSetService {
   List<CandidateSkillSetDto> findAll();
 
-  CandidateSkillSetDto findById(Integer id) throws EntityNotFoundException;
+  CandidateSkillSetDto findById(Integer id);
 
   List<CandidateSkillSetDto> findByCandidateId(Integer id);
 
-  CandidateSkillSet convertRequestToEntity(CandidateSkillSetRequest request)
-      throws EntityNotFoundException;
+  CandidateSkillSet convertRequestToEntity(CandidateSkillSetRequest request);
 
-  void deleteById(Integer id) throws EntityNotFoundException;
+  void deleteById(Integer id);
 
-  CandidateSkillSetDto update(CandidateSkillSetRequest request, Integer id)
-      throws EntityNotFoundException;
+  CandidateSkillSetDto update(CandidateSkillSetRequest request, Integer id);
 
-  CandidateSkillSet add(CandidateSkillSetRequest request) throws EntityNotFoundException;
+  CandidateSkillSet add(CandidateSkillSetRequest request);
 }

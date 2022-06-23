@@ -28,7 +28,7 @@ public class HiringRequestSkillSetServiceImpl implements HiringRequestSkillSetSe
   }
 
   @Override
-  public HiringRequestSkillSetDto findById(Integer id) throws EntityNotFoundException {
+  public HiringRequestSkillSetDto findById(Integer id) {
     return HiringRequestSkillSetMapper.INSTANCE.toDto(
         hiringRequestSkillSetRepository
             .findById(id)
@@ -36,22 +36,20 @@ public class HiringRequestSkillSetServiceImpl implements HiringRequestSkillSetSe
   }
 
   @Override
-  public void deleteById(Integer id) throws EntityNotFoundException {
+  public void deleteById(Integer id) {
     findById(id);
     hiringRequestSkillSetRepository.deleteById(id);
   }
 
   @Override
-  public HiringRequestSkillSet add(HiringRequestSkillSetRequest request)
-      throws EntityNotFoundException {
+  public HiringRequestSkillSet add(HiringRequestSkillSetRequest request) {
     {
       return hiringRequestSkillSetRepository.save(convertRequestToEntity(request));
     }
   }
 
   @Override
-  public HiringRequestSkillSetDto update(HiringRequestSkillSetRequest request, Integer id)
-      throws EntityNotFoundException {
+  public HiringRequestSkillSetDto update(HiringRequestSkillSetRequest request, Integer id) {
     HiringRequestSkillSet updatingHiringRequestSkillSet =
         hiringRequestSkillSetRepository
             .findById(id)
@@ -69,8 +67,7 @@ public class HiringRequestSkillSetServiceImpl implements HiringRequestSkillSetSe
   }
 
   @Override
-  public HiringRequestSkillSet convertRequestToEntity(HiringRequestSkillSetRequest request)
-      throws EntityNotFoundException {
+  public HiringRequestSkillSet convertRequestToEntity(HiringRequestSkillSetRequest request) {
     return new HiringRequestSkillSet(
         null,
         hiringRequestRepository

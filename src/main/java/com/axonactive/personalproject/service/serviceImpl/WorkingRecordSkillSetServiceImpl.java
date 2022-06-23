@@ -3,9 +3,9 @@ package com.axonactive.personalproject.service.serviceImpl;
 import com.axonactive.personalproject.controller.request.WorkingHistoryRecordSkillSetRequest;
 import com.axonactive.personalproject.entity.WorkingHistoryRecordSkillSet;
 import com.axonactive.personalproject.exception.EntityNotFoundException;
-import com.axonactive.personalproject.repository.SkillSetRepository;
-import com.axonactive.personalproject.repository.WorkingHistoryRecordRepository;
 import com.axonactive.personalproject.repository.WorkingHistoryRecordSkillSetRepository;
+import com.axonactive.personalproject.service.SkillSetService;
+import com.axonactive.personalproject.service.WorkingHistoryRecordService;
 import com.axonactive.personalproject.service.WorkingHistoryRecordSkillSetService;
 import com.axonactive.personalproject.service.dto.WorkingHistoryRecordSkillSetDto;
 import com.axonactive.personalproject.service.mapper.WorkingHistoryRecordSkillSetMapper;
@@ -20,8 +20,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WorkingRecordSkillSetServiceImpl implements WorkingHistoryRecordSkillSetService {
   @Autowired WorkingHistoryRecordSkillSetRepository workingHistoryRecordSkillSetRepository;
-  @Autowired WorkingHistoryRecordRepository workingHistoryRecordRepository;
-  @Autowired SkillSetRepository skillSetRepository;
+  @Autowired WorkingHistoryRecordService workingHistoryRecordService;
+  @Autowired SkillSetService skillSetService;
 
   @Override
   public List<WorkingHistoryRecordSkillSetDto> findAll() {
@@ -30,7 +30,7 @@ public class WorkingRecordSkillSetServiceImpl implements WorkingHistoryRecordSki
   }
 
   @Override
-  public WorkingHistoryRecordSkillSetDto findById(Integer id) throws EntityNotFoundException {
+  public WorkingHistoryRecordSkillSetDto findById(Integer id) {
     return WorkingHistoryRecordSkillSetMapper.INSTANCE.toDto(
         workingHistoryRecordSkillSetRepository
             .findById(id)
@@ -38,32 +38,28 @@ public class WorkingRecordSkillSetServiceImpl implements WorkingHistoryRecordSki
   }
 
   @Override
-  public void deleteById(Integer id) throws EntityNotFoundException {
+  public void deleteById(Integer id) {
     findById(id);
     workingHistoryRecordSkillSetRepository.deleteById(id);
   }
 
   @Override
-  public WorkingHistoryRecordSkillSet add(WorkingHistoryRecordSkillSetRequest request)
-      throws EntityNotFoundException {
+  public WorkingHistoryRecordSkillSet add(WorkingHistoryRecordSkillSetRequest request) {
     return workingHistoryRecordSkillSetRepository.save(convertRequestToEntity(request));
   }
 
   @Override
   public WorkingHistoryRecordSkillSetDto update(
-      WorkingHistoryRecordSkillSetRequest request, Integer id) throws EntityNotFoundException {
+      WorkingHistoryRecordSkillSetRequest request, Integer id) {
     WorkingHistoryRecordSkillSet updatingWorkingHistoryRecordSkillSet =
         workingHistoryRecordSkillSetRepository
             .findById(id)
             .orElseThrow(EntityNotFoundException::workingHistoryRecordSkillSetNotFound);
     updatingWorkingHistoryRecordSkillSet.setSkillSet(
-        skillSetRepository
-            .findById(request.getSkillSetId())
-            .orElseThrow(EntityNotFoundException::skillSetNotFound));
+        skillSetService.findById(request.getSkillSetId()));
     updatingWorkingHistoryRecordSkillSet.setWorkingHistoryRecord(
-        workingHistoryRecordRepository
-            .findById(request.getWorkingHistoryRecordId())
-            .orElseThrow(EntityNotFoundException::workingHistoryRecordNotFound));
+        workingHistoryRecordService.checkWorkingHistoryRecordId(
+            request.getWorkingHistoryRecordId()));
     return WorkingHistoryRecordSkillSetMapper.INSTANCE.toDto(
         workingHistoryRecordSkillSetRepository.save(updatingWorkingHistoryRecordSkillSet));
   }
@@ -76,15 +72,12 @@ public class WorkingRecordSkillSetServiceImpl implements WorkingHistoryRecordSki
 
   @Override
   public WorkingHistoryRecordSkillSet convertRequestToEntity(
-      WorkingHistoryRecordSkillSetRequest request) throws EntityNotFoundException {
+      WorkingHistoryRecordSkillSetRequest request) {
     return new WorkingHistoryRecordSkillSet(
         null,
-        workingHistoryRecordRepository
-            .findById(request.getWorkingHistoryRecordId())
-            .orElseThrow(EntityNotFoundException::workingHistoryRecordNotFound),
-        skillSetRepository
-            .findById(request.getSkillSetId())
-            .orElseThrow(EntityNotFoundException::skillSetNotFound));
+        workingHistoryRecordService.checkWorkingHistoryRecordId(
+            request.getWorkingHistoryRecordId()),
+        skillSetService.findById(request.getSkillSetId()));
   }
 
   @Override

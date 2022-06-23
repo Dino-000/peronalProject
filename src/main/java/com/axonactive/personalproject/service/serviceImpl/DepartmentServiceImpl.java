@@ -21,20 +21,20 @@ public class DepartmentServiceImpl implements DepartmentService {
   }
 
   @Override
-  public Department findById(Integer id) throws EntityNotFoundException {
+  public Department findById(Integer id) {
     return departmentRepository
         .findById(id)
         .orElseThrow(EntityNotFoundException::departmentNotFound);
   }
 
   @Override
-  public void deleteById(Integer id) throws EntityNotFoundException {
+  public void deleteById(Integer id) {
     findById(id);
     departmentRepository.deleteById(id);
   }
 
   @Override
-  public Department saveDepartment(Department input) {
+  public Department add(Department input) {
     return departmentRepository.save(
         new Department(
             null,
@@ -45,7 +45,7 @@ public class DepartmentServiceImpl implements DepartmentService {
   }
 
   @Override
-  public Department update(Department input, Integer id) throws EntityNotFoundException {
+  public Department update(Department input, Integer id) {
     Department updatingDepartment =
         departmentRepository.findById(id).orElseThrow(EntityNotFoundException::departmentNotFound);
     updatingDepartment.setName(input.getName());

@@ -21,7 +21,7 @@ public class RecruitmentChanelServiceImpl implements RecruitmentChanelService {
   }
 
   @Override
-  public RecruitmentChanel findById(Integer id) throws EntityNotFoundException {
+  public RecruitmentChanel findById(Integer id) {
     return recruitmentChanelRepository
         .findById(id)
         .orElseThrow(EntityNotFoundException::recruitmentChannelNotFound);
@@ -40,8 +40,7 @@ public class RecruitmentChanelServiceImpl implements RecruitmentChanelService {
   }
 
   @Override
-  public RecruitmentChanel update(RecruitmentChanel request, Integer id)
-      throws EntityNotFoundException {
+  public RecruitmentChanel update(RecruitmentChanel request, Integer id) {
     RecruitmentChanel updatingRecruitmentChannel = findById(id);
     updatingRecruitmentChannel.setAdminAccount(request.getAdminAccount());
     updatingRecruitmentChannel.setConversionRate(request.getConversionRate());
@@ -54,7 +53,7 @@ public class RecruitmentChanelServiceImpl implements RecruitmentChanelService {
   }
 
   @Override
-  public void deleteById(Integer id) throws EntityNotFoundException {
+  public void deleteById(Integer id) {
     findById(id);
     recruitmentChanelRepository.deleteById(id);
   }

@@ -5,6 +5,7 @@ import com.axonactive.personalproject.entity.ApplicationForm;
 import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.service.ApplicationFormService;
 import com.axonactive.personalproject.service.dto.ApplicationFormDto;
+import com.axonactive.personalproject.service.dto.CandidatePortfolioDto;
 import com.axonactive.personalproject.service.mapper.ApplicationFormMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,13 +39,8 @@ public class ApplicationFormResource {
   @GetMapping("/{id}")
   public ResponseEntity<ApplicationFormDto> getById(@PathVariable("id") Integer id)
       throws EntityNotFoundException {
-    try {
-      return ResponseEntity.created(URI.create(PATH + "/" + id))
-          .body(applicationFormService.findById(id));
-    } catch (EntityNotFoundException e) {
-      log.error("Can not find the Application Form with input id", e);
-      throw EntityNotFoundException.badRequest(String.valueOf(e.getCause()), e.getMessage());
-    }
+    return ResponseEntity.created(URI.create(PATH + "/" + id))
+        .body(applicationFormService.findById(id));
   }
 
   @PreAuthorize("hasRole('HR')")
@@ -52,13 +48,8 @@ public class ApplicationFormResource {
   public ResponseEntity<Double> getSalary(
       //      @RequestHeader("Authentication") String authentication,
       @PathVariable("id") Integer id) throws EntityNotFoundException {
-    Double salary = null;
-    try {
-      return ResponseEntity.ok().body(applicationFormService.getSalary(id));
-    } catch (EntityNotFoundException e) {
-      log.info("Can not find the Application Form with input id: " + id);
-      throw EntityNotFoundException.badRequest(String.valueOf(e.getCause()), e.getMessage());
-    }
+
+    return ResponseEntity.ok().body(applicationFormService.getSalary(id));
   }
 
   @PreAuthorize("hasRole('HR')")
@@ -77,21 +68,33 @@ public class ApplicationFormResource {
   }
 
   @GetMapping(value = "/{id}/cv", produces = MediaType.IMAGE_PNG_VALUE)
-  public ResponseEntity<byte[]> getCv(@PathVariable("id") Integer id) throws IOException {
+  public ResponseEntity<byte[]> getCv(@PathVariable("id") Integer id)
+      throws IOException, EntityNotFoundException {
     try {
       return ResponseEntity.ok()
           .contentType(MediaType.IMAGE_PNG)
           .body(applicationFormService.getCv(id));
-    } catch (IOException e) {
+    } catch (IOException | EntityNotFoundException e) {
       log.error("Can not find the path", e);
-      throw EntityNotFoundException.badRequest(String.valueOf(e.getCause()), e.getMessage());
+      throw e;
     }
   }
 
   @PostMapping("/{id}/cv")
   public String addCv(@PathVariable("id") Integer id, @RequestParam("file") MultipartFile file)
-      throws Exception {
-    return applicationFormService.addCv(id, file);
+      throws IOException, EntityNotFoundException {
+    try {
+      return applicationFormService.addCv(id, file);
+    } catch (IOException e) {
+      log.error("Can not find the path to save this CV", e);
+      throw e;
+    }
+  }
+
+  @GetMapping("/{id}/portfolio")
+  public ResponseEntity<CandidatePortfolioDto> findPortfolio(@PathVariable("id") Integer id)
+      throws EntityNotFoundException {
+    return ResponseEntity.ok().body(applicationFormService.findPortfolio(id));
   }
 
   @PreAuthorize("hasRole('HR')")
@@ -106,17 +109,14 @@ public class ApplicationFormResource {
   @PreAuthorize("hasRole('HR')")
   @PutMapping("/{id}")
   public ResponseEntity<ApplicationFormDto> update(
-      @PathVariable("id") Integer id, @RequestBody ApplicationFormRequest updatingRequest)
-      throws EntityNotFoundException {
-
+      @PathVariable("id") Integer id, @RequestBody ApplicationFormRequest updatingRequest) {
     return ResponseEntity.created(URI.create(PATH + "/" + id))
         .body(applicationFormService.update(id, updatingRequest));
   }
 
   @PreAuthorize("hasRole('ADMIN')")
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
-      throws EntityNotFoundException {
+  public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
     applicationFormService.deleteById(id);
     return ResponseEntity.noContent().build();
   }

@@ -21,18 +21,18 @@ public class EducationServiceImpl implements EducationService {
   }
 
   @Override
-  public Education findById(Integer id) throws EntityNotFoundException {
+  public Education findById(Integer id) {
     return educationRepository.findById(id).orElseThrow(EntityNotFoundException::educationNotFound);
   }
 
   @Override
-  public void deleteById(Integer id) throws EntityNotFoundException {
+  public void deleteById(Integer id) {
     findById(id);
     educationRepository.deleteById(id);
   }
 
   @Override
-  public Education saveEducation(Education inputData) {
+  public Education add(Education inputData) {
     return educationRepository.save(
         new Education(
             null,
@@ -48,7 +48,7 @@ public class EducationServiceImpl implements EducationService {
   }
 
   @Override
-  public Education update(Education inputData, Integer id) throws EntityNotFoundException {
+  public Education update(Education inputData, Integer id) {
     Education updatingEducation =
         educationRepository.findById(id).orElseThrow(EntityNotFoundException::educationNotFound);
     updatingEducation.setSchoolName(inputData.getSchoolName());

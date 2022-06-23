@@ -3,7 +3,6 @@ package com.axonactive.personalproject.controller;
 import com.axonactive.personalproject.entity.Candidate;
 import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.service.CandidateService;
-import com.axonactive.personalproject.service.dto.CandidatePortfolioDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,12 +107,6 @@ public class CandidateResource {
     return ResponseEntity.ok().body(candidateService.findByCertification(name));
   }
 
-  @GetMapping("/{id}/portfolio")
-  public ResponseEntity<CandidatePortfolioDto> findPortfolio(@PathVariable("id") Integer id)
-      throws EntityNotFoundException {
-    return ResponseEntity.ok().body(candidateService.findPortfolio(id));
-  }
-
   @PostMapping
   public ResponseEntity<Candidate> add(@RequestBody Candidate inputData) {
     Candidate newCandidate = candidateService.add(inputData);
@@ -126,12 +119,7 @@ public class CandidateResource {
       @PathVariable("id") Integer id, @RequestBody Candidate updateDetail)
       throws EntityNotFoundException {
     Candidate foundCandidate = null;
-    try {
-      foundCandidate = candidateService.update(updateDetail, id);
-    } catch (EntityNotFoundException e) {
-      log.error("Can not find the candidate with given id.", e);
-      throw EntityNotFoundException.notFound(String.valueOf(e.getCause()), e.getMessage());
-    }
+    foundCandidate = candidateService.update(updateDetail, id);
     return ResponseEntity.created(URI.create(PATH + "/" + id)).body(foundCandidate);
   }
 

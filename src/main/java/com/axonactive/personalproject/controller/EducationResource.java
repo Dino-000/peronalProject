@@ -31,7 +31,7 @@ public class EducationResource {
 
   @PostMapping
   public ResponseEntity<Education> add(@RequestBody Education inputData) {
-    Education newEducation = educationService.saveEducation(inputData);
+    Education newEducation = educationService.add(inputData);
 
     return ResponseEntity.created(URI.create(PATH + "/" + newEducation.getId())).body(newEducation);
   }

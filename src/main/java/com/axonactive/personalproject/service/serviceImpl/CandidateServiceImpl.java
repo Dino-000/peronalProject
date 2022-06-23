@@ -2,13 +2,8 @@ package com.axonactive.personalproject.service.serviceImpl;
 
 import com.axonactive.personalproject.entity.Candidate;
 import com.axonactive.personalproject.exception.EntityNotFoundException;
-import com.axonactive.personalproject.repository.*;
+import com.axonactive.personalproject.repository.CandidateRepository;
 import com.axonactive.personalproject.service.CandidateService;
-import com.axonactive.personalproject.service.dto.CandidatePortfolioDto;
-import com.axonactive.personalproject.service.mapper.CandidateCertificationMapper;
-import com.axonactive.personalproject.service.mapper.CandidateEducationMapper;
-import com.axonactive.personalproject.service.mapper.CandidateSkillSetMapper;
-import com.axonactive.personalproject.service.mapper.WorkingHistoryRecordSkillSetMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,10 +15,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class CandidateServiceImpl implements CandidateService {
   @Autowired CandidateRepository candidateRepository;
-  @Autowired CandidateCertificationRepository candidateCertificationRepository;
-  @Autowired CandidateEducationRepository candidateEducationRepository;
-  @Autowired CandidateSkillSetRepository candidateSkillSetRepository;
-  @Autowired WorkingHistoryRecordSkillSetRepository workingHistoryRecordSkillSetRepository;
 
   @Override
   public List<Candidate> findAll() {
@@ -31,12 +22,12 @@ public class CandidateServiceImpl implements CandidateService {
   }
 
   @Override
-  public Candidate findById(Integer id) throws EntityNotFoundException {
+  public Candidate findById(Integer id) {
     return candidateRepository.findById(id).orElseThrow(EntityNotFoundException::candidateNotFound);
   }
 
   @Override
-  public void delete(Integer id) throws EntityNotFoundException {
+  public void delete(Integer id) {
     findById(id);
     candidateRepository.deleteById(id);
   }
@@ -93,33 +84,13 @@ public class CandidateServiceImpl implements CandidateService {
   }
 
   @Override
-  public CandidatePortfolioDto findBCandidatePortfolioById(Integer id) {
-
-    return null;
-  }
-
-  @Override
   public Set<Candidate> findByCertification(String nameOfCertification) {
     return candidateRepository.findByCertification(nameOfCertification);
   }
 
   @Override
-  public CandidatePortfolioDto findPortfolio(Integer id) throws EntityNotFoundException {
-    return new CandidatePortfolioDto(
-        candidateRepository.findById(id).orElseThrow(EntityNotFoundException::candidateNotFound),
-        CandidateCertificationMapper.INSTANCE.toDtos(
-            candidateCertificationRepository.findByCandidateId(id)),
-        CandidateEducationMapper.INSTANCE.toDtos(
-            candidateEducationRepository.findByCandidateId(id)),
-        CandidateSkillSetMapper.INSTANCE.toDtos(candidateSkillSetRepository.findByCandidateId(id)),
-        WorkingHistoryRecordSkillSetMapper.INSTANCE.toDtos(
-            workingHistoryRecordSkillSetRepository.findByWorkingHistoryRecordCandidateId(id)));
-  }
-
-  @Override
-  public Candidate update(Candidate updateDetail, Integer id) throws EntityNotFoundException {
+  public Candidate update(Candidate updateDetail, Integer id) {
     Candidate updatingCandidate = findById(id);
-
     updatingCandidate.setName(updateDetail.getName());
     updatingCandidate.setDateOfBirth(updateDetail.getDateOfBirth());
     updatingCandidate.setLocation(updateDetail.getLocation());
