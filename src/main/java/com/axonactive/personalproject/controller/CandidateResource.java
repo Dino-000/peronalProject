@@ -6,6 +6,7 @@ import com.axonactive.personalproject.service.CandidateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,13 @@ public class CandidateResource {
 
   @GetMapping
   public ResponseEntity<List<Candidate>> getAll() {
-    return ResponseEntity.ok().body(candidateService.findAll());
+    HttpHeaders responseHeaders = new HttpHeaders();
+
+    responseHeaders.add("Access-Control-Expose-Headers",
+            "Content-Range");
+    responseHeaders.add("Content-Range",
+            "Candidate 0-10/10");
+    return ResponseEntity.ok().headers(responseHeaders).body(candidateService.findAll());
   }
 
   @GetMapping("/team-size")

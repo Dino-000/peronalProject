@@ -5,6 +5,7 @@ import com.axonactive.personalproject.exception.EntityNotFoundException;
 import com.axonactive.personalproject.service.CertificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,13 @@ public class CertificationResource {
 
   @GetMapping
   public ResponseEntity<List<Certification>> getAll() {
-    return ResponseEntity.ok().body(certificationService.findAll());
+    HttpHeaders responseHeaders = new HttpHeaders();
+
+    responseHeaders.add("Access-Control-Expose-Headers",
+            "Content-Range");
+    responseHeaders.add("Content-Range",
+            "Certifications 0-10/10");
+    return ResponseEntity.ok().headers(responseHeaders).body(certificationService.findAll());
   }
 
   @GetMapping("/{id}")
