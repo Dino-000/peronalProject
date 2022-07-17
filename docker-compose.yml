@@ -1,0 +1,29 @@
+version: '3.1'
+services:
+  app:
+    container_name: bobo-ats-app
+    image: bobo-ats.jar
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgresql
+
+
+  postgresql:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=bobo-ats-db
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  sample_db: {}
